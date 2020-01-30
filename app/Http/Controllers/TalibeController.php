@@ -190,7 +190,7 @@ class TalibeController extends Controller
 
                 if(!$request->file('avatar')->isValid()){
 
-                     $validator->arrors()->add('avatar','Erreur: Veuillez joindre l\'image à nouveau');
+                    $validator->arrors()->add('avatar','Erreur: Veuillez joindre l\'image à nouveau');
 
                 }else{
 
