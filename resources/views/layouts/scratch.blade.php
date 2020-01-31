@@ -9,7 +9,7 @@
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link href="/assets/css/material-dashboard.css?v=2.0.2" rel="stylesheet" />
-  
+
   @stack('styles')
 </head>
 
@@ -86,7 +86,7 @@
                     <span class="sidebar-mini"> A </span>
                     <span class="sidebar-normal"> NOUVEAU </span>
                   </a>
-                </li>        
+                </li>
               </ul>
             </div>
           </li>
@@ -94,7 +94,7 @@
             <a class="nav-link" data-toggle="collapse" href="#daara">
               <i class="fas fa-home"></i>
               <p> Daaras
-                
+
               </p>
             </a>
             <div class="collapse" id="daara">
@@ -111,7 +111,7 @@
                     <span class="sidebar-normal">NOUVEAU</span>
                   </a>
                 </li>
-                
+
               </ul>
             </div>
           </li>
@@ -134,7 +134,7 @@
                     <span class="sidebar-normal"> NOUVEAU </span>
                   </a>
                 </li>
-               
+
               </ul>
             </div>
           </li>
@@ -235,7 +235,7 @@
 
     <footer class="footer">
       <div class="container-fluid">
-        
+
         <div class="copyright float-center">
           &copy;
           <script>
@@ -266,7 +266,7 @@
     <script src="/assets/js/plugins/bootstrap-datetimepicker.min.js"></script>
     <!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->
     <script src="/assets/js/plugins/jquery.dataTables.min.js"></script>
-   
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
     <!-- Library for adding dinamically elements -->
     <!-- <script src="/assets/js/plugins/arrive.min.js"></script> -->
@@ -285,7 +285,9 @@
         // md.initDashboardPageCharts();
       });
     </script>
-    @stack('scripts')
+
+
+  @stack('scripts')
 </body>
 
 </html>

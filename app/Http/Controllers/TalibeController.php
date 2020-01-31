@@ -24,7 +24,7 @@ class TalibeController extends Controller
     {
         $view = $request->query('view') === 'card' ? 'talibe.index-card' : 'talibe.index-table';
 
-        return view($view,['talibeList'=> Talibe::orderBy('prenom')->paginate(20), 'nbr' => Talibe::all()->count() ]);
+        return view($view,['talibeList'=> Talibe::all(), 'nbr' => Talibe::all()->count() ]);
     }
 
     /**
