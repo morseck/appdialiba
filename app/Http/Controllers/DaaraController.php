@@ -214,4 +214,44 @@ class DaaraController extends Controller
 
         return view($view,compact('talibes','dname','id'));
      }
+
+
+    /**
+     * Importation de fichier excel
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    function importation(Request $request){
+        // var_dump("import");die();
+         $this->validate($request, [
+              'importation_excel'   =>  'required|mimes:xls, xlsx'
+          ]);
+
+        $path = $request->file('importation_excel')->getRealPath();
+        $data = Excel::load($path)->get();
+
+        $insert_data[]=array();
+        if ($data->count() > 0){
+            foreach ($data->toArray() as $key => $value){
+                if ($value["nom"]!=null) {
+                    $daara = new Daara();
+                    $daara->fill([
+                        'nom'       => $value["nom"],
+                        'dieuw'     => $value["dieuw"],
+                        'creation'  => null,
+                        'phone'     => $value["phone"],
+                        'lat'       => null,
+                        'lon'       => null,
+                        'image'     => null
+                    ]);
+                }
+
+                $daara->save();
+                // }
+            }
+        }
+        // var_dump($data); die();
+        return back();
+
+    }
 }

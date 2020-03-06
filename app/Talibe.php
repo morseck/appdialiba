@@ -12,6 +12,7 @@ class Talibe extends Model
     protected $fillable=['prenom','nom','genre','pere','mere','datenaissance','lieunaissance','adresse','region','dieuw_id',
                          'tuteur','phone1','phone2','arrivee','depart','deces','commentaire','avatar','niveau','daara_id'
         ];
+
 	
 	public function daara()
     {

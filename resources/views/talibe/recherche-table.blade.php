@@ -1,10 +1,8 @@
-@extends('layouts.scratch',['title' => 'Liste des talibeList | '])
+@extends('layouts.scratch',['title' => 'Recherche Talibés | '])
 @push('styles')
 
 @endpush
-
 @section('content')
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -13,106 +11,11 @@
                         <div class="card-icon">
                             <i class="material-icons">assignment</i>
                         </div>
-                        <h4 class="card-title mt-10"> Importation</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="toolbar">
-                            <!--        Here you can write extra buttons/actions for the toolbar              -->
-                        </div>
-                        <div class="material-datatables">
-                            <table id="importation" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
-                                <thead>
-                                <tr>
-                                    <th>Prenom <strong>Nom</strong></th>
-                                    <th>Dieuwrigne</th>
-                                    <th>Téléphone</th>
-                                    <th>Tuteur</th>
-                                    <th class="disabled-sorting text-right">Actions</th>
-                                </tr>
-                                </thead>
-                                <tfoot>
-                                <tr>
-                                    <th>Prenom <strong>Nom</strong></th>
-                                    <th>Dieuwrigne</th>
-                                    <th>Téléphone</th>
-                                    <th>Tuteur</th>
-                                    <th class="text-right">Actions</th>
-                                </tr>
-                                </tfoot>
-                                <tbody>
-                                @foreach($data_import as $import)
-                                    <tr>
-                                        <td><a href="#" title="Cliquez pour plus de détails">{{ $import->prenom }} <strong>{{ $import->nom }}</strong></a></td>
-
-{{--                                        <td>{{ $import->daara != '' ? $import->daara->nom : 'non orienté'}}</td>--}}
-
-
-                                        <td>
-                                            @if($import->dieuw)
-                                                {{ $import->serigne_daara }}
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a href="#" title="Cliquer pour envoyer un mail">{{ $import->telephone }}</a>
-                                        </td>
-                                        <td> {{ $import->tuteur }} </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- end content-->
-                </div>
-                <!--  end card  -->
-            </div>
-            <!-- end col-md-12 -->
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-center">
-
-                <!-- Classic Modal -->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Choisir un fichier excel</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                    <i class="material-icons">clear</i>
-                                </button>
-                            </div>
-                            <form method="POST" enctype="multipart/form-data" action="{{route('importation_talibe')}}" class="navbar-form">
-                            <div class="modal-body">
-
-                                    @csrf()
-                                    <input type="file" class="form-control" name="importation_excel">
-
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-link">valider <i class="material-icons">done</i></button>
-{{--
-                                <button type="button" class="btn btn-link">Valider <i class="material-icons">done</i></button>
---}}
-                                <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Close <i class="material-icons">close</i></button>
-                            </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header card-header-primary card-header-icon">
-                        <div class="card-icon">
-                            <i class="material-icons">assignment</i>
-                        </div>
-                        <h4 class="card-title mt-10"> Liste des Talibés: [{{ $nbr }}]</h4>
+                        <h4 class="card-title mt-10"> Nombre de Talibés trouvés: [{{ $nombre }}] - requête [{{$recherche}}]</h4>
                         <p class="card-category" style="color: #000000">Cliquez sur le nom d'un talibé pour afficher plus de détails</p>
-                        <a class="btn btn-success" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px;" href="{{ route('talibe.create') }}"><i class="fas fa-user-plus"></i>Nouveau</a>
+                       {{-- <a class="btn btn-success" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px;" href="{{ route('talibe.create') }}"><i class="fas fa-user-plus"></i>Nouveau</a>
                         <a class="btn btn-primary" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px;" data-toggle="modal" data-target="#myModal" href="#"><i class="fas fa-file"></i>Importer fichier excel</a>
+                    --}}
                     </div>
                     <div class="card-body">
                         <div class="toolbar">
@@ -184,39 +87,34 @@
             </div>
             <!-- end col-md-12 -->
         </div>
-        <!-- end row -->
     </div>
-
-
 @endsection
-
-
 @push('scripts')
     @if( session()->has('talibeEvent')  )
 
-      <script type="text/javascript">
-        (function(from, align) {
-        type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
+        <script type="text/javascript">
+            (function(from, align) {
+                type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
 
-        color = Math.floor((Math.random() * 6) + 1);
+                color = Math.floor((Math.random() * 6) + 1);
 
-        $.notify({
-            icon: "notifications",
-            message: "{{ session('talibeEvent') }}"
+                $.notify({
+                    icon: "notifications",
+                    message: "{{ session('talibeEvent') }}"
 
-        }, {
-            type: type[color],
-            timer: 3000,
-            placement: {
-                from: from,
-                align: align
-            }
-        });
-    })();
+                }, {
+                    type: type[color],
+                    timer: 3000,
+                    placement: {
+                        from: from,
+                        align: align
+                    }
+                });
+            })();
 
-      </script>
+        </script>
 
-      @endif
+    @endif
 
     <script>
         $(document).ready(function() {

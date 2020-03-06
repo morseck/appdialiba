@@ -8,8 +8,8 @@
 @section('content')
 <div class="container-fluid"> 
               <div class="row">
-                <div class="col-lg-6" style="margin: auto;">
-                  <div class="card" data-color="purple" style="background-color:#eeeeee;">
+                <div class="col-lg-6 card" style="margin: auto;">
+                  <div class="card" data-color="purple" {{--style="background-color:#eeeeee;"--}}>
                    
                   <form class="form-horizontal" method="POST" action="{{ route('daara.update',['id' => $daara->id]) }}" enctype="multipart/form-data">
                   {{ csrf_field() }}

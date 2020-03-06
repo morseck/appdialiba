@@ -19,6 +19,15 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+//Importer fichier excel dieuwrine
+//Route::post('/importation', 'TalibeController@importation_dieuwrine')->name('importation');
+
+//Importer fichier excel talibe
+Route::post('/importation', 'TalibeController@importation_talibe')->name('importation_talibe');
+
+//Rechercher un talibe a partir de son nom prenom
+Route::get('/talibe/recherche', 'TalibeController@recherche')->name('reccherche_talibe');
+
 Route::get('/galerie', 'GalerieController@index');
 
 Route::get('galerie/{photoId}', 'GalerieController@show');

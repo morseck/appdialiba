@@ -7,7 +7,7 @@
 		 </div>
             <div class="row">
               <div class="col-md-12">
-                <div class="card card-plain">
+                <div class="card">
                   <div class="card-header card-header-icon card-header-success">
                     <div class="card-icon">
                       <i class="material-icons">assignment</i>
@@ -17,8 +17,8 @@
                     <a class="btn btn-success" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px;" href="{{ route('dieuw.create') }}"><i class="fas fa-user-plus"></i>Nouveau</a>
                   </div>
                   <div class="card-body">
-                    <div class="table-responsive">
-                      <table class="table">
+                      <div class="material-datatables">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                         <thead class="text-primary">
                           <th>Nom</th>
                           <th>Daara</th>
@@ -57,30 +57,94 @@
 @endsection
 
 
-@if( session()->has('dieuwEvent')  )
-  @push('scripts')
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#datatables').DataTable({
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    //'copyHtml5',
+                    'excelHtml5',
+                    //'csvHtml5',
+                    'pdfHtml5'
+                ],
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search records",
+                }
+            });
+            $('#importation').DataTable({
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    //'copyHtml5',
+                    'excelHtml5',
+                    //'csvHtml5',
+                    'pdfHtml5'
+                ],
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search records",
+                }
+            });
 
-      <script type="text/javascript">
-        (function(from, align) {
-        type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
+            var table = $('#datatable').DataTable();
 
-        color = Math.floor((Math.random() * 6) + 1);
+            // Edit record
+            table.on('click', '.edit', function() {
+                $tr = $(this).closest('tr');
+                var data = table.row($tr).data();
+                alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+            });
 
-        $.notify({
-            icon: "notifications",
-            message: "{{ session('dieuwEvent') }}"
+            // Delete a record
+            table.on('click', '.remove', function(e) {
+                $tr = $(this).closest('tr');
+                table.row($tr).remove().draw();
+                e.preventDefault();
+            });
 
-        }, {
-            type: type[color],
-            timer: 3000,
-            placement: {
-                from: from,
-                align: align
-            }
+            //Like record
+            table.on('click', '.like', function() {
+                alert('You clicked on Like button');
+            });
         });
-    })();
+    </script>
+        @if( session()->has('dieuwEvent')  )
 
-      </script>
 
-  @endpush
-@endif
+          <script type="text/javascript">
+            (function(from, align) {
+            type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
+
+            color = Math.floor((Math.random() * 6) + 1);
+
+            $.notify({
+                icon: "notifications",
+                message: "{{ session('dieuwEvent') }}"
+
+            }, {
+                type: type[color],
+                timer: 3000,
+                placement: {
+                    from: from,
+                    align: align
+                }
+            });
+        })();
+
+          </script>
+
+    @endif
+@endpush

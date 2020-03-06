@@ -192,9 +192,9 @@
           </button>
 
           <div class="collapse navbar-collapse justify-content-end">
-              <form class="navbar-form">
+              <form class="navbar-form" method="get" action="{{route('reccherche_talibe')}}">
                 <div class="input-group no-border">
-                  <input type="text" value="" class="form-control" placeholder="Search...">
+                  <input type="text" name="recherche" class="form-control" placeholder="Recherche...">
                 </div>
               </form>
               <ul class="navbar-nav" style="padding-right:35px;padding-left: 50px;">

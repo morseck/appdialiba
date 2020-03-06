@@ -6,8 +6,12 @@ namespace App\Http\Controllers;
 use App\Daara;
 use App\Dieuw;
 use App\Talibe;
+use App\Importation;
 use Validator;
 use Illuminate\Http\Request;
+use DB;
+//use Maatwebsite\Excel\Excel;
+use Excel;
 
 class TalibeController extends Controller
 {
@@ -23,8 +27,35 @@ class TalibeController extends Controller
     public function index( Request $request)
     {
         $view = $request->query('view') === 'card' ? 'talibe.index-card' : 'talibe.index-table';
+        $data_import = DB::table('import_taiba')->orderBy('id')->get();
 
-        return view($view,['talibeList'=> Talibe::all(), 'nbr' => Talibe::all()->count() ]);
+        return view($view,['talibeList'=> Talibe::all(), 'nbr' => Talibe::all()->count(), 'data_import'=> $data_import]);
+    }
+
+    /**
+     * Rechercher talibé à partir de son nom ou prenom
+     * @param Request $request
+     */
+    public function recherche(Request $request){
+        $recherche = $request->get("recherche");
+        $talibeList = array();
+        $nombre = 0;
+
+        if($recherche){
+           // var_dump($recherche); die();
+            $talibeList = Talibe::query();
+            $talibeList = $talibeList->where(DB::raw('CONCAT(prenom, " ", nom)'), 'LIKE' , '%'.$recherche.'%')
+                ->get();
+            //var_dump($talibes);die();
+           /* $talibeList = DB::table('talibes')
+                ->where(DB::raw('CONCAT(prenom, " ", nom)'), 'LIKE' , '%'.$recherche.'%')
+                ->get();*/
+            $nombre = count($talibeList);
+           // var_dump($resultats);die();
+        }
+
+
+        return view('talibe.recherche-table',['talibeList'=>$talibeList, 'recherche'=>$recherche, 'nombre'=>$nombre]);
     }
 
     /**
@@ -235,5 +266,210 @@ class TalibeController extends Controller
         $trashedTalibes = Talibe::onlyTrashed()->orderBy('prenom')->paginate(20);
 
         return view('talibe.trash', ['trashed' => $trashedTalibes]);
+    }
+
+
+    /**
+     * importation fichier ndongo dans la table talibe
+     * @param Request $request
+     */
+    function importation_talibe(Request $request){
+        // var_dump("import");die();
+        /*  $this->validate($request, [
+              'importation_excel'   =>  'required|mimes:xls, xlsx'
+          ]);*/
+
+        $path = $request->file('importation_excel')->getRealPath();
+        $data = Excel::load($path)->get();
+
+        $daara_id = null;
+        $daara_nom = null;
+        $dieuw = null;
+        $dieuw_id = null;
+        $age = null;
+        $date_naissance_talibe = null;
+        //var_dump($data); die();
+        $insert_data[]=array();
+        if ($data->count() > 0){
+            // var_dump($data->toArray());die();
+            foreach ($data->toArray() as $key => $value){
+
+                if ($value["nom"]!=null) {
+
+                    $daara_nom = $value['daara'];
+                    $daara_id = Daara::select('id')->where('nom', $daara_nom)->first();
+                    $daara_id = $daara_id['id'];
+
+                    $dieuw = $value['serigne'];
+                    //$dieuw_id = Dieuw::select('id')->where('concat(prenom,nom)', $dieuw)->where('daara_id', $daara)->first();
+                    $dieuw_id = Dieuw::select('id')
+                        ->where(DB::raw('CONCAT(prenom, " ", nom)'), $dieuw)
+                        ->where('daara_id', $daara_id)
+                        ->first();
+                    $dieuw_id = $dieuw_id['id'];
+                    //var_dump($dieuw_id);die();
+                    $age = $value['age'];
+                    $date_naissance_talibe =null;
+                    if ($age){
+                        //permet de connaitre la date de naissance grace à l'age
+                        $date_naissance_talibe = date("Y-01-01",strtotime("-".$age." year"));
+                    }
+                    var_dump($date_naissance_talibe);die();
+                    $talibes = new Talibe();
+                    $talibes->fill([
+                        'nom'       => $value["nom"],
+                        'prenom'    => $value["prenom"],
+                        'daara_id'  => $daara_id,
+                        'dieuw_id'  => $dieuw_id,
+                        'genre'     => 1,
+                       // 'avatar'   => ,
+                        'pere'   => $value['pere'],
+                        'mere'   => $value['prenom - nom de la mere'],
+                        'datenaissance'   => $date_naissance_talibe,
+                        'adresse'   => $value['adresse'],
+                        'tuteur'   => $value['tuteur'],
+                        'phone1'   => $value['telephone'],
+                        'niveau'   => $value['niveau'],
+                        //'arrivee'   => ,
+                       // 'commentaire'   => ,
+
+                    ]);
+                }
+
+                $talibes->save();
+
+                $insert_data[] = array(
+                    'nom'       => $value["nom"],
+                    'prenom'     => $value["prenom"],
+                    'adresse'  => $value['adresse'],
+                    //'daara_id'     => $daara,
+                    'genre'       => 1,
+                    'lon'       => null,
+                    'image'     => null
+                );
+                // }
+            }
+            if (!empty($insert_data)){
+                // DB::table('daaras')->insert($insert_data);
+                //var_dump($insert_data); die();
+            }
+        }
+        var_dump($insert_data); die();
+        return back();
+
+    }
+
+
+
+
+
+    function importation_dieuwrine(Request $request){
+        // var_dump("import");die();
+        /*  $this->validate($request, [
+              'importation_excel'   =>  'required|mimes:xls, xlsx'
+          ]);*/
+
+        $path = $request->file('importation_excel')->getRealPath();
+        $data = Excel::load($path)->get();
+
+        $daara = null;
+        $daara_nom = null;
+        //var_dump($data); die();
+        $insert_data[]=array();
+        if ($data->count() > 0){
+            // var_dump($data->toArray());die();
+            foreach ($data->toArray() as $key => $value){
+                if ($value["nom"]!=null) {
+                    $daara_nom = $value['daara'];
+                    $daara = Daara::select('id')->where('nom', $daara_nom)->first();
+                    //var_dump($daara['id']);die();
+
+                    $dieuws = new Dieuw();
+                    $dieuws->fill([
+
+                        'nom'       => $value["nom"],
+                        'prenom'     => $value["prenom"],
+                        'adresse'  => $value['adresse'],
+                        'daara_id'     => $daara['id'],
+                        'genre'       => 1
+                    ]);
+                }
+
+                $dieuws->save();
+
+                $insert_data[] = array(
+                    'nom'       => $value["nom"],
+                    'prenom'     => $value["prenom"],
+                    'adresse'  => $value['adresse'],
+                    //'daara_id'     => $daara,
+                    'genre'       => 1,
+                    'lon'       => null,
+                    'image'     => null
+                );
+                // }
+            }
+            if (!empty($insert_data)){
+                // DB::table('daaras')->insert($insert_data);
+                //var_dump($insert_data); die();
+            }
+        }
+        var_dump($insert_data); die();
+        return back();
+
+    }
+
+
+
+    function importation(Request $request){
+      // var_dump("import");die();
+      /*  $this->validate($request, [
+            'importation_excel'   =>  'required|mimes:xls, xlsx'
+        ]);*/
+
+        $path = $request->file('importation_excel')->getRealPath();
+        $data = Excel::load($path)->get();
+
+        //var_dump($data); die();
+        $insert_data[]=array();
+        if ($data->count() > 0){
+           // var_dump($data->toArray());die();
+            foreach ($data->toArray() as $key => $value){
+                //var_dump($value); die();
+               // foreach ($value as $row){
+                  //  var_dump($row['nom']); die();
+                    if ($value["nom"]!=null) {
+                      /*  $insert_data[] = array(
+                            'nom' => $value["nom"],
+                            'lat' => null,
+                            'lon' => null,
+                            'creation' => null,
+                            'dieuw' => $value['dieuw'],
+                            'image' => null,
+                            'phone' => $value['phone']
+                        );*/
+                        $daara = new Daara();
+                        $daara->fill([
+
+                            'nom'       => $value["nom"],
+                            'dieuw'     => $value["dieuw"],
+                            'creation'  => null,
+                            'phone'     => $value["phone"],
+                            'lat'       => null,
+                            'lon'       => null,
+                            'image'     => null
+                        ]);
+                    }
+
+                $daara->save();
+               // }
+            }
+            if (!empty($insert_data)){
+               // DB::table('daaras')->insert($insert_data);
+                //var_dump($insert_data); die();
+            }
+        }
+       // var_dump($data); die();
+        return back();
+
     }
 }
