@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 USE App\Daara;
 use Validator;
 use Illuminate\Http\Request;
+use DB;
 
 class DaaraController extends Controller
 {
@@ -211,8 +212,10 @@ class DaaraController extends Controller
         $dname   = $daara->nom;
 
         $talibes = $daara->talibes;
+         $parts = DB::select('SELECT COUNT(*) as poids, talibes.niveau FROM talibes JOIN daaras ON talibes.daara_id='.$id.' WHERE daaras.deleted_at IS NULL GROUP BY talibes.niveau') ;
+        var_dump($parts);die();
 
-        return view($view,compact('talibes','dname','id'));
+         return view($view,compact('talibes','dname','id'));
      }
 
 

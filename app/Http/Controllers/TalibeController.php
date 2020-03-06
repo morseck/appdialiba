@@ -44,7 +44,7 @@ class TalibeController extends Controller
         if($recherche){
            // var_dump($recherche); die();
             //$talibeList = Talibe::query();
-            $talibeList = Talibe::query()->where(DB::raw("CONCAT(prenom,' ', nom)"), 'LIKE' , '%'.$recherche.'%')
+            $talibeList = Talibe::query()->where(DB::raw("lower(CONCAT(prenom,' ', nom))"), 'LIKE' , strtolower('%'.$recherche.'%'))
                 ->get();
             //var_dump($talibes);die();
            /* $talibeList = DB::table('talibes')
