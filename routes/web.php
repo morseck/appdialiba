@@ -42,6 +42,9 @@ Route::resource('daara','DaaraController');
 
 Route::get('/daara/{id}/talibes/','DaaraController@talibes')->name('by_daara');
 
+//Liste des talibes enseignes par un dieuwrine
+Route::get('/dieuw/{id}/talibes/','DieuwController@talibeByDieuw')->name('by_dieuw');
+
 Route::resource('consultation','ConsultationController');
 
 Route::resource('medecin','MedecinController');

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Dieuw;
 use App\Daara;
+use App\Talibe;
 use Validator;
+use DB;
 use Illuminate\Http\Request;
 
 class DieuwController extends Controller
@@ -103,7 +105,39 @@ class DieuwController extends Controller
      */
     public function show($id)
     {
-        return view('dieuw.show',['dieuw' => Dieuw::findOrFail($id)]);
+        $parts = DB::select('SELECT COUNT(talibes.id) as poids, talibes.niveau FROM daaras,talibes INNER JOIN dieuws ON talibes.dieuw_id=dieuws.id WHERE dieuws.id IS NOT NULL AND dieuws.id = '.$id.' AND talibes.dieuw_id='.$id.' AND talibes.daara_id IS NOT NULL AND talibes.dieuw_id IS NOT NULL AND daaras.id= talibes.daara_id GROUP BY talibes.niveau') ;
+        $talibeList = Talibe::query()
+            ->join('dieuws','talibes.dieuw_id','=','dieuws.id')
+            ->join('daaras','daaras.id','=','talibes.daara_id')
+            ->where('dieuws.id', '=', $id )
+            ->where('talibes.daara_id', '!=', null)
+            ->where('dieuws.id', '!=',null )
+            ->get();
+        //var_dump($parts); die();
+       // var_dump(count($talibeList)); die();
+        return view('dieuw.show',['dieuw' => Dieuw::findOrFail($id), 'parts'=>$parts, 'total'=>count($talibeList)]);
+    }
+
+    /**
+     * Liste des talibes enseigne par un dieuwrine
+     * @param $id = identifiant du dieuwrine
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function talibeByDieuw($id){
+       $parts = DB::select('SELECT COUNT(talibes.id) as poids, talibes.niveau FROM daaras,talibes INNER JOIN dieuws ON talibes.dieuw_id=dieuws.id WHERE dieuws.id IS NOT NULL AND dieuws.id = '.$id.' AND talibes.dieuw_id='.$id.' AND talibes.daara_id IS NOT NULL AND talibes.dieuw_id IS NOT NULL AND daaras.id= talibes.daara_id GROUP BY talibes.niveau') ;
+        $talibeList = Talibe::query()
+           // ->join('talibes','talibes.id','=',null)
+           ->join('daaras','daaras.id','=','talibes.daara_id')
+            ->join('dieuws','talibes.dieuw_id','=','dieuws.id')
+            ->where('dieuws.id', '=', $id )
+            ->where('talibes.daara_id', '!=', null)
+            ->where('dieuws.id', '!=',null)
+            ->select('talibes.*')
+            ->get();
+        //var_dump($talibeList);die();
+        $dieuw  = Dieuw::findOrFail($id);
+        $dname  = $dieuw->fullname();
+        return view('dieuw.talibe-by-dieuw',['dieuw' => $dieuw, 'talibes'=>$talibeList,'dname'=>$dname, 'parts'=>$parts]);
     }
 
     /**

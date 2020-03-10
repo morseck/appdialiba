@@ -212,10 +212,10 @@ class DaaraController extends Controller
         $dname   = $daara->nom;
 
         $talibes = $daara->talibes;
-         $parts = DB::select('SELECT COUNT(*) as poids, talibes.niveau FROM talibes JOIN daaras ON talibes.daara_id='.$id.' WHERE daaras.deleted_at IS NULL GROUP BY talibes.niveau') ;
-        var_dump($parts);die();
+         $parts = DB::select('SELECT COUNT(talibes.id) as poids, talibes.niveau FROM talibes INNER JOIN daaras ON talibes.daara_id=daaras.id WHERE daaras.id = '.$id.' AND daaras.deleted_at IS NULL GROUP BY talibes.niveau') ;
+        //var_dump($parts);die();
 
-         return view($view,compact('talibes','dname','id'));
+         return view($view,compact('talibes','dname','id', 'parts'));
      }
 
 

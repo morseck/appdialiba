@@ -167,8 +167,8 @@
                                         <td>
                                             {{ $talibe->phone1 }}
                                         </td>
-                                        <td> {{ $talibe->tuteur }} </td>
-                                        <td class="text-right">
+                                        <td> {{ $talibe->niveau }} </td>
+                                        <td class="text-right" style="font-size: 0.1em;">
                                             <a href="{{ route('talibe.show',['id' => $talibe->id]) }}" class="btn btn-link btn-info btn-just-icon" data-toggle="tooltip"  data-placement="left" title="Voir détails"><i class="fa fa-eye"></i></a>
                                             <a href="{{ route('talibe.edit',['id' => $talibe->id]) }}" class="btn btn-link btn-warning btn-just-icon"  data-toggle="tooltip"  data-placement="left" title="Modifier"><i class="fa fa-edit"></i></a>
                                         </td>
