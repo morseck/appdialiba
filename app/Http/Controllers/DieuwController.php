@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Dieuw;
 use App\Daara;
 use App\Talibe;
+use App\Importation;
 use Validator;
-use DB;
 use Illuminate\Http\Request;
+use DB;
+use Session;
+//use Maatwebsite\Excel\Excel;
+use Excel;
 
 class DieuwController extends Controller
 {
@@ -24,7 +28,7 @@ class DieuwController extends Controller
     {
         $view = $request->query('view') === 'card' ? 'dieuw.index-card' : 'dieuw.index-table';
 
-        return view($view,['dieuws' => Dieuw::orderBy('prenom')->paginate(20), 'nbr' => Dieuw::all()->count() ]) ;
+        return view($view,['dieuws' => Dieuw::all(), 'nbr' => Dieuw::all()->count() ]) ;
     }
 
     /**
@@ -140,6 +144,7 @@ class DieuwController extends Controller
         return view('dieuw.talibe-by-dieuw',['dieuw' => $dieuw, 'talibes'=>$talibeList,'dname'=>$dname, 'parts'=>$parts]);
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -239,5 +244,191 @@ class DieuwController extends Controller
         session()->flash('dieuwEvent', 'Le Dieuw '.$name. ' a été supprimé avec succès');
 
         return redirect()->route('dieuw.index');
+    }
+
+    /**
+     * Importation par fichier excel des dieuwrines
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    function importation_dieuw(Request $request){
+        if (!$request->file()){
+            return redirect()->route('dieuw.index');
+        }
+        //Donnes sur les rapports d'importation
+        $rapport_dupliques = array();
+        $rapport_enregistres= array();
+        $rapport_erreurs= array();
+
+        $ligne = 1;//numero ligne excel
+        // var_dump("import");die();
+        /*  $this->validate($request, [
+              'importation_excel'   =>  'required|mimes:xls, xlsx'
+          ]);*/
+
+        $path = $request->file('importation_excel')->getRealPath();
+        $data = Excel::load($path)->get();
+
+        if ($data->count() > 0) {
+            // var_dump($data->toArray());die();
+            foreach ($data->toArray() as $key => $value) {
+                $ligne++;
+                $dieuwrines = null;
+
+                //Si toute la ligne est vide ou tous les champs sont vide
+                if ($value["nom"] == null && $value["prenom"] == null && $value["age"] == null && $value["adresse"] == null
+                    && $value["region"] == null && $value["date_arrivee"] == null && $value["pere"] == null
+                    && $value["prenom_nom_de_la_mere"] == null && $value["tuteur"] == null && $value["telephone"] == null
+                    && $value["daara"] == null &&  $value["genre"]==null  && $value["details"] == null)
+                {
+                    //var_dump('ligne vide'); die();
+                }
+                else
+                {
+                    $daara_id = null;
+                    $daara_nom = null;
+                    $age = null;
+                    $niveau = null;
+                    $date_naissance_dieuw = null;
+
+                    $date_arrivee = null;
+                    $age = null;
+                    $dieuwrines = null;
+                    $genre = 1; // Homme
+
+                    $repetition = null; // donnees dupliquer
+                    //var_dump($data); die();
+
+
+                    //Recherche Daara correspondant
+                    $daara_nom = $value['daara'];
+                    if ((($daara_nom) && ($daara_nom != 'neant')) ){
+                        $daara_id = Daara::select('id')->where(strtolower('nom'), strtolower($daara_nom))->first();
+                        $daara_id = $daara_id['id'];
+                    }
+
+
+                    $age = $value['age'];
+                    $date_arrivee = $value['date_arrivee'];
+                    if ($age) {
+                        //permet de connaitre la date de naissance grace à l'age
+                        $date_naissance_dieuw = date("Y-01-01", strtotime("-" . $age . " year"));
+                    }
+                    if ($date_arrivee){
+                        //permet de formater la date darrive
+                        $date_arrivee = date($date_arrivee.'-01-01');
+                    }
+                    if ($value['genre']!=null && $value['genre'] != 1){
+                        $genre = 0; //femme
+                    }
+
+
+                    $dieuwrines=null;
+                    //var_dump($date_arrivee);die();
+                    $dieuwrines = new Dieuw();
+
+                    $repetition=null;
+                    //Si toutes les colonne sont vides
+                    $nom = null;
+                    $nom = $value['nom'];
+                    $repetition = DB::select('SELECT nom from dieuws where lower(nom) like lower (\''.$nom.'\')
+                                    AND lower(prenom) like lower (\''.$value["prenom"].'\')
+                                    AND lower(pere) like lower (\''.$value["pere"].'\')
+                                    AND lower(mere) like lower (\''.$value["prenom_nom_de_la_mere"].'\')
+                                    AND lower(tuteur) like lower (\''.$value["tuteur"].'\')
+                                    AND daara_id like '.$daara_id.'
+                    ') ;
+                    //$repetition = DB::select('SELECT id from dieuws WHERE LOWER(nom) like '.$nom.' ');
+
+                   /* $repetition = Dieuw::select('id')
+                        ->where("lower('nom')",'like', ''.strtolower($value["nom"]).'')
+                        ->where(strtolower('prenom'), strtolower($value["prenom"]))
+                        ->where('datenaissance', $date_naissance_dieuw)
+                        ->where(strtolower('adresse'), strtolower($value["adresse"]))
+                        ->where(strtolower('region'), strtolower($value["region"]))
+                        ->where('arrivee', $date_arrivee)
+                        ->where('daara_id', $daara_id)
+                        ->where(strtolower('pere'), strtolower($value['pere']))
+                        ->where(strtolower('mere'), strtolower($value['prenom_nom_de_la_mere']))
+                        ->where(strtolower('tuteur'), strtolower($value['tuteur']))
+                        ->where('phone1', $value['telephone'])
+                        ->first();*/
+                    //var_dump($repetition);die();
+                    if ($repetition){//si le talibe existe deja
+                        //var_dump("dupliquer");die();
+                        $rapport_dupliques[]= array(
+                            'numero' =>$ligne,
+                            'nom' => $value["nom"],
+                            'prenom' => $value["prenom"],
+                            'daara' => $value['daara'],
+                            'pere' => $value['pere'],
+                            'mere' => $value['prenom_nom_de_la_mere'],
+                            'adresse' => $value['adresse'],
+                            'tuteur' => $value['tuteur']
+                        );
+                    }
+                    else{//Si le talibe n'est pas dupliqué
+                        $dieuwrines->fill([
+                            'nom' => $value["nom"],
+                            'prenom' => $value["prenom"],
+                            'daara_id' => $daara_id,
+                            'genre' => $genre,
+                            // 'avatar'   => ,
+                            'pere' => $value['pere'],
+                            'mere' => $value['prenom_nom_de_la_mere'],
+                            'datenaissance' => $date_naissance_dieuw,
+                            'adresse' => $value['adresse'],
+                            'region' => $value['region'],
+                            'tuteur' => $value['tuteur'],
+                            'phone1' => $value['telephone'],
+                            'arrivee' => $date_arrivee,
+                            'commentaire' => $value['details'],
+
+                        ]);
+                        try{
+                            $dieuwrines->save();
+                            // var_dump("enregistrer");die();
+                            $rapport_enregistres[]= array(
+                                'numero' =>$ligne,
+                                'nom' => $value["nom"],
+                                'prenom' => $value["prenom"],
+                                'daara' => $value['daara'],
+                                'pere' => $value['pere'],
+                                'mere' => $value['prenom_nom_de_la_mere'],
+                                'adresse' => $value['adresse'],
+                                'tuteur' => $value['tuteur']
+                            );
+                        }catch (\Exception $exception){
+                            $rapport_erreurs[]= array(
+                                'numero' =>$ligne,
+                                'nom' => $value["nom"],
+                                'prenom' => $value["prenom"],
+                                'daara' => $value['daara'],
+                                'pere' => $value['pere'],
+                                'mere' => $value['prenom_nom_de_la_mere'],
+                                'adresse' => $value['adresse'],
+                                'tuteur' => $value['tuteur']
+                            );
+                            //var_dump("catch"); die();
+                        }
+
+                    }
+                }
+            }
+        }
+        if (count($rapport_enregistres)!=0){
+            session()->flash('message_enregistrer', 'Données enregistrées avec succées');
+            Session::flash('rapport_enregistres', $rapport_enregistres);
+        }
+        if ( count($rapport_dupliques)!=0){
+            session()->flash('message_dupliquer', 'Il exite des données dupliquées');
+            Session::flash('rapport_dupliques', $rapport_dupliques);
+        }
+        if (count($rapport_erreurs)!=0){
+            session()->flash('message_erreur', 'Il existe des erreurs dans les données');
+            Session::flash('rapport_erreurs', $rapport_erreurs);
+        }
+        return redirect()->route('dieuw.index');
+
     }
 }

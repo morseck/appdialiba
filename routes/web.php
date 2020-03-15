@@ -23,7 +23,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 //Route::post('/importation', 'TalibeController@importation_dieuwrine')->name('importation');
 
 //Importer fichier excel talibe
-Route::post('/importation', 'TalibeController@importation_talibe')->name('importation_talibe');
+Route::post('/importation_talibe', 'TalibeController@importation_talibe')->name('importation_talibe');
+Route::get('/importation_talibe', 'TalibeController@importation_talibe')->name('importation_talibe');
+
+//Importer fichier excel dieuwrine
+Route::post('/importation_dieuw', 'DieuwController@importation_dieuw')->name('importation_dieuw');
+Route::get('/importation_dieuw', 'DieuwController@importation_dieuw')->name('importation_dieuw');
 
 //Rechercher un talibe a partir de son nom prenom
 Route::get('/talibe/recherche', 'TalibeController@recherche')->name('reccherche_talibe');

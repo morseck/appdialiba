@@ -2,9 +2,146 @@
 
 @section('content')
          <div class="container-fluid">
+             {{--Debut titre--}}
          	<div class="row">
-			<h3 style="margin: auto;margin-bottom: 10px;"> Liste de tous les dieuws : [{{ $nbr }}]</h3>
-		 </div>
+			    <h3 style="margin: auto;margin-bottom: 10px;"> Liste de tous les dieuws : [{{ $nbr }}]</h3>
+		    </div>
+            {{--Fin titre--}}
+
+             {{--Debut Rapport importation --}}
+             <div class="row" id="rapport_importation" style="display: none  ">
+                 <div class="col-md-12">
+                     <div class="card">
+                         <div class="card-header card-header-primary card-header-icon">
+                             <div class="card-icon">
+                                 <i class="material-icons">assignment</i>
+                             </div>
+                             <h4 class="card-title mt-10" id="rapport_importation"> Rapport d'importation</h4>
+                             <button class="btn btn-just-icon btn-round btn-reddit button_rapport" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px; margin-right: 10px;" data-toggle="tooltip"  data-placement="left" title="Fermer le rapport d'importation"><i class="fas fa-times"></i></button>
+                         </div>
+                         <div class="card-body">
+                             <div class="material-datatables">
+                                 <table id="importation" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                     <thead>
+                                     <tr>
+                                         <th>n°</th>
+                                         <th>Prenom <strong>Nom</strong></th>
+                                         <th>Daara</th>
+                                         <th>Pere</th>
+                                         <th>Mere</th>
+                                         <th>Adresse</th>
+                                         <th>Tuteur</th>
+                                         <th class="text-right">Status</th>
+                                     </tr>
+                                     </thead>
+                                     <tfoot>
+                                     <tr>
+                                         <th>n°</th>
+                                         <th>Prenom <strong>Nom</strong></th>
+                                         <th>Daara</th>
+                                         <th>Pere</th>
+                                         <th>Mere</th>
+                                         <th>Adresse</th>
+                                         <th>Tuteur</th>
+                                         <th class="text-right">Status</th>
+                                     </tr>
+                                     </tfoot>
+                                     <tbody>
+                                     @if(Session::has('rapport_enregistres') || Session::has('rapport_dupliques') || Session::has('rapport_erreur'))
+                                         @if(count(Session::get('rapport_enregistres'))>0)
+                                             @foreach(Session::get('rapport_enregistres')  as $enregistere)
+                                                 <tr>
+                                                     <td>{{$enregistere['numero']}}</td>
+                                                     <td>{{ ucfirst(strtolower($enregistere['prenom']))}} <strong><b>{{ strtoupper($enregistere['nom']) }}</b></strong></td>
+                                                     <td>
+                                                         @if($enregistere['daara']!=null)
+                                                             {{$enregistere['daara']}}
+                                                         @else
+                                                             <span class="category badge badge-warning text-white">Non orienté</span>
+                                                         @endif
+                                                     </td>
+                                                     <td> {{ $enregistere['pere'] }} </td>
+                                                     <td> {{ $enregistere['mere'] }} </td>
+                                                     <td> {{ $enregistere['adresse'] }} </td>
+                                                     <td> {{ $enregistere['tuteur'] }} </td>
+                                                     <td> <span class="category badge badge-success text-white">Enregister</span> </td>
+                                                 </tr>
+                                             @endforeach
+                                         @endif
+
+                                         @if(count(Session::get('rapport_dupliques'))>0)
+                                             @foreach(Session::get('rapport_dupliques') as $duplique)
+                                                 <tr>
+                                                     <td>{{$duplique['numero']}}</td>
+                                                     <td>{{ ucfirst(strtolower($duplique['prenom']))}} <strong><b>{{ strtoupper($duplique['nom']) }}</b></strong></td>
+                                                     <td> {{$duplique['daara']}}</td>
+                                                     <td> {{ $duplique['pere'] }} </td>
+                                                     <td> {{ $duplique['mere'] }} </td>
+                                                     <td> {{ $duplique['adresse'] }} </td>
+                                                     <td> {{ $duplique['tuteur'] }} </td>
+                                                     <td> <span class="category badge badge-warning text-white">Dupliquer</span> </td>
+                                                 </tr>
+                                             @endforeach
+                                         @endif
+                                         @if(count(Session::get('rapport_erreurs'))>0)
+                                             @foreach(Session::get('rapport_erreurs') as $erreur)
+                                                 <tr>
+                                                     <td>{{$erreur['numero']}}</td>
+                                                     <td>{{ $erreur['prenom']}} <strong><b>{{ ($erreur['nom']) }}</b></strong></td>
+                                                     <td> {{$erreur['daara']}}</td>
+                                                     <td> {{ $erreur['pere'] }} </td>
+                                                     <td> {{ $erreur['mere'] }} </td>
+                                                     <td> {{ $erreur['adresse'] }} </td>
+                                                     <td> {{ $erreur['tuteur'] }} </td>
+                                                     <td> <span class="category badge badge-danger text-white">Erreur</span> </td>
+                                                 </tr>
+                                             @endforeach
+                                         @endif
+                                     @endif
+                                     </tbody>
+                                 </table>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!-- end col-md-12 -->
+             </div>
+             {{--Fin Rapport importation--}}
+
+             {{--Debut modal formulaire d'importation--}}
+             <div class="row">
+                 <div class="col-md-12 text-center">
+                     <!-- Classic Modal -->
+                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                         <div class="modal-dialog">
+                             <div class="modal-content">
+                                 <div class="modal-header">
+                                     <h4 class="modal-title">Choisir un fichier excel</h4>
+                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                         <i class="material-icons">clear</i>
+                                     </button>
+                                 </div>
+                                 <form method="POST" enctype="multipart/form-data" action="{{route('importation_dieuw')}}" class="navbar-form">
+                                     <div class="modal-body">
+                                         @csrf()
+                                         <input type="file" class="form-control" name="importation_excel">
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button type="submit" class="btn btn-link">valider <i class="material-icons">done</i></button>
+                                         {{--
+                                                                         <button type="button" class="btn btn-link">Valider <i class="material-icons">done</i></button>
+                                         --}}
+                                         <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Close <i class="material-icons">close</i></button>
+                                     </div>
+                                 </form>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             {{--Fin modal formulaire d'importation--}}
+
+             {{--Debut Liste des dieuwrines--}}
             <div class="row">
               <div class="col-md-12">
                 <div class="card">
@@ -12,33 +149,66 @@
                     <div class="card-icon">
                       <i class="material-icons">assignment</i>
                     </div>
-                    <h4 class="card-title mt-0"> Liste des Dieuwrigne</h4>
-                    <p class="card-category">Cliquez sur le nom d'un dieuw pour afficher plus de détails</p>
+                    <h4 class="card-title mt-10"> Liste des Dieuwrigne [{{ $nbr }}]</h4>
+                    <p class="card-category text-dark">Cliquez sur le nom d'un dieuwrine pour afficher plus de détails</p>
                     <a class="btn btn-success" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px;" href="{{ route('dieuw.create') }}"><i class="fas fa-user-plus"></i>Nouveau</a>
+                      <a class="btn btn-primary" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px;" data-toggle="modal" data-target="#myModal" href="#"><i class="fas fa-file"></i>Importer fichier excel</a>
+
+                      @if(Session::has('rapport_enregistres') || Session::has('rapport_dupliques') || Session::has('rapport_erreurs'))
+                          <button  class="btn btn-danger button_rapport" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px; margin-right: 10px;"><span id="eye"><i class="fas fa-eye"></i></span><span id="libelle">Voir rapport d'imporation</span></button>
+                      @endif
                   </div>
                   <div class="card-body">
                       <div class="material-datatables">
                         <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
-                        <thead class="text-primary">
-                          <th>Nom</th>
-                          <th>Daara</th>
-                          <th>Téléphone</th>
-                          <th>Tuteur</th>
-                        </thead>
+                            <thead class="text-primary">
+                              <tr>
+                                  <th>n°</th>
+                                  <th>Prenom <b>NOM</b></th>
+                                  <th>Daara</th>
+                                  <th>Téléphone</th>
+                                  <th>Adresse</th>
+                                  <th>Action</th>
+                              </tr>
+                            </thead>
+
+                            <tfoot class="text-primary">
+                                <tr>
+                                    <th>n°</th>
+                                    <th>Prenom <b>NOM</b></th>
+                                    <th>Daara</th>
+                                    <th>Téléphone</th>
+                                    <th>Adresse</th>
+                                    <th>Action</th>
+                                </tr>
+                            </tfoot>
 
                         <tbody>
+                        <?php $i=1; ?>
                           @foreach($dieuws as $dieuw)
                           <tr>
-                            <td><a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}" title="Cliquez pour plus de détails">{{ $dieuw->fullname() }}</a></td>
-                            
-                            <td>{{ $dieuw->daara != '' ? $dieuw->daara->nom : 'non orienté'}}</td>
+                              <td><strong><?php echo $i++;?></strong></td>
+                              <td><a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($dieuw->prenom))}} <strong><b>{{ strtoupper($dieuw->nom) }}</b></strong></a></td>
+                              <td>
+                                @if($dieuw->daara != '' )
+                                    <span class="success-badge bootstrap-tagsinput">
+                                        <span class="tag badge">
+                                            <a href="{{ route('by_daara',['id' => $dieuw->daara->id]) }}" title="Cliquer pour voire les détails sur le Daara" class="text-white"><strong>{{$dieuw->daara->nom}}</strong></a>
+                                        </span>
+                                    </span>
+                                @else
+                                    <span class="badge badge-pill badge-warning">non orienté</span>
+                                @endif
+                              </td>
+                              <td>
+                                  <a href="#" title="Cliquer pour envoyer un mail">{{ $dieuw->phone1 }}</a>
+                              </td>
+                              <td> {{ $dieuw->adresse }} </td>
+                              <td>
+                                  <a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}" class="btn btn-link btn-info btn-just-icon" data-toggle="tooltip"  data-placement="left" title="Voir détails"><i class="fa fa-eye"></i></a>
+                                  <a href="{{ route('dieuw.edit',['id' => $dieuw->id]) }}" class="btn btn-link btn-warning btn-just-icon"  data-toggle="tooltip"  data-placement="left" title="Modifier"><i class="fa fa-edit"></i></a>
 
-
-                          
-                            <td>
-                              <a href="#" title="Cliquer pour envoyer un mail">{{ $dieuw->phone1 }}</a>
-                            </td>
-                            <td> {{ $dieuw->tuteur }} </td>
+                              </td>
                           </tr>
                             @endforeach
                         </tbody>
@@ -46,18 +216,21 @@
                     </div>
                   </div>
 
-                  <div class="card-footer">
+             {{--     <div class="card-footer">
                   	<p>{{ $dieuws->links() }}</p>
-                  </div>
+                  </div>--}}
 
                 </div>
               </div>          
             </div>
+             {{--Fin Liste des dieuwrines--}}
+
           </div>         
 @endsection
 
 
 @push('scripts')
+    {{--DataTable--}}
     <script>
         $(document).ready(function() {
             $('#datatables').DataTable({
@@ -121,7 +294,7 @@
             });
         });
     </script>
-        @if( session()->has('dieuwEvent')  )
+    @if( session()->has('dieuwEvent')  )
 
 
           <script type="text/javascript">
@@ -145,6 +318,96 @@
         })();
 
           </script>
+
+    @endif
+
+    {{--Affichage rapport d'importation--}}
+    <script>
+        $(function () {
+            var libelle = $('#libelle').html();
+            console.log(libelle);
+            $('.button_rapport').click(function () {
+                $('#rapport_importation').slideToggle();
+                if (libelle == "Voir rapport d'imporation"){
+                    libelle = "Fermer rapport d'importation";
+                    $('#eye').html('<i class="fas fa-eye-slash"></i>')
+                }else {
+                    if (libelle == "Fermer rapport d'importation"){
+                        libelle = "Voir rapport d'imporation";
+                        $('#eye').html('<i class="fas fa-eye"></i>')
+                    }
+                }
+
+
+                $('#libelle').html(libelle);
+                //console.log("test");
+            });
+        });
+    </script>
+    @if( session()->has('message_enregistrer')  )
+
+        <script type="text/javascript">
+            (function(from, align) {
+
+                $.notify({
+                    icon: "check",
+                    message: "{{ session('message_enregistrer') }}"
+
+                }, {
+                    type: 'success',
+                    timer: 3000,
+                    placement: {
+                        from: from,
+                        align: align
+                    }
+                });
+            })();
+
+        </script>
+
+    @endif
+    @if( session()->has('message_dupliquer')  )
+
+        <script type="text/javascript">
+            (function(from, align) {
+
+                $.notify({
+                    icon: "warning",
+                    message: "{{ session('message_dupliquer') }}"
+
+                }, {
+                    type: 'warning',
+                    timer: 3000,
+                    placement: {
+                        from: from,
+                        align: align
+                    }
+                });
+            })();
+
+        </script>
+
+    @endif
+    @if( session()->has('message_erreur')  )
+
+        <script type="text/javascript">
+            (function(from, align) {
+
+                $.notify({
+                    icon: "stop",
+                    message: "{{ session('message_erreur') }}"
+
+                }, {
+                    type: 'danger',
+                    timer: 3000,
+                    placement: {
+                        from: from,
+                        align: align
+                    }
+                });
+            })();
+
+        </script>
 
     @endif
 @endpush

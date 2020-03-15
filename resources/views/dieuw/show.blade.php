@@ -12,8 +12,13 @@
 				           <div class="row">
 				           		<div class="col-lg-6">
 				           			<h3 class="card-title">{{ $dieuw->fullname() }}</h3>
-                                    <a href="{{ route('by_daara',['id' => $dieuw->daara->id]) }}"><h4 class="category badge badge-success">{{ $dieuw->daara != '' ? $dieuw->daara->nom : 'non orienté' }}</h4></a>
-                                    <a href="{{ route('by_dieuw',['id' => $dieuw->id]) }}"><h4 class="category badge badge-warning pull-right">{{ $total}} Talibés</h4></a>
+                                    @if($dieuw->daara != '' )
+                                        <a href="{{ route('by_daara',['id' => $dieuw->daara->id]) }}"><h4 class="category badge badge-success">{{ $dieuw->daara != '' ? $dieuw->daara->nom : 'non orienté' }}</h4></a>
+                                        </span>
+                                    @else
+                                        <span class="category badge badge-warning">non orienté</span>
+                                    @endif
+                                    <a href="{{ route('by_dieuw',['id' => $dieuw->id]) }}"><h4 class="category badge badge-info pull-right">{{ $total}} Talibés</h4></a>
 				           		</div>
 				           		<div class="col-lg-6">
 				           			<img src="{{ asset('storage/dieuws/'.$dieuw->avatar) }}" style="width: 75px; height: 75px; border-radius: 50%;">
@@ -37,7 +42,6 @@
 				             	<div class="col-lg-4 col-xs-6"><b>Tuteur</b></div>
 				             	<div class="col-lg-6 col-xs-6">{{ $dieuw->tuteur }}</div>
 				             </div>
-
 				             <div class="row">
 				             	<div class="col-lg-4 col-xs-6"><b>Phone 1</b></div>
 				             	<div class="col-lg-6 col-xs-6">{{ $dieuw->phone1 }}</div>
@@ -81,12 +85,15 @@
 				        </div>
 				        <div class="card-footer">
 				        	<div class="row">
-				        		<div class="col-lg-6">
+				        		<div class="col-lg-4">
 				        			<a class="btn btn-info btn-sm" href="{{ route('dieuw.edit',['id' => $dieuw->id]) }}"><i class="fas fa-user-edit"></i> Editer</a>
 				        		</div>
-				        		<div class="col-lg-6">
+				        		<div class="col-lg-4">
 				        			<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deletmodal"><i class="fas fa-trash-alt"></i> Supprimer</button>
 				        		</div>
+                                <div class="col-lg-4">
+                                    <a class="btn btn-default btn-sm" href="{{ route('dieuw.index') }}"><i class="fas fa-list"></i> Liste Dieuwrine</a>
+                                </div>
 				        	</div>
 				        </div>
 				    </div>

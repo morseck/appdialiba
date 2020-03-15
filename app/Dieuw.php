@@ -9,7 +9,7 @@ class Dieuw extends Model
 {
     use SoftDeletes;
     
-    protected $fillable=['prenom','nom','genre','pere','mere','datenaissance','lieunaissance','adresse',
+    protected $fillable=['prenom','nom','genre','pere','mere','datenaissance','lieunaissance','adresse','region',
                          'tuteur','phone1','phone2','arrivee','depart','deces','commentaire','avatar','daara_id'
         ];
 

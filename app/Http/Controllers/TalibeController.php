@@ -10,6 +10,7 @@ use App\Importation;
 use Validator;
 use Illuminate\Http\Request;
 use DB;
+use Session;
 //use Maatwebsite\Excel\Excel;
 use Excel;
 
@@ -19,43 +20,45 @@ class TalibeController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index( Request $request)
+    public function index(Request $request)
     {
         $view = $request->query('view') === 'card' ? 'talibe.index-card' : 'talibe.index-table';
         $data_import = DB::table('import_taiba')->orderBy('id')->get();
 
-        return view($view,['talibeList'=> Talibe::all(), 'nbr' => Talibe::all()->count(), 'data_import'=> $data_import]);
+        return view($view, ['talibeList' => Talibe::all(), 'nbr' => Talibe::all()->count(), 'data_import' => $data_import]);
     }
 
     /**
      * Rechercher talibé à partir de son nom ou prenom
      * @param Request $request
      */
-    public function recherche(Request $request){
+    public function recherche(Request $request)
+    {
         $recherche = $request->get("recherche");
         $talibeList = array();
         $nombre = 0;
 
-        if($recherche){
-           // var_dump($recherche); die();
+        if ($recherche) {
+            // var_dump($recherche); die();
             //$talibeList = Talibe::query();
-            $talibeList = Talibe::query()->where(DB::raw("lower(CONCAT(prenom,' ', nom))"), 'LIKE' , strtolower('%'.$recherche.'%'))
+            $talibeList = Talibe::query()->where(DB::raw("lower(CONCAT(prenom,' ', nom))"), 'LIKE', strtolower('%' . $recherche . '%'))
                 ->get();
             //var_dump($talibes);die();
-           /* $talibeList = DB::table('talibes')
-                ->where(DB::raw('CONCAT(prenom, " ", nom)'), 'LIKE' , '%'.$recherche.'%')
-                ->get();*/
+            /* $talibeList = DB::table('talibes')
+                 ->where(DB::raw('CONCAT(prenom, " ", nom)'), 'LIKE' , '%'.$recherche.'%')
+                 ->get();*/
             $nombre = count($talibeList);
-           // var_dump($resultats);die();
+            // var_dump($resultats);die();
         }
 
 
-        return view('talibe.recherche-table',['talibeList'=>$talibeList, 'recherche'=>$recherche, 'nombre'=>$nombre]);
+        return view('talibe.recherche-table', ['talibeList' => $talibeList, 'recherche' => $recherche, 'nombre' => $nombre]);
     }
 
     /**
@@ -65,16 +68,16 @@ class TalibeController extends Controller
      */
     public function create()
     {
-        return view('talibe.create',[
-                                        'dieuws' => Dieuw::all(),
-                                        'daaras' => Daara::all(),
-                                    ]);
+        return view('talibe.create', [
+            'dieuws' => Dieuw::all(),
+            'daaras' => Daara::all(),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -84,56 +87,50 @@ class TalibeController extends Controller
         $validator = Validator::make($request->all(), [
 
             'prenom' => 'required',
-            'nom'    => 'required',
+            'nom' => 'required',
             'genre' => 'required',
             // 'region' => 'required',
             // 'pere'   => 'required',
             // 'mere'   => 'required',
-            'daara_id'=>'required',
+            'daara_id' => 'required',
             // 'datenaissance' => 'required'
-        ],[
-            'prenom.required'   => 'Le prénom est requis',
-            'nom.required'   => 'Le nom est requis',
-            'gender.required'   => 'Le genre est requis',
-            'region.required'   => 'La région est requise',
-            'pere.required'   => 'Le nom du père est requis',
-            'mere.required'   => 'Le nom de la mère est requis'
+        ], [
+            'prenom.required' => 'Le prénom est requis',
+            'nom.required' => 'Le nom est requis',
+            'gender.required' => 'Le genre est requis',
+            'region.required' => 'La région est requise',
+            'pere.required' => 'Le nom du père est requis',
+            'mere.required' => 'Le nom de la mère est requis'
         ]);
 
-        $talibe = new Talibe($request->except(['datenaissance','arrivee'])) ;
+        $talibe = new Talibe($request->except(['datenaissance', 'arrivee']));
 
-        $talibe->arrivee = app_date_reverse($request->arrivee,'/','-');
+        $talibe->arrivee = app_date_reverse($request->arrivee, '/', '-');
 
-        $talibe->datenaissance = app_date_reverse($request->datenaissance,'/','-');
+        $talibe->datenaissance = app_date_reverse($request->datenaissance, '/', '-');
 
-        if($request->hasFile('avatar'))
-        {
-            $validator->after(function() use($request,$talibe){
+        if ($request->hasFile('avatar')) {
+            $validator->after(function () use ($request, $talibe) {
 
-                if(!$request->file('avatar')->isValid())
-                {
+                if (!$request->file('avatar')->isValid()) {
                     $validator->errors()->add('avatar', 'Erreur: Veuillez joindre limage à nouveau');
-                }
-                else
-                {
+                } else {
                     $path = $request->avatar->store('public/talibes');
 
                     $talibe->avatar = app_real_filename($path);
                 }
             });
-        }
-        else
-        {
+        } else {
             $talibe->avatar = intval($talibe->genre) === 1 ? 'user_male.ico' : 'user_female.ico';
         }
 
-        if($validator->fails())
+        if ($validator->fails())
 
-           return back()->withErrors($validator);
+            return back()->withErrors($validator);
 
         $talibe->save();
 
-        session()->flash('talibeEvent', 'Le talibé '.$talibe->fullname().' a été bien ajouté');
+        session()->flash('talibeEvent', 'Le talibé ' . $talibe->fullname() . ' a été bien ajouté');
 
         return redirect()->route('talibe.index');
 
@@ -142,88 +139,90 @@ class TalibeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return view('talibe.show',['talibe' => Talibe::findOrFail($id)]);
+        return view('talibe.show', ['talibe' => Talibe::findOrFail($id)]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         return view('talibe.edit', ['talibe' => Talibe::findOrFail($id),
-                                    'dieuws' => Dieuw::all(),
-                                    'daaras' => Daara::all()
-                                ]);
+            'dieuws' => Dieuw::all(),
+            'daaras' => Daara::all()
+        ]);
     }
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         // dd($request);
-          $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
 
             'prenom' => 'required',
-            'nom'    => 'required',
+            'nom' => 'required',
             'genre' => 'required',
             // 'region' => 'required',
             // 'pere'   => 'required',
             // 'mere'   => 'required',
-            'daara_id'=> 'required',
+            'daara_id' => 'required',
             // 'datenaissance' => 'required'
-        ],[
-            'prenom.required'   => 'Le prénom est requis',
-            'nom.required'   => 'Le nom est requis',
-            'gender.required'   => 'Le genre est requis',
-            'region.required'   => 'La région est requise',
-            'pere.required'   => 'Le nom du père est requis',
-            'mere.required'   => 'Le nom de la mère est requis'
+        ], [
+            'prenom.required' => 'Le prénom est requis',
+            'nom.required' => 'Le nom est requis',
+            'gender.required' => 'Le genre est requis',
+            'region.required' => 'La région est requise',
+            'pere.required' => 'Le nom du père est requis',
+            'mere.required' => 'Le nom de la mère est requis'
         ]);
 
+        //$test_date = new \DateTime($date_arrivee.'-01-01');
+
+        //var_dump(($test_date));die();
         $talibe = Talibe::findOrFail($id);
 
         $talibe->fill([
-
-            'prenom'    => $request->prenom,
-            'nom'       => $request->nom,
-            'gerne'     => $request->genre,
-            'datenaissance' => app_date_reverse($request->datenaissance,'/','-'),
+            'prenom' => $request->prenom,
+            'nom' => $request->nom,
+            'gerne' => $request->genre,
+            'datenaissance' => app_date_reverse($request->datenaissance, '/', '-'),
             'lieunaissance' => $request->lieunaissance,
-            'region'        => $request->region,
-            'phone1'    => $request->phone1,
-            'phone2'    => $request->phone2,
-            'pere'      => $request->pere,
-            'mere'      => $request->mere,
-            'tuteur'    => $request->tuteur,
-            'adresse'   => $request->adresse,
-            'daara_id'  => $request->daara_id,
-            'dieuw_id'  => $request->dieuw_id,
-            'niveau'    => $request->niveau,
-            'commentaire'   => $request->commentaire,
-            'arrivee'   =>  app_date_reverse($request->arrivee,'/','-')
+            'region' => $request->region,
+            'phone1' => $request->phone1,
+            'phone2' => $request->phone2,
+            'pere' => $request->pere,
+            'mere' => $request->mere,
+            'tuteur' => $request->tuteur,
+            'adresse' => $request->adresse,
+            'daara_id' => $request->daara_id,
+            'dieuw_id' => $request->dieuw_id,
+            'niveau' => $request->niveau,
+            'commentaire' => $request->commentaire,
+            'arrivee' => app_date_reverse($request->arrivee, '/', '-')
         ]);
 
-        if($request->hasFile('avatar'))
-        {
-            $validator->after(function() use($request, $talibe){
+        if ($request->hasFile('avatar')) {
+            $validator->after(function () use ($request, $talibe) {
 
-                if(!$request->file('avatar')->isValid()){
+                if (!$request->file('avatar')->isValid()) {
 
-                    $validator->arrors()->add('avatar','Erreur: Veuillez joindre l\'image à nouveau');
+                    $validator->arrors()->add('avatar', 'Erreur: Veuillez joindre l\'image à nouveau');
 
-                }else{
+                } else {
 
                     $path = $request->avatar->store('public/talibes');
                     $talibe->avatar = app_real_filename($path);
@@ -231,13 +230,13 @@ class TalibeController extends Controller
             });
         }
 
-        if($validator->fails())
-            
+        if ($validator->fails())
+
             return back()->withErrors($validator);
 
         $talibe->save();
 
-        session()->flash('talibeEvent','Le profil du talibé '.$talibe->fullname().' a été bien mis à jour');
+        session()->flash('talibeEvent', 'Le profil du talibé ' . $talibe->fullname() . ' a été bien mis à jour');
 
         return redirect()->route('talibe.index');
     }
@@ -245,7 +244,7 @@ class TalibeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -256,12 +255,13 @@ class TalibeController extends Controller
 
         $talibe->delete();
 
-        session()->flash('talibeEvent', 'Le Talibé '.$name. ' a été supprimé avec succès');
+        session()->flash('talibeEvent', 'Le Talibé ' . $name . ' a été supprimé avec succès');
 
         return redirect()->route('talibe.index');
     }
 
-    public function viewTrash() {
+    public function viewTrash()
+    {
 
         $trashedTalibes = Talibe::onlyTrashed()->orderBy('prenom')->paginate(20);
 
@@ -274,6 +274,15 @@ class TalibeController extends Controller
      * @param Request $request
      */
     function importation_talibe(Request $request){
+        if (!$request->file()){
+            return redirect()->route('talibe.index');
+        }
+        //Donnes sur les rapports d'importation
+        $rapport_dupliques = array();
+        $rapport_enregistres= array();
+        $rapport_erreurs= array();
+
+        $ligne = 1;//numero ligne excel
         // var_dump("import");die();
         /*  $this->validate($request, [
               'importation_excel'   =>  'required|mimes:xls, xlsx'
@@ -282,88 +291,187 @@ class TalibeController extends Controller
         $path = $request->file('importation_excel')->getRealPath();
         $data = Excel::load($path)->get();
 
-        $daara_id = null;
-        $daara_nom = null;
-        $dieuw = null;
-        $dieuw_id = null;
-        $age = null;
-        $date_naissance_talibe = null;
-        //var_dump($data); die();
-        $insert_data[]=array();
-        if ($data->count() > 0){
+        if ($data->count() > 0) {
             // var_dump($data->toArray());die();
-            foreach ($data->toArray() as $key => $value){
+            foreach ($data->toArray() as $key => $value) {
+                $ligne++;
 
-                if ($value["nom"]!=null) {
-
-                    $daara_nom = $value['daara'];
-                    $daara_id = Daara::select('id')->where('nom', $daara_nom)->first();
-                    $daara_id = $daara_id['id'];
-
-                    $dieuw = $value['serigne'];
-                    //$dieuw_id = Dieuw::select('id')->where('concat(prenom,nom)', $dieuw)->where('daara_id', $daara)->first();
-                    $dieuw_id = Dieuw::select('id')
-                        ->where(DB::raw('CONCAT(prenom, " ", nom)'), $dieuw)
-                        ->where('daara_id', $daara_id)
-                        ->first();
-                    $dieuw_id = $dieuw_id['id'];
-                    //var_dump($dieuw_id);die();
-                    $age = $value['age'];
-                    $date_naissance_talibe =null;
-                    if ($age){
-                        //permet de connaitre la date de naissance grace à l'age
-                        $date_naissance_talibe = date("Y-01-01",strtotime("-".$age." year"));
-                    }
-                    var_dump($date_naissance_talibe);die();
-                    $talibes = new Talibe();
-                    $talibes->fill([
-                        'nom'       => $value["nom"],
-                        'prenom'    => $value["prenom"],
-                        'daara_id'  => $daara_id,
-                        'dieuw_id'  => $dieuw_id,
-                        'genre'     => 1,
-                       // 'avatar'   => ,
-                        'pere'   => $value['pere'],
-                        'mere'   => $value['prenom - nom de la mere'],
-                        'datenaissance'   => $date_naissance_talibe,
-                        'adresse'   => $value['adresse'],
-                        'tuteur'   => $value['tuteur'],
-                        'phone1'   => $value['telephone'],
-                        'niveau'   => $value['niveau'],
-                        //'arrivee'   => ,
-                       // 'commentaire'   => ,
-
-                    ]);
+                    //Si toute la ligne est vide ou tous les champs sont vide
+                //Cas niveau vide
+                if (($value['niveau'] == 'neant')){
+                    $value['niveau']=null;
                 }
+                if ($value["nom"] == null && $value["prenom"] == null && $value["age"] == null && $value["adresse"] == null
+                        && $value["region"] == null && $value["date_arrivee"] == null && $value["serigne"] == null
+                        && $value["niveau"] == null && $value["pere"] == null && $value["prenom_nom_de_la_mere"] == null
+                        && $value["tuteur"] == null && $value["telephone"] == null && $value["daara"] == null && $value["details"] == null)
+                    {
+                        //var_dump('ligne vide'); die();
+                    }
+                    else
+                        {
+                        $daara_id = null;
+                        $daara_nom = null;
+                        $dieuw = null;
+                        $dieuw_id = null;
+                        $age = null;
+                        $niveau = null;
+                        $date_naissance_talibe = null;
 
-                $talibes->save();
+                        $date_naissance_talibe = null;
+                        $date_arrivee = null;
+                        $age = null;
+                        $talibes = null;
+                        $genre = 1; // Homme
 
-                $insert_data[] = array(
-                    'nom'       => $value["nom"],
-                    'prenom'     => $value["prenom"],
-                    'adresse'  => $value['adresse'],
-                    //'daara_id'     => $daara,
-                    'genre'       => 1,
-                    'lon'       => null,
-                    'image'     => null
-                );
-                // }
-            }
-            if (!empty($insert_data)){
-                // DB::table('daaras')->insert($insert_data);
-                //var_dump($insert_data); die();
+                        $repetition = null; // donnees dupliquer
+                            //var_dump($data); die();
+
+
+                        //Recherche Daara correspondant
+                        $daara_nom = $value['daara'];
+                        if ((($daara_nom) && ($daara_nom != 'neant')) ){
+                            $daara_id = DB::select('SELECT id From daaras where lower(nom) like lower (\''.$daara_nom.'\') limit 1');
+                              //  ->where(('nom'), strtolower($daara_nom))->first();
+                            $daara_id = $daara_id[0];
+                            $daara_id = $daara_id->id;
+                        }
+
+
+
+                        //Recherche Dieuwrine correspondant
+                        $dieuw = $value['serigne'];
+                        if (($daara_nom) && ($daara_nom != 'neant')){//si daara est non existant
+                            $dieuw_id = Dieuw::select('id')
+                                ->where(DB::raw('lower(CONCAT(prenom, " ", nom))'), strtolower($dieuw))
+                                ->where('daara_id', $daara_id)
+                                ->first();
+                            $dieuw_id = $dieuw_id['id'];
+                        }
+
+
+                        $age = $value['age'];
+                        $date_arrivee = $value['date_arrivee'];
+                        if ($age) {
+                            //permet de connaitre la date de naissance grace à l'age
+                            $date_naissance_talibe = date("Y-01-01", strtotime("-" . $age . " year"));
+                        }
+                        if ($date_arrivee){
+                            //permet de formater la date darrive
+                            //$date_arrivee = \DateTime::createFromFormat('Y-m-d', $date_arrivee.'-01-01');
+                            $date_arrivee = date($date_arrivee.'-01-01');
+                        }
+                        if ($value['genre']!=null && $value['genre'] != 1){
+                            $genre = 0; //femme
+                        }
+
+                        //Cas niveau vide
+                        if (($value['niveau']) || ($value['niveau'] != 'neant')){
+                            $niveau = $value['niveau'];
+                        }
+
+
+                        //var_dump($date_arrivee);die();
+                        $talibes = new Talibe();
+                        //Si toutes les colonne sont vides
+                            $repetition = DB::select('SELECT nom from talibes where lower(nom) like lower (\''.$value["nom"].'\')
+                                    AND lower(prenom) like lower (\''.$value["prenom"].'\')
+                                    AND lower(pere) like lower (\''.$value["pere"].'\')
+                                    AND lower(mere) like lower (\''.$value["prenom_nom_de_la_mere"].'\')
+                                    AND lower(tuteur) like lower (\''.$value["tuteur"].'\')
+                                    AND daara_id like '.$daara_id.'
+                                    AND dieuw_id like \''.$dieuw_id.'\'
+                                
+                    ') ;
+                           //var_dump($repetition);die();
+                            if ($repetition){//si le talibe existe deja
+                                //var_dump("dupliquer");die();
+                                $rapport_dupliques[]= array(
+                                    'numero' =>$ligne,
+                                    'nom' => $value["nom"],
+                                    'prenom' => $value["prenom"],
+                                    'dieuw' => $value['serigne'],
+                                    'daara' => $value['daara'],
+                                    'pere' => $value['pere'],
+                                    'mere' => $value['prenom_nom_de_la_mere'],
+                                    'adresse' => $value['adresse'],
+                                    'tuteur' => $value['tuteur'],
+                                    'niveau' => $niveau
+                                );
+                            }
+                            else{//Si le talibe n'est pas dupliqué
+                                $talibes->fill([
+                                    'nom' => $value["nom"],
+                                    'prenom' => $value["prenom"],
+                                    'daara_id' => $daara_id,
+                                    'dieuw_id' => $dieuw_id,
+                                    'genre' => $genre,
+                                    // 'avatar'   => ,
+                                    'pere' => $value['pere'],
+                                    'mere' => $value['prenom_nom_de_la_mere'],
+                                    'datenaissance' => $date_naissance_talibe,
+                                    'adresse' => $value['adresse'],
+                                    'region' => $value['region'],
+                                    'tuteur' => $value['tuteur'],
+                                    'phone1' => $value['telephone'],
+                                    'niveau' => $niveau,
+                                    'arrivee' => $date_arrivee,
+                                    'commentaire' => $value['details'],
+
+                                ]);
+                               try{
+                                   $talibes->save();
+                                   $rapport_enregistres[]= array(
+                                       'numero' =>$ligne,
+                                       'nom' => $value["nom"],
+                                       'prenom' => $value["prenom"],
+                                       'dieuw' => $value['serigne'],
+                                       'daara' => $value['daara'],
+                                       'pere' => $value['pere'],
+                                       'mere' => $value['prenom_nom_de_la_mere'],
+                                       'adresse' => $value['adresse'],
+                                       'tuteur' => $value['tuteur'],
+                                       'niveau' => $niveau
+                                   );
+                               }catch (\Exception $exception){
+                                   $rapport_erreurs[]= array(
+                                       'numero' =>$ligne,
+                                       'nom' => $value["nom"],
+                                       'prenom' => $value["prenom"],
+                                       'dieuw' => $value['serigne'],
+                                       'daara' => $value['daara'],
+                                       'pere' => $value['pere'],
+                                       'mere' => $value['prenom_nom_de_la_mere'],
+                                       'adresse' => $value['adresse'],
+                                       'tuteur' => $value['tuteur'],
+                                       'niveau' => $niveau
+                                   );
+                                        //var_dump("catch"); die();
+                               }
+
+                               // var_dump("enregistrer");die();
+                            }
+                    }
             }
         }
-        var_dump($insert_data); die();
-        return back();
+        if (count($rapport_enregistres)!=0){
+            session()->flash('message_enregistrer', 'Données enregistrées avec succées');
+            Session::flash('rapport_enregistres', $rapport_enregistres);
+        }
+        if ( count($rapport_dupliques)!=0){
+            session()->flash('message_dupliquer', 'Il exite des données dupliquées');
+            Session::flash('rapport_dupliques', $rapport_dupliques);
+        }
+        if (count($rapport_erreurs)!=0){
+            session()->flash('message_erreur', 'Il existe des erreurs dans les données');
+            Session::flash('rapport_erreurs', $rapport_erreurs);
+        }
+        return redirect()->route('talibe.index');
 
     }
 
-
-
-
-
-    function importation_dieuwrine(Request $request){
+    function importation_dieuwrine(Request $request)
+    {
         // var_dump("import");die();
         /*  $this->validate($request, [
               'importation_excel'   =>  'required|mimes:xls, xlsx'
@@ -375,11 +483,11 @@ class TalibeController extends Controller
         $daara = null;
         $daara_nom = null;
         //var_dump($data); die();
-        $insert_data[]=array();
-        if ($data->count() > 0){
+        $insert_data[] = array();
+        if ($data->count() > 0) {
             // var_dump($data->toArray());die();
-            foreach ($data->toArray() as $key => $value){
-                if ($value["nom"]!=null) {
+            foreach ($data->toArray() as $key => $value) {
+                if ($value["nom"] != null) {
                     $daara_nom = $value['daara'];
                     $daara = Daara::select('id')->where('nom', $daara_nom)->first();
                     //var_dump($daara['id']);die();
@@ -387,88 +495,88 @@ class TalibeController extends Controller
                     $dieuws = new Dieuw();
                     $dieuws->fill([
 
-                        'nom'       => $value["nom"],
-                        'prenom'     => $value["prenom"],
-                        'adresse'  => $value['adresse'],
-                        'daara_id'     => $daara['id'],
-                        'genre'       => 1
+                        'nom' => $value["nom"],
+                        'prenom' => $value["prenom"],
+                        'adresse' => $value['adresse'],
+                        'daara_id' => $daara['id'],
+                        'genre' => 1
                     ]);
                 }
 
                 $dieuws->save();
 
                 $insert_data[] = array(
-                    'nom'       => $value["nom"],
-                    'prenom'     => $value["prenom"],
-                    'adresse'  => $value['adresse'],
+                    'nom' => $value["nom"],
+                    'prenom' => $value["prenom"],
+                    'adresse' => $value['adresse'],
                     //'daara_id'     => $daara,
-                    'genre'       => 1,
-                    'lon'       => null,
-                    'image'     => null
+                    'genre' => 1,
+                    'lon' => null,
+                    'image' => null
                 );
                 // }
             }
-            if (!empty($insert_data)){
+            if (!empty($insert_data)) {
                 // DB::table('daaras')->insert($insert_data);
                 //var_dump($insert_data); die();
             }
         }
-        var_dump($insert_data); die();
+        var_dump($insert_data);
+        die();
         return back();
 
     }
 
-
-
-    function importation(Request $request){
-      // var_dump("import");die();
-      /*  $this->validate($request, [
-            'importation_excel'   =>  'required|mimes:xls, xlsx'
-        ]);*/
+    function importation(Request $request)
+    {
+        // var_dump("import");die();
+        /*  $this->validate($request, [
+              'importation_excel'   =>  'required|mimes:xls, xlsx'
+          ]);*/
 
         $path = $request->file('importation_excel')->getRealPath();
         $data = Excel::load($path)->get();
 
         //var_dump($data); die();
-        $insert_data[]=array();
-        if ($data->count() > 0){
-           // var_dump($data->toArray());die();
-            foreach ($data->toArray() as $key => $value){
+        $insert_data[] = array();
+        if ($data->count() > 0) {
+            // var_dump($data->toArray());die();
+            foreach ($data->toArray() as $key => $value) {
                 //var_dump($value); die();
-               // foreach ($value as $row){
-                  //  var_dump($row['nom']); die();
-                    if ($value["nom"]!=null) {
-                      /*  $insert_data[] = array(
-                            'nom' => $value["nom"],
-                            'lat' => null,
-                            'lon' => null,
-                            'creation' => null,
-                            'dieuw' => $value['dieuw'],
-                            'image' => null,
-                            'phone' => $value['phone']
-                        );*/
-                        $daara = new Daara();
-                        $daara->fill([
+                // foreach ($value as $row){
+                //  var_dump($row['nom']); die();
+                if ($value["nom"] != null) {
+                    /*  $insert_data[] = array(
+                          'nom' => $value["nom"],
+                          'lat' => null,
+                          'lon' => null,
+                          'creation' => null,
+                          'dieuw' => $value['dieuw'],
+                          'image' => null,
+                          'phone' => $value['phone']
+                      );*/
+                    $daara = new Daara();
+                    $daara->fill([
 
-                            'nom'       => $value["nom"],
-                            'dieuw'     => $value["dieuw"],
-                            'creation'  => null,
-                            'phone'     => $value["phone"],
-                            'lat'       => null,
-                            'lon'       => null,
-                            'image'     => null
-                        ]);
-                    }
+                        'nom' => $value["nom"],
+                        'dieuw' => $value["dieuw"],
+                        'creation' => null,
+                        'phone' => $value["phone"],
+                        'lat' => null,
+                        'lon' => null,
+                        'image' => null
+                    ]);
+                }
 
                 $daara->save();
-               // }
+                // }
             }
-            if (!empty($insert_data)){
-               // DB::table('daaras')->insert($insert_data);
+            if (!empty($insert_data)) {
+                // DB::table('daaras')->insert($insert_data);
                 //var_dump($insert_data); die();
             }
         }
-       // var_dump($data); die();
+        // var_dump($data); die();
         return back();
 
     }

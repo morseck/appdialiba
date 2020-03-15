@@ -24,10 +24,14 @@
 				    <div class="card">
 				        <div class="card-header">
 				           <div class="row">
-				           		<div class="col-lg-4">
-				           			<h3 class="card-title">{{ $talibe->fullname() }}</h3>
-				            		<h4 class="category badge badge-success">{{ $talibe->daara != '' ? $talibe->daara->nom : 'non orienté' }}</h4>
-				           		</div>
+				           		<div class="col-lg-6">
+				           			<h3 class="card-title">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></h3>
+                                    @if($talibe->daara != '' )
+                                        <a href="{{ route('by_daara',['id' => $talibe->daara->id]) }}" title="Cliquer pour voire les détails sur le Daara" ><h4 class="category badge badge-success">{{ $talibe->daara->nom  }}</h4></a>
+                                    @else
+                                        <span class="category badge badge-warning">non orienté</span>
+                                    @endif
+                                </div>
 				           		<div class="col-lg-6">
 				           			<img src="{{ asset('storage/talibes/'.$talibe->avatar) }}" style="width:100px; height: 100px; border-radius: 50%;">
 				           		</div>
@@ -38,6 +42,20 @@
 				             	<div class="col-lg-4 col-xs-6"><b>Genre</b></div>
 				             	<div class="col-lg-6 col-xs-6">{{ intval($talibe->genre) === 1 ? 'Masculin': 'Féminin' }}</div>
 				             </div>
+                            <div class="row mbt-15">
+                                <div class="col-lg-4 col-xs-6"><b>Niveau d'étude</b></div>
+                                <div class="col-lg-6 col-xs-6"><strong><b>{{ $talibe->niveau }}</b></strong></div>
+                            </div>
+                            <div class="row mbt-15">
+                                <div class="col-lg-4 col-xs-6"><b>Dieuwrigne</b></div>
+                                <div class="col-lg-6 col-xs-6">
+                                    @if($talibe->dieuw != '')
+                                        <a href="{{ route('dieuw.show',['id' =>  $talibe->dieuw->id]) }}" title="Cliquer pour voire les détails sur le Dieuwrine" class="category badge badge-default text-white">{{ $talibe->dieuw->fullname() }}</a>
+                                    @else
+                                        <span class="category badge badge-danger">non affecté</span>
+                                    @endif
+                                </div>
+                            </div>
 				             <div class="row mbt-15">
 				             	<div class="col-lg-4 col-xs-6"><b>Père</b></div>
 				             	<div class="col-lg-6 col-xs-6">{{ $talibe->pere }}</div>
@@ -91,26 +109,22 @@
 				             	<div class="col-lg-6 col-xs-6">{{ $talibe->deces }}</div>
 				             </div>
 				             @endif
-				             <div class="row mbt-15">
-				             	<div class="col-lg-4 col-xs-6"><b>Dieuwrigne</b></div>
-				             	<div class="col-lg-6 col-xs-6">{{ $talibe->dieuw != '' ? $talibe->dieuw->nom : ''  }}</div>
-				             </div>
-				             <div class="row mbt-15">
-				             	<div class="col-lg-4 col-xs-6"><b>Niveau d'étude</b></div>
-				             	<div class="col-lg-6 col-xs-6">{{ $talibe->niveau }}</div>
-				             </div><br>
+				             <br>
 				             <!--  <div class="row">
 				             	<div class="col-lg-6 col-xs-6">{{ $talibe->commentaire }}</div>
 				             </div><br> -->
 				        </div>
 				        <div class="card-footer">
 				        	<div class="row">
-				        		<div class="col-lg-6">
+				        		<div class="col-lg-4">
 				        			<a class="btn btn-info" href="{{ route('talibe.edit',['id' => $talibe->id]) }}"><i class="fas fa-user-edit"></i> Editer</a>
 				        		</div>
-				        		<div class="col-lg-6">
+				        		<div class="col-lg-4">
 				        			<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletmodal"><i class="fas fa-trash-alt"></i> Supprimer</button>
 				        		</div>
+                                <div class="col-lg-4">
+                                    <a class="btn btn-default" href="{{ route('talibe.index') }}"><i class="fas fa-list"></i> Liste Talibés</a>
+                                </div>
 				        	</div>
 				        </div>
 				    </div>

@@ -229,6 +229,29 @@
       <!-- End Navbar -->
 
       <div class="content">
+              <div class="row">
+                  <div class="col-md-12">
+                      <div class="">
+                         {{-- <div class="card-icon" style="margin-left: 10px; margin-top: 10px">
+                              <i class="material-icons">keyboard_arrow_left</i>
+                          </div>--}}
+                         <div class="card-body">
+                             <button class="btn" onclick="history.back()" data-toggle="tooltip"  data-placement="left" title="Cliquez pour retourner à la page précédente">
+                              <span class="btn-label">
+                                <i class="material-icons">keyboard_arrow_left</i>
+                              </span>
+                                 Précedent
+                             </button>
+                             <button class="btn btn-success" onclick="history.forward()"  data-toggle="tooltip"  data-placement="left" title="Cliquez pour accéder à la page suivante">
+                                 Suivant
+                              <span class="btn-label">
+                                <i class="material-icons">keyboard_arrow_right</i>
+                              </span>
+                             </button>
+                         </div>
+                      </div>
+                  </div>
+              </div>
           @yield('content')
       </div>
 

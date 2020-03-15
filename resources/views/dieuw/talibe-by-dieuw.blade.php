@@ -81,9 +81,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card">
-                            <div class="card-header card-header-warning card-header-icon">
+                            <div class="card-header card-header-info card-header-icon">
                                 <div class="card-icon">
-                                    <i class="material-icons">insert_chart</i>
+                                    <i class="material-icons">pie_chart</i>
                                 </div>
                                 <h4 class="card-title mt-10"> Diagramme en zone polaire</h4>
                             </div>
@@ -105,7 +105,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="col-md-12">
+                     <div class="col-md-12">
                          <div class="card">
                              <div class="card-header card-header-warning card-header-icon">
                                  <div class="card-icon">
@@ -117,7 +117,7 @@
                                  <canvas id="myChart3"></canvas>
                              </div>
                          </div>
-                     </div>--}}
+                     </div>
                 </div>
             </div>
         </div>
@@ -169,7 +169,7 @@
         myData.push(0);
         var ctx1 = document.getElementById('myChart1');
         var ctx2 = document.getElementById('myChart2');
-        // var ctx3 = document.getElementById('myChart3');
+         var ctx3 = document.getElementById('myChart3');
 
         var data = {
             labels: myLabels,
@@ -207,7 +207,7 @@
             }
         });
 
-        /* var myChart3 = new Chart(ctx3,{
+         var myChart3 = new Chart(ctx3,{
              type: 'bar',
              data: data,
              options: {
@@ -216,7 +216,7 @@
                      display:false
                  }
              }
-         });*/
+         });
 
     </script>
 

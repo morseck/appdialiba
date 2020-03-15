@@ -3,18 +3,127 @@
 @section('content')
          <div class="container-fluid">
          	<div class="row">
-			<h3 style="margin: auto;margin-bottom: 10px;"> Liste des Talibes de  {{ $dname }} : ({{ $talibes->count() }})</h3>
-		 </div>
+			    <div class="card">
+                    <div class="card-body ">
+                        <span style="float: right">
+                            <strong><i class="fas fa-user-graduate mr-1" ></i> <b>{{$daara_info['dieuw']}}</b>
+                                @if($daara_info['telephone']!='neant' || $daara_info['telephone'])
+                                    <span class="category badge badge-default text-white ml-3"><i class="fas fa-phone mr-1"></i> {{$daara_info['telephone']}}</span>
+                                @endif
+                            </strong>
+                        </span>
+                        <h3 style="margin: auto;margin-bottom: 10px;"> Détails Daara  <strong><b>{{ $dname }}</b></strong> </h3>
+                    </div>
+                </div>
+		    </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header card-header-primary card-header-icon">
+                                    <div class="card-icon">
+                                        <i class="material-icons">assignment</i>
+                                    </div>
+                                    <h4 class="card-title mt-10"> Liste des Talibés de {{$dname}}: [{{ $talibes->count() }}] </h4>
+                                    <p class="card-category" style="color: #000000">Cliquez sur le nom d'un talibé pour afficher plus de détails</p>
+                                </div>
+                                <div class="card-body">
+                                    <div class="material-datatables">
+                                        <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th>Prenom <strong>Nom</strong></th>
+                                                <th>Niveau</th>
+                                                <th>Dieuwrigne</th>
+                                                <th>Tuteur</th>
+                                                <th class="text-right">Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tfoot>
+                                            <tr>
+                                                <th>Prenom <strong>Nom</strong></th>
+                                                <th>Niveau</th>
+                                                <th>Dieuwrigne</th>
+                                                <th>Tuteur</th>
+                                                <th class="text-right">Actions</th>
+                                            </tr>
+                                            </tfoot>
+
+                                            <tbody>
+                                            @foreach($talibes as $talibe)
+                                                <tr>
+                                                    <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
+                                                    <td>{{ $talibe->niveau }}</td>
+                                                    <td>
+                                                        @if($talibe->dieuw)
+                                                            <a href="{{ route('dieuw.show',['id' =>  $talibe->dieuw->id]) }}" title="Cliquer pour voire les détails sur le Dieuwrine" class="category badge badge-default text-white">{{ $talibe->dieuw->fullname() }}</a>
+                                                        @endif
+                                                    </td>
+                                                    <td> {{ $talibe->tuteur }} </td>
+                                                    <td class="text-right">
+                                                        <a href="{{ route('talibe.edit',['id' => $talibe->id]) }}"  data-toggle="tooltip"  data-placement="left" title="Modifier" style="font-size: 1.5em; color: #FF9800"><i class="fa fa-edit"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header card-header-danger card-header-icon">
+                                    <div class="card-icon">
+                                        <i class="fas fa-user-graduate"></i>
+                                    </div>
+                                    <h4 class="card-title mt-10"> Liste des Serigne Daara de {{$dname}}: [{{ $dieuwrines->count() }}] </h4>
+                                    <p class="card-category" style="color: #000000">Cliquez sur le nom d'un Serigne Daara pour afficher plus de détails</p>
+                                </div>
+                                <div class="card-body">
+                                    <div class="material-datatables">
+                                        <table id="dieuwrigneDatatable" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th>Prenom <strong>Nom</strong></th>
+                                                <th>Telephone</th>
+                                                <th class="text-right">Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tfoot>
+                                            <tr>
+                                                <th>Prenom <strong>Nom</strong></th>
+                                                <th>Telephone</th>
+                                                <th class="text-right">Actions</th>
+                                            </tr>
+                                            </tfoot>
+
+                                            <tbody>
+                                            @foreach($dieuwrines as $dieuw)
+                                                <tr>
+                                                    <td><a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}" title="Cliquez pour voir les détails sur le Dieuwrine">{{ ucfirst(strtolower($dieuw->prenom))}} <strong><b>{{ strtoupper($dieuw->nom) }}</b></strong></a></td>
+                                                    <td>{{$dieuw->phone1}}</td>
+                                                    <td class="text-right">
+                                                        <a href="{{ route('dieuw.edit',['id' => $dieuw->id]) }}"  data-toggle="tooltip"  data-placement="left" title="Modifier" style="font-size: 1.5em; color: #FF9800"><i class="fa fa-edit"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header card-header-warning card-header-icon">
                                     <div class="card-icon">
                                         <i class="material-icons">insert_chart</i>
                                     </div>
-                                    <h4 class="card-title mt-10"> Diagramme en barre</h4>
+                                    <h4 class="card-title mt-10"> Diagramme en barre horitazontale des talibes de {{$dname}} en fonction des hizibs</h4>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="myChart1"></canvas>
@@ -27,87 +136,27 @@
                                     <div class="card-icon">
                                         <i class="material-icons">pie_chart</i>
                                     </div>
-                                    <h4 class="card-title mt-10"> Diagramme circulaire</h4>
+                                    <h4 class="card-title mt-10"> Diagramme en circulaire des <b>régions</b> en fonction des talbés de {{$dname}} </h4>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="myChart2"></canvas>
                                 </div>
                             </div>
                         </div>
-                       {{-- <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header card-header-warning card-header-icon">
                                     <div class="card-icon">
                                         <i class="material-icons">insert_chart</i>
                                     </div>
-                                    <h4 class="card-title mt-10"> Diagramme en barre</h4>
+                                    <h4 class="card-title mt-10"> Diagramme en barre horitazontale des <b>Serignes daara</b> de {{$dname}} en fonction des talibes</h4>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="myChart3"></canvas>
                                 </div>
                             </div>
-                        </div>--}}
-                    </div>
-                    <div class="card">
-                        <div class="card-header card-header-primary card-header-icon">
-                            <div class="card-icon">
-                                <i class="material-icons">assignment</i>
-                            </div>
-                            <h4 class="card-title mt-10"> Liste des Talibés: [{{ $talibes->count() }}]</h4>
-                            <p class="card-category" style="color: #000000">Cliquez sur le nom d'un talibé pour afficher plus de détails</p>
                         </div>
-                  <div class="card-body">
-                      <div class="material-datatables">
-                          <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
-                              <thead>
-                                 <tr>
-                                     <th>Prenom <strong>Nom</strong></th>
-                                     <th>Niveau</th>
-                                     <th>Dieuwrigne</th>
-                                     <th>Téléphone</th>
-                                     <th>Tuteur</th>
-                                     <th>Adresse</th>
-                                     <th class="text-right">Action</th>
-                                 </tr>
-                            </thead>
-                              <tfoot>
-                              <tr>
-                                  <th>Prenom <strong>Nom</strong></th>
-                                  <th>Niveau</th>
-                                  <th>Dieuwrigne</th>
-                                  <th>Téléphone</th>
-                                  <th>Tuteur</th>
-                                  <th>Adresse</th>
-                                  <th class="text-right">Actions</th>
-                              </tr>
-                              </tfoot>
-
-                        <tbody>
-                          @foreach($talibes as $talibe)
-                          <tr>
-                              <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
-                            <td>{{ $talibe->niveau }}</td>
-                            <td>
-                                @if($talibe->dieuw)
-                                    <a href="{{ route('dieuw.show',['id' =>  $talibe->dieuw->id]) }}" title="Cliquer pour voire les détails sur le Dieuwrine" class="category badge badge-default text-white">{{ $talibe->dieuw->fullname() }}</a>
-                                @endif
-                            </td>
-                            <td>
-                              <a href="#" title="Cliquer pour envoyer un mail">{{ $talibe->phone1 }}</a>
-                            </td>
-                            <td> {{ $talibe->tuteur }} </td>
-                            <td> {{ $talibe->adresse }} </td>
-                              <td class="text-right">
-                                  <a href="{{ route('talibe.show',['id' => $talibe->id]) }}" class="btn btn-link btn-info btn-just-icon" data-toggle="tooltip"  data-placement="left" title="Voir détails"><i class="fa fa-eye"></i></a>
-                                  <a href="{{ route('talibe.edit',['id' => $talibe->id]) }}" class="btn btn-link btn-warning btn-just-icon"  data-toggle="tooltip"  data-placement="left" title="Modifier"><i class="fa fa-edit"></i></a>
-                              </td>
-                          </tr>
-                            @endforeach
-                        </tbody>
-                      </table>
                     </div>
-                  </div>
-                </div>
               </div>          
             </div>
           </div>         
@@ -119,6 +168,15 @@
         var talibes = 0;
         var myLabels = [] ;
         var myData =[] ;
+
+        var dieuws = 0;
+        var myLabelDieuws = [] ;
+        var myDataDieuws =[] ;
+
+        var regions = 0;
+        var myLabelRegions = [] ;
+        var myDataRegions =[] ;
+
         var myBackgroundColors =[] ;
 
         function randomColor()
@@ -139,26 +197,64 @@
         myBackgroundColors.push(randomColor()) ;
     </script>
     <?php endforeach; ?>
+
+    <?php foreach ($partDieuws as $key => $p) : ?>
+    <script type="text/javascript">
+        myLabelDieuws.push('<?= $p->fullname ?>') ;
+        myDataDieuws.push('{{ $p->poids }}');
+        myBackgroundColors.push(randomColor()) ;
+    </script>
+    <?php endforeach; ?>
+
+    <?php foreach ($partRegions as $key => $p) : ?>
+    <script type="text/javascript">
+        myLabelRegions.push('<?= $p->region ?>') ;
+        myDataRegions.push('{{ $p->poids }}');
+        myBackgroundColors.push(randomColor()) ;
+    </script>
+    <?php endforeach; ?>
+
     {{--Omar--}}
     <script type="text/javascript">
-
-
-        for(var i=0,l=myData.length; i < l ; i++ )
-        {
+        for(var i=0,l=myData.length; i < l ; i++ ) {
             talibes += parseInt(myData[i]) ;
         }
 
-        console.log(talibes);
+        for(var i=0,l=myDataDieuws.length; i < l ; i++ ) {
+           // console.log(myDataDieuws[i]);
+            dieuws += parseInt(myDataDieuws[i]) ;
+        }
+
+        for(var i=0,l=myDataRegions.length; i < l ; i++ ) {
+            // console.log(myDataDieuws[i]);
+            regions += parseInt(myDataRegions[i]) ;
+        }
+
+        console.log('talibes: '+talibes);
+        console.log('Dieuwrines: '+dieuws);
+        console.log('Region: '+regions);
 
         for(var i=0,l=myData.length; i < l ; i++ )
         {
             myLabels[i] += ' ('+ ((myData[i] / talibes ) * 100 ).toFixed(2) +' %)'+'  ['+myData[i]+']' ;
         }
 
+        for(var i=0,l=myDataDieuws.length; i < l ; i++ )
+        {
+            myLabelDieuws[i] += ' ('+ ((myDataDieuws[i] / dieuws ) * 100 ).toFixed(2) +' %)'+'  ['+myDataDieuws[i]+']' ;
+        }
+
+        for(var i=0,l=myDataRegions.length; i < l ; i++ )
+        {
+            myLabelRegions[i] += ' ('+ ((myDataRegions[i] / regions ) * 100 ).toFixed(2) +' %)'+'  ['+myDataRegions[i]+']' ;
+        }
+
         myData.push(0);
+        myDataDieuws.push(0);
+        myDataRegions.push(0);
         var ctx1 = document.getElementById('myChart1');
         var ctx2 = document.getElementById('myChart2');
-       // var ctx3 = document.getElementById('myChart3');
+       var ctx3 = document.getElementById('myChart3');
 
         var data = {
             labels: myLabels,
@@ -174,9 +270,37 @@
                 minBarLength: 2,
             }]
         } ;
+        var dataDieuw = {
+            labels: myLabelDieuws,
+            datasets: [{
+                label: '# of Votes',
+                data: myDataDieuws,
+                backgroundColor: myBackgroundColors,
+                borderColor: myBackgroundColors,
+                borderWidth: 1,
+                barPercentage: 1,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+            }]
+        } ;
+        var dataRegion = {
+            labels: myLabelRegions,
+            datasets: [{
+                label: '# of Votes',
+                data: myDataRegions,
+                backgroundColor: myBackgroundColors,
+                borderColor: myBackgroundColors,
+                borderWidth: 1,
+                barPercentage: 1,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+            }]
+        } ;
 
         var myChart1 = new Chart(ctx1,{
-            type: 'bar',
+            type: 'horizontalBar',
             data: data,
             options: {
                 legend:{
@@ -187,7 +311,7 @@
 
         var myChart2 = new Chart(ctx2,{
             type: 'doughnut',
-            data: data,
+            data: dataRegion,
             options: {
 
                 legend:{
@@ -196,16 +320,16 @@
             }
         });
 
-       /* var myChart3 = new Chart(ctx3,{
-            type: 'bar',
-            data: data,
+        var myChart3 = new Chart(ctx3,{
+            type: 'horizontalBar',
+            data: dataDieuw,
             options: {
 
                 legend:{
                     display:false
                 }
             }
-        });*/
+        });
 
     </script>
 
@@ -231,7 +355,7 @@
                     searchPlaceholder: "Search records",
                 }
             });
-            $('#importation').DataTable({
+            $('#dieuwrigneDatatable').DataTable({
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [10, 25, 50, -1],
@@ -273,11 +397,11 @@
             });
         });
     </script>
-    <script>
+    {{--<script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
-    </script>
+    </script>--}}
 
 
 @endpush
