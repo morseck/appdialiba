@@ -49,7 +49,6 @@ class DaaraController extends Controller
                 'nom'       =>  'bail|required|unique:daaras',
                 'dieuw'     =>  'bail|required',
                 'phone'     =>  'bail|required|unique:daaras',
-                'creation'  =>  'bail|required',
             ],[
                 'nom.required'      => 'Le nom du Daara est requis',
                 'nom.unique'        => 'Le nom daara '.$request->nom.' existe déjà',
@@ -59,12 +58,15 @@ class DaaraController extends Controller
             ]);
 
         $daara = new Daara();
-
+        $creation = null;
+        if ($request->creation!=null){
+            $creation ->app_date_reverse($request->creation,'/','-');
+        }
         $daara->fill([
 
             'nom'       => $request->nom,
             'dieuw'     => $request->dieuw,
-            'creation'  => app_date_reverse($request->creation,'/','-'),
+            'creation'  => $creation,
             'phone'     => $request->phone,
             'lat'       => $request->lat,
             'lon'       => $request->lon
@@ -81,7 +83,9 @@ class DaaraController extends Controller
                 }
                 else
                 {
-                    $path = $request->image->store('public/daaras');
+                   // $path = $request->avatar->store('public/dieuws');
+
+                    $path =  $request->image->store('daara', ['disk' => 'my_files']);
 
                     $daara->image = app_real_filename($path);
                 }
@@ -141,7 +145,6 @@ class DaaraController extends Controller
             'nom'       =>  'bail|required|unique:daaras,nom,'.$id,
             'dieuw'     =>  'bail|required',
             'phone'     =>  'bail|required|unique:daaras,phone,'.$id,
-            'creation'  =>  'bail|required',
         ],[
             'nom.required'      => 'Le nom du Daara est requis',
             'nom.unique'        => 'Le nom d '.$request->nom.' est déjà pris',
@@ -152,10 +155,15 @@ class DaaraController extends Controller
 
         $daara = Daara::findOrFail($id);
 
+        $creation = null;
+        if ($request->creation!=null){
+            $creation=app_date_reverse($request->creation,'/','-');
+        }
+
         $daara->nom   = $request->nom;
         $daara->dieuw = $request->dieuw;
         $daara->phone = $request->phone;
-        $daara->creation = app_date_reverse($request->creation,'/','-');
+        $daara->creation = $creation;
         $daara->lat   = $request->lat;
         $daara->lon   = $request->lon;
 
@@ -169,9 +177,11 @@ class DaaraController extends Controller
                 }
                 else
                 {
-                    $path = $request->image->store('public/daaras');
 
-                    $daara->image = $path;
+                    $path = $request->image->store('daara', ['disk' => 'my_files']);
+                    $daara->image = app_real_filename($path);
+
+                    //$daara->image = $path;
                 }
             });
         }

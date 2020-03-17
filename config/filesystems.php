@@ -54,6 +54,11 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        /*Dans le cadre des talibes: enregistrer les talibes dans le dossier public*/
+        'my_files' => [
+            'driver' => 'local',
+            'root'   => public_path() . '/myfiles',
+        ],
 
         's3' => [
             'driver' => 's3',

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Daara;
+use App\Medecin;
 use Illuminate\Http\Request;
 
 class MedecinController extends Controller
@@ -17,7 +19,8 @@ class MedecinController extends Controller
      */
     public function index()
     {
-        //
+        return view('medecin.index',['medecinList' => Medecin::all()]);
+
     }
 
     /**
@@ -27,7 +30,7 @@ class MedecinController extends Controller
      */
     public function create()
     {
-        //
+        return view('medecin.create');
     }
 
     /**

@@ -188,7 +188,8 @@
                                     <th>Daara</th>
                                     <th>Dieuwrigne</th>
                                     <th>Téléphone</th>
-                                    <th>Tuteur</th>
+                                    <th>Niveau</th>
+                                    <th>Region</th>
                                     <th class="disabled-sorting text-right">Actions</th>
                                 </tr>
                                 </thead>
@@ -198,7 +199,8 @@
                                     <th>Daara</th>
                                     <th>Dieuwrigne</th>
                                     <th>Téléphone</th>
-                                    <th>Tuteur</th>
+                                    <th>Niveau</th>
+                                    <th>Région</th>
                                     <th class="text-right">Actions</th>
                                 </tr>
                                 </tfoot>
@@ -230,6 +232,7 @@
                                             {{ $talibe->phone1 }}
                                         </td>
                                         <td> {{ $talibe->niveau }} </td>
+                                        <td> {{ $talibe->region }} </td>
                                         <td class="text-right" style="font-size: 0.1em;">
                                             <a href="{{ route('talibe.show',['id' => $talibe->id]) }}" class="btn btn-link btn-info btn-just-icon" data-toggle="tooltip"  data-placement="left" title="Voir détails"><i class="fa fa-eye"></i></a>
                                             <a href="{{ route('talibe.edit',['id' => $talibe->id]) }}" class="btn btn-link btn-warning btn-just-icon"  data-toggle="tooltip"  data-placement="left" title="Modifier"><i class="fa fa-edit"></i></a>

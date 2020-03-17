@@ -48,7 +48,8 @@ if(!function_exists('app_real_filename'))
 {
 	 function app_real_filename($str)
 	{
-		return explode('/', $str)[2];
+
+	    return explode('/', $str)[1];
 	}
 }
 ?>

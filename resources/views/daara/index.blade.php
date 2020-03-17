@@ -33,7 +33,11 @@
                       <div class="card-body" style="line-height: 80%;margin-top: -15px;">
                         <div class="row">
                             <div class="col-md-5">
-                              <img src="{{ asset('assets/img/touba.jpg') }}" style="width: 120px; height: 115px; border-radius: 50%;">
+                                @if($daara->image == null)
+                                    <img src="{{ asset('assets/img/touba.jpg') }}" style="width: 120px; height: 115px; border-radius: 50%;">
+                                @else
+                                    <img src="{{ asset('myfiles/daara/'.$daara->image) }}" style="width: 120px; height: 115px; border-radius: 50%;">
+                                @endif
                             </div>
                             <div class="col-md-7" style="margin-top: 15px;">
                                <p>Phone :  {{ $daara->phone }}</p>
