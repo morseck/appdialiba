@@ -30,6 +30,10 @@ Route::get('/importation_talibe', 'TalibeController@importation_talibe')->name('
 Route::post('/importation_dieuw', 'DieuwController@importation_dieuw')->name('importation_dieuw');
 Route::get('/importation_dieuw', 'DieuwController@importation_dieuw')->name('importation_dieuw');
 
+//Importer fichier excel medecin
+Route::post('/importation_medecin', 'MedecinController@importation_medecin')->name('importation_medecin');
+Route::get('/importation_medecin', 'MedecinController@importation_medecin')->name('importation_medecin');
+
 //Rechercher un talibe a partir de son nom prenom
 Route::get('/talibe/recherche', 'TalibeController@recherche')->name('reccherche_talibe');
 

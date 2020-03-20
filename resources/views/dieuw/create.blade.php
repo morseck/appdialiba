@@ -1,4 +1,4 @@
-@extends('layouts.scratch',['title' => 'Création d\'un nouveau Talibé | '])
+@extends('layouts.scratch',['title' => 'Création d\'un nouveau Dieuwrine | '])
 
 
 @push('styles')
@@ -23,8 +23,8 @@
                 	@csrf()
                   <!--        You can switch " data-color="primary" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
                   <div class="card-header text-center">
-                    <h4 class="card-title">Dieuw N° {{ nb_dieuws() + 1 }}</h4>
-                    <h5 class="card-description">Création d'un nouveau Talibé.</h5>
+                    <h4 class="card-title">Dieuwrine N° {{ nb_dieuws() + 1 }}</h4>
+                    <h5 class="card-description">Création d'un nouveau Dieuwrine.</h5>
                   </div>
                   @include('partials.errors')
                   <div class="wizard-navigation">

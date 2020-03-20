@@ -77,7 +77,7 @@
                       </a>
                       <a href="{{ route('medecin.index') }}">
                           <p class="card-category">Médecins</p>
-                          <h3 class="card-title">0</h3>
+                          <h3 class="card-title">{{ nb_medecins() }}</h3>
                       </a>
                   </div>
                   <div class="card-footer">

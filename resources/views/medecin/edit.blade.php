@@ -1,4 +1,4 @@
-@extends('layouts.scratch',['title' => 'Création d\'un nouveau Médecin | '])
+@extends('layouts.scratch',['title' => 'Création d\'un nouveau Talibé | '])
 
 
 @push('styles')
@@ -13,18 +13,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endpush
 
+
 @section('content')
     <div class="container-fluid">
         <div class="col-md-8 col-12 mr-auto ml-auto">
-            <!--      Wizard container        -->
             <div class="wizard-container">
                 <div class="card card-wizard" data-color="green" id="wizardProfile">
-                    <form action="{{ route('medecin.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('medecin.update',['id' => $medecin->id]) }}" method="POST" enctype="multipart/form-data">
                     @csrf()
+                    {{ method_field('PUT')}}
                     <!--        You can switch " data-color="primary" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
                         <div class="card-header text-center">
-                            <h4 class="card-title">Médecin N° {{ nb_medecins() + 1 }}</h4>
-                            <h5 class="card-description">Création d'un nouveau Médecin.</h5>
+                            <h4 class="card-title">medecin </h4>
+                            <h5 class="card-description">Edition de profil.</h5>
                         </div>
                         @include('partials.errors')
                         <div class="wizard-navigation">
@@ -40,11 +41,14 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="about">
                                     <div class="row justify-content-center">
-
                                         <div class="col-sm-6">
                                             <div class="picture-container">
                                                 <div class="picture">
-                                                    <img src="../../assets/img/medecin-avatar.png" class="picture-src" id="wizardPicturePreview" title="" />
+                                                    @if(($medecin->image !='') && ($medecin->image !='image medecin'))
+                                                        <img src="{{ asset('myfiles/medecin/'.$medecin->image) }}" class="picture-src" id="wizardPicturePreview" title="" />
+                                                    @else
+                                                        <img src="{{ asset('assets/img/medecin-avatar.png') }}" class="picture-src" id="wizardPicturePreview" title="" />
+                                                    @endif
                                                     <input type="file" id="wizard-picture" name="image">
                                                 </div>
                                                 <h6 class="category">Photo médecin</h6>
@@ -58,7 +62,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="exampleInput1" class="bmd-label-floating">Prénom</label>
-                                                    <input type="text" class="form-control" name="prenom" value="{{ old('prenom') }}" required>
+                                                    <input type="text" class="form-control" name="prenom" value="{{ old('prenom') ?? $medecin->prenom }}" required>
                                                 </div>
                                             </div>
                                             <div class="input-group form-control-lg">
@@ -69,7 +73,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="exampleInput11" class="bmd-label-floating">Nom</label>
-                                                    <input type="text" class="form-control" name="nom" value="{{ old('nom') }}" required>
+                                                    <input type="text" class="form-control" name="nom" value="{{ old('nom') ?? $medecin->nom }}"  required>
                                                 </div>
                                             </div>
                                         </div>
@@ -82,17 +86,17 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <select class="selectpicker" data-style="select-with-transition" title="Spécialité" name="spec" required>
-                                                        <option value="généraliste">Généraliste</option>
-                                                        <option value="chirurgien">Chirurgien</option>
-                                                        <option value="ophtalmologue">Ophtalmologue</option>
-                                                        <option value="dentiste">Dentiste</option>
-                                                        <option value="pédiatre">Pédiatre</option>
-                                                        <option value="infirmier">Infirmier</option>
-                                                        <option value="cardiologue">Cardiologue</option>
-                                                        <option value="Sage-femme">Sage-femme</option>
-                                                        <option value="délegue médical">Délégué médical</option>
-                                                        <option value="étudiant">Etudiant</option>
-                                                        <option value="autre">Autre</option>
+                                                        <option value="généraliste" {{ $medecin->spec == 'généraliste' ? 'selected' : ''}}>Généraliste</option>
+                                                        <option value="chirurgien" {{ $medecin->spec == 'chirurgien' ? 'selected' : ''}}>Chirurgien</option>
+                                                        <option value="ophtalmologue" {{ $medecin->spec == 'ophtalmologue' ? 'selected' : ''}}>Ophtalmologue</option>
+                                                        <option value="dentiste" {{ $medecin->spec == 'dentiste' ? 'selected' : ''}}>Dentiste</option>
+                                                        <option value="pédiatre" {{ $medecin->spec == 'pédiatre' ? 'selected' : ''}}>Pédiatre</option>
+                                                        <option value="infirmier" {{ $medecin->spec == 'infirmier' ? 'selected' : ''}}>Infirmier</option>
+                                                        <option value="cardiologue" {{ $medecin->spec == 'cardiologue' ? 'selected' : ''}}>Cardiologue</option>
+                                                        <option value="Sage-femme" {{ $medecin->spec == 'Sage-femme' ? 'selected' : ''}}>Sage-femme</option>
+                                                        <option value="délegue médical" {{ $medecin->spec == 'délegue médical' ? 'selected' : ''}}>Délégué médical</option>
+                                                        <option value="étudiant" {{ $medecin->spec == 'étudiant' ? 'selected' : ''}}>Etudiant</option>
+                                                        <option value="autre" {{ $medecin->spec == 'autre' ? 'selected' : ''}}>Autre</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -104,17 +108,17 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <select class="selectpicker" data-style="select-with-transition" title="Hôpital" name="hopital" required>
-                                                        <option value="fann">Fann</option>
-                                                        <option value="principal">Principal</option>
-                                                        <option value="dentheque">Dentheque</option>
-                                                        <option value="Roi bedoin">Roi bedoin</option>
-                                                        <option value="abass ndao">Abass ndao</option>
-                                                        <option value="clinique les madelenes">Clinique les madelenes</option>
-                                                        <option value="dalal diam">Dalal Diam</option>
-                                                        <option value="hopital les maristes">Hopital les maristes</option>
-                                                        <option value="hopital les grand yoff">Hopital Grand Yoff</option>
-                                                        <option value="universite">Universite</option>
-                                                        <option value="autre">Autre</option>
+                                                        <option value="fann" {{ $medecin->hopital == 'fann' ? 'selected' : ''}}>Fann</option>
+                                                        <option value="principal" {{ $medecin->hopital == 'principal' ? 'selected' : ''}}>Principal</option>
+                                                        <option value="dentheque" {{ $medecin->hopital == 'dentheque' ? 'selected' : ''}}>Dentheque</option>
+                                                        <option value="Roi bedoin"{{ $medecin->hopital == 'Roi bedoin' ? 'selected' : ''}}>Roi bedoin</option>
+                                                        <option value="abass ndao" {{ $medecin->hopital == 'abass ndao' ? 'selected' : ''}}>Abass ndao</option>
+                                                        <option value="clinique les madelenes" {{ $medecin->hopital == 'clinique les madelenes' ? 'selected' : ''}}>Clinique les madelenes</option>
+                                                        <option value="dalal diam" {{ $medecin->hopital == 'dalal diam' ? 'selected' : ''}}>Dalal Diam</option>
+                                                        <option value="hopital les maristes" {{ $medecin->hopital == 'hopital les maristes' ? 'selected' : ''}}>Hopital les maristes</option>
+                                                        <option value="hopital les grand yoff" {{ $medecin->hopital == 'hopital les grand yoff' ? 'selected' : ''}}>Hopital Grand Yoff</option>
+                                                        <option value="universite" {{ $medecin->hopital == 'universite' ? 'selected' : ''}}>Universite</option>
+                                                        <option value="autre" {{ $medecin->hopital == 'autre' ? 'selected' : ''}}>Autre</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -126,7 +130,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="exampleInput11" class="bmd-label-floating">Télephone</label>
-                                                    <input type="text" class="form-control" name="phone" value="{{ old('phone') }}">
+                                                    <input type="text" class="form-control" name="phone" value="{{ old('phone') ?? $medecin->phone }}">
                                                 </div>
                                             </div>
                                             <div class="input-group form-control-lg">
@@ -137,7 +141,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="exampleInput11" class="bmd-label-floating">E-mail</label>
-                                                    <input type="text" class="form-control" name="email" value="{{ old('email') }}">
+                                                    <input type="text" class="form-control" name="email" value="{{ old('email') ?? $medecin->email }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -182,15 +186,33 @@
         $('#arrivee').flatpickr(dateOpt);
         $('#datenaissance').flatpickr(dateOpt);
 
-        //    $('#input-file').change(function(event) {
 
-        //      var fileList = event.target.files;
-
-        //      console.log(fileList);
-
-        //    if (fileList.length) {
-        //      $('#filename').text(fileList[0].name)
-        //    }
-        // });
     </script>
+
+    @if( session()->has('medecinEvent')  )
+            <script type="text/javascript">
+                (function(from, align) {
+                    //type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
+
+                    color = Math.floor((Math.random() * 6) + 1);
+
+                    $.notify({
+                        icon: "notifications",
+                        message: "{{ session('medecinEvent') }}"
+
+                    }, {
+                        //type: type[color],
+                        type: 'success',
+                        timer: 3000,
+                        placement: {
+                            from: from,
+                            align: align
+                        }
+                    });
+                })();
+
+            </script>
+
+        @endif
+
 @endpush

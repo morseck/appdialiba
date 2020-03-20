@@ -3,6 +3,7 @@
 use App\Dieuw;
 use App\Daara;
 use App\Talibe;
+use App\Medecin;
 
 if(!function_exists('app_date_reverse'))
 {
@@ -34,6 +35,14 @@ if(!function_exists('nb_dieuws'))
 	{
 		return (int) Dieuw::all()->count();
 	}
+}
+
+if(!function_exists('nb_medecins'))
+{
+    function nb_medecins()
+    {
+        return (int) Medecin::all()->count();
+    }
 }
 
 if(!function_exists('niveau_mapper'))
