@@ -29,7 +29,8 @@ class TalibeController extends Controller
     public function index(Request $request)
     {
         $view = $request->query('view') === 'card' ? 'talibe.index-card' : 'talibe.index-table';
-        $data_import = DB::table('import_taiba')->orderBy('id')->get();
+        //$data_import = DB::table('import_taiba')->orderBy('id')->get();
+        $data_import = null;
 
         return view($view, ['talibeList' => Talibe::all(), 'nbr' => Talibe::all()->count(), 'data_import' => $data_import]);
     }
