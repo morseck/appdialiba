@@ -17,14 +17,182 @@
 @section('content')
 
 	<div class="container-fluid">
-		<div class="row">				              
+        {{--Debut bulletin de santé --}}
+        <div class="row" id="bulletin_medical" style="display: none;">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-success card-header-icon">
+                        <div class="card-icon">
+                            {{--<i class="material-icons">assignment</i>--}}
+                            <i class="fas fa-ambulance"></i>
+                        </div>
+                        <h4 class="card-title mt-10" id="bulletin_medical"> Bulletin médical de {{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></h4>
+                        <button class="btn btn-just-icon btn-round btn-reddit button_rapport" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px; margin-right: 10px;" data-toggle="tooltip"  data-placement="left" title="Fermer le rapport d'importation"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="card-body">
+                        <div class="material-datatables">
+                            <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>n°</th>
+                                    <th>Date </th>
+                                    <th>Lieu</th>
+                                    <th>Maladie</th>
+                                    <th>Avis</th>
+                                    <th>Médecin</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>n°</th>
+                                    <th>Date </th>
+                                    <th>Lieu</th>
+                                    <th>Maladie</th>
+                                    <th>Avis</th>
+                                    <th>Médecin</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <?php $i = 1; ?>
+                                    @foreach($consultations  as $consulta)
+                                            <tr>
+                                                <td><?php echo $i;?></td>
+                                                <td>{{ app_date_reverse($consulta->date,'-','-') }}</td>
+                                                <td>{{$consulta->lieu}}</td>
+                                                <td>{{$consulta->maladie}}</td>
+                                                <td> {{ $consulta->avis }} </td>
+                                                <td>
+                                                    <a href="{{route('medecin.show', ['id' => $consulta->medecin->id])}}" class="category badge badge-success text-white">
+                                                        <span >{{$consulta->medecin->fullname()}}</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <?php $i++; ?>
+                                        @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        {{--Fin bulletin de sante--}}
+
+        {{--Debut modal formulaire de consultation--}}
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Classic Modal -->
+                <div class="modal fade" id="modalConsultation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-success text-white">
+                                <h4 class="modal-title">Formulaire de consultation du talibé <strong>{{ ucfirst(strtolower($talibe->prenom))}} <b>{{ strtoupper($talibe->nom) }}</b></strong></h4>
+                                <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true">
+                                    <i class="material-icons" style="font-size: 1em;">clear</i>
+                                </button>
+                            </div>
+                            <form method="POST" enctype="multipart/form-data" action="{{route('consultation.store')}}" class="navbar-form">
+                                <div class="modal-body">
+                                    @csrf()
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="input-group form-control-lg">
+                                                <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                 <i class="fas fa-user-md"></i>
+                                                </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="hidden" class="form-control" name="talibe_id"  value="{{ $talibe->id }}"  style="background-color: transparent;">
+                                                    <select class="selectpicker" data-style="select-with-transition" title="Médecin" name="medecin_id">
+                                                        @foreach($medecins as $medecin)
+                                                            <option value="{{ $medecin->id }}">{{ $medecin->fullname() }} - {{ $medecin->spec ?? ''}} - {{ $medecin->hopital ?? ''}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="input-group form-control-lg">
+                                                <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                 <i class="fas fa-map-marker-alt"></i>
+                                                </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="selectpicker" data-style="select-with-transition" title="Lieu de la consultation" name="lieu">
+                                                        @foreach($daaras as $daara)
+                                                            <option value="{{ $daara->nom}}" {{ $daara->nom == ''.$talibe->daara->nom.'' ? 'selected' :'' }}>{{ $daara->nom }}</option>
+                                                        @endforeach
+                                                        <option value="autre">Autre</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="input-group form-control-lg">
+                                                <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                 <i class="fas fa-calendar"></i>
+                                                </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInput11" class="">Date</label>
+                                                    <input type="date" class="form-control" name="date"  value="{{ old('date') }}"  style="background-color: transparent;" placeholder="Format: jj/mm/aa - exemple: 21/02/2020">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-group form-control-lg">
+                                                <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                 <i class="fas fa-medkit"></i>
+                                                </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="selectpicker" data-style="select-with-transition" title="Maladie" name="maladie">
+                                                        <option value="paludisme">Paludisme</option>
+                                                        <option value="diabète">Diabète</option>
+                                                        <option value="rougeole">Rougeole</option>
+                                                        <option value="fievre jaune">Fièvre jaune</option>
+                                                        <option value="diarrhe">Diarrhé</option>
+                                                        <option value="autre">Autre</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="input-group form-control-lg">
+                                                <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                 <i class="fas fa-stethoscope"></i>
+                                                </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInput11" class="bmd-label-floating">Avis</label>
+                                                    <textarea class="form-control" name="avis" style="background-color: transparent;">{{(old('avis')) }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-link">valider <i class="material-icons">done</i></button>
+                                    <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Fermer <i class="material-icons">close</i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--Fin modal formulaire de consultation--}}
+
+        {{--Debut show talibe--}}
+		<div class="row">
             <div class="col-lg-7 col-xs-8" style="margin: auto;">
+                @include('partials.errors')
             	<div class="row">
             		<div class="col-md-12">
 				    <div class="card">
 				        <div class="card-header">
 				           <div class="row">
-				           		<div class="col-lg-6">
+				           		<div class="col-lg-5">
 				           			<h3 class="card-title">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></h3>
                                     @if($talibe->daara != '' )
                                         <a href="{{ route('by_daara',['id' => $talibe->daara->id]) }}" title="Cliquer pour voire les détails sur le Daara" ><h4 class="category badge badge-success">{{ $talibe->daara->nom  }}</h4></a>
@@ -32,8 +200,20 @@
                                         <span class="category badge badge-warning">non orienté</span>
                                     @endif
                                 </div>
-				           		<div class="col-lg-6">
-				           			<img src="{{ asset('storage/talibes/'.$talibe->avatar) }}" style="width:100px; height: 100px; border-radius: 50%;">
+				           		<div class="col-lg-7">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            @if(($talibe->avatar !='') && ($talibe->avatar !='image talibe'))
+                                                <img src="{{ asset('myfiles/talibes/'.$talibe->avatar) }}" style="width:100px; height: 100px; border-radius: 50%;">
+                                            @else
+                                                <img src="{{ asset('assets/img/default-avatar.png') }}" style="width:100px; height: 100px; border-radius: 50%;">
+                                            @endif
+                                        </div>
+                                        <div class="col-md-8">
+                                            <button type="button" class="btn btn-round btn-outline-success" data-toggle="modal" data-target="#modalConsultation" href="#"><i class="fas fa-medkit"></i> Nouvelle consultation</button>
+                                            <button type="button" class="btn btn-round btn-outline-info button_rapport"><i class="fas fa-stethoscope"></i> <span id="libelle">Voir bulletin médical</span></button>
+                                        </div>
+                                    </div>
 				           		</div>
 				           </div>
 				        </div>
@@ -132,6 +312,7 @@
             	</div>
            </div>
 		</div>
+        {{--Fin show talibe--}}
 	</div>
 
 <!-- deletion confirmation modal -->
@@ -167,6 +348,136 @@
   </div>
 </div>
 @endsection
+@push('scripts')
+    {{--Debut datepicker--}}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            //init DateTimePickers
+            md.initFormExtendedDatetimepickers();
+
+            // Initialise the wizard
+            demo.initMaterialWizard();
+            setTimeout(function() {
+                $('.card.card-wizard').addClass('active');
+            }, 200);
+
+            // Initialise the datepicker
+            let dateOpt = {dateFormat: "d/m/Y", locale: 'fr'};
+            $('#date').flatpickr(dateOpt);
+
+        });
+
+
+        //    $('#input-file').change(function(event) {
+
+        //      var fileList = event.target.files;
+
+        //      console.log(fileList);
+
+        //    if (fileList.length) {
+        //      $('#filename').text(fileList[0].name)
+        //    }
+        // });
+    </script>
+    {{--Fin datepicker--}}
+
+    {{--Debut alerte notification--}}
+    @if( session()->has('consultationEvent')  )
+        <script type="text/javascript">
+            (function(from, align) {
+                //type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
+
+                color = Math.floor((Math.random() * 6) + 1);
+
+                $.notify({
+                    icon: "notifications",
+                    message: "{{ session('consultationEvent') }}"
+
+                }, {
+                    //type: type[color],
+                    type: 'success',
+                    timer: 3000,
+                    placement: {
+                        from: from,
+                        align: align
+                    }
+                });
+            })();
+
+        </script>
+
+    @endif
+    {{--Fin alerte notification--}}
+
+    {{--Debut dataTable--}}
+    <script>
+        $(document).ready(function() {
+            $('#datatables').DataTable({
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    //'copyHtml5',
+                    'excelHtml5',
+                    //'csvHtml5',
+                    'pdfHtml5'
+                ],
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search records",
+                }
+            });
+            var table = $('#datatable').DataTable();
+            // Edit record
+            table.on('click', '.edit', function() {
+                $tr = $(this).closest('tr');
+                var data = table.row($tr).data();
+                alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+            });
+            // Delete a record
+            table.on('click', '.remove', function(e) {
+                $tr = $(this).closest('tr');
+                table.row($tr).remove().draw();
+                e.preventDefault();
+            });
+
+            //Like record
+            table.on('click', '.like', function() {
+                alert('You clicked on Like button');
+            });
+        });
+    </script>
+    {{--Fin dataTable--}}
+
+    {{-- Debut Affichage bulletin de sante--}}
+    <script>
+        $(function () {
+            var libelle = $('#libelle').html();
+            console.log(libelle);
+            $('.button_rapport').click(function () {
+                $('#bulletin_medical').slideToggle();
+                if (libelle == "Voir bulletin médical"){
+                    libelle = "Fermer bulletin médical";
+                }else {
+                    if (libelle == "Fermer bulletin médical"){
+                        libelle = "Voir bulletin médical";
+                    }
+                }
+
+                $('#libelle').html(libelle);
+                //console.log("test");
+            });
+        });
+    </script>
+    {{-- Fin Affichage bulletin de sante--}}
+@endpush
 
 
 

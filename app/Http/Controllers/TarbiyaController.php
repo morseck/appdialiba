@@ -2,32 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Dieuw;
 use App\Daara;
-use App\Talibe;
-use App\Importation;
-use Validator;
+use App\Tarbiya;
 use Illuminate\Http\Request;
+use Validator;
 use DB;
 use Session;
 use Excel;
 
-class DieuwController extends Controller
+class TarbiyaController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $view = $request->query('view') === 'card' ? 'dieuw.index-card' : 'dieuw.index-table';
-
-        return view($view,['dieuws' => Dieuw::all(), 'nbr' => Dieuw::all()->count() ]) ;
+        return view('tarbiya.index',['tarbiyas' => Tarbiya::all()]) ;
     }
 
     /**
@@ -37,7 +35,7 @@ class DieuwController extends Controller
      */
     public function create()
     {
-        return view('dieuw.create', ['daaras' => Daara::all()]);
+        return view('tarbiya.create', ['tarbiyas' => Tarbiya::all(), 'daaras'=>Daara::all()]);
     }
 
     /**
@@ -48,7 +46,6 @@ class DieuwController extends Controller
      */
     public function store(Request $request)
     {
-        
         $validator = Validator::make($request->all(), [
 
             'prenom' => 'required',
@@ -62,15 +59,15 @@ class DieuwController extends Controller
 
         ]);
 
-        $dieuw = new Dieuw($request->except(['datenaissance','arrivee'])) ;
+        $tarbiya = new Tarbiya($request->except(['datenaissance','arrivee'])) ;
 
-        $dieuw->arrivee = app_date_reverse($request->arrivee,'/','-');
+        $tarbiya->arrivee = app_date_reverse($request->arrivee,'/','-');
 
-        $dieuw->datenaissance = app_date_reverse($request->datenaissance,'/','-');
+        $tarbiya->datenaissance = app_date_reverse($request->datenaissance,'/','-');
 
         if($request->hasFile('avatar'))
         {
-            $validator->after(function() use($request,$dieuw){
+            $validator->after(function() use($request,$tarbiya){
 
                 if(!$request->file('avatar')->isValid())
                 {
@@ -78,26 +75,28 @@ class DieuwController extends Controller
                 }
                 else
                 {
-                    $path = $request->avatar->store('public/dieuws');
+                    $path = $request->avatar->store('tarbiya', ['disk' => 'my_files']);
 
-                    $dieuw->avatar = app_real_filename($path);
+                    $tarbiya->avatar = app_real_filename($path);
                 }
             });
         }
         else
         {
-            $dieuw->avatar = intval($dieuw->genre) === 1 ? 'user_male.ico' : 'user_female.ico';
+            $tarbiya->avatar = intval($tarbiya->genre) === 1 ? 'user_male.ico' : 'user_female.ico';
         }
 
         if($validator->fails())
 
-           return back()->withErrors($validator);
+            return back()->withErrors($validator);
 
-        $dieuw->save();
+        $tarbiya->save();
 
-        session()->flash('dieuwEvent', 'Le dieuwrigne '.$dieuw->fullname().' a été bien ajouté');
+        session()->flash('tarbiyaEvent', 'Le Ngongo tarbiya '.$tarbiya->fullname().' a été bien ajouté');
+        $tarbiya = Tarbiya::latest()->first();
+        $id = $tarbiya->id;
 
-        return redirect()->route('dieuw.index');
+        return redirect()->route('tarbiya.show', ['id' => $id]);
     }
 
     /**
@@ -108,41 +107,8 @@ class DieuwController extends Controller
      */
     public function show($id)
     {
-        $parts = DB::select('SELECT COUNT(talibes.id) as poids, talibes.niveau FROM daaras,talibes INNER JOIN dieuws ON talibes.dieuw_id=dieuws.id WHERE dieuws.id IS NOT NULL AND dieuws.id = '.$id.' AND talibes.dieuw_id='.$id.' AND talibes.daara_id IS NOT NULL AND talibes.dieuw_id IS NOT NULL AND daaras.id= talibes.daara_id GROUP BY talibes.niveau') ;
-        $talibeList = Talibe::query()
-            ->join('dieuws','talibes.dieuw_id','=','dieuws.id')
-            ->join('daaras','daaras.id','=','talibes.daara_id')
-            ->where('dieuws.id', '=', $id )
-            ->where('talibes.daara_id', '!=', null)
-            ->where('dieuws.id', '!=',null )
-            ->get();
-        //var_dump($parts); die();
-       // var_dump(count($talibeList)); die();
-        return view('dieuw.show',['dieuw' => Dieuw::findOrFail($id), 'parts'=>$parts, 'total'=>count($talibeList)]);
+        return view('tarbiya.show',['tarbiya' => Tarbiya::findOrFail($id)]);
     }
-
-    /**
-     * Liste des talibes enseigne par un dieuwrine
-     * @param $id = identifiant du dieuwrine
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function talibeByDieuw($id){
-       $parts = DB::select('SELECT COUNT(talibes.id) as poids, talibes.niveau FROM daaras,talibes INNER JOIN dieuws ON talibes.dieuw_id=dieuws.id WHERE dieuws.id IS NOT NULL AND dieuws.id = '.$id.' AND talibes.dieuw_id='.$id.' AND talibes.daara_id IS NOT NULL AND talibes.dieuw_id IS NOT NULL AND daaras.id= talibes.daara_id GROUP BY talibes.niveau') ;
-        $talibeList = Talibe::query()
-           // ->join('talibes','talibes.id','=',null)
-           ->join('daaras','daaras.id','=','talibes.daara_id')
-            ->join('dieuws','talibes.dieuw_id','=','dieuws.id')
-            ->where('dieuws.id', '=', $id )
-            ->where('talibes.daara_id', '!=', null)
-            ->where('dieuws.id', '!=',null)
-            ->select('talibes.*')
-            ->get();
-        //var_dump($talibeList);die();
-        $dieuw  = Dieuw::findOrFail($id);
-        $dname  = $dieuw->fullname();
-        return view('dieuw.talibe-by-dieuw',['dieuw' => $dieuw, 'talibes'=>$talibeList,'dname'=>$dname, 'parts'=>$parts]);
-    }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -152,9 +118,9 @@ class DieuwController extends Controller
      */
     public function edit($id)
     {
-        return view('dieuw.edit', ['dieuw' => Dieuw::findOrFail($id),
-                                    'daaras' => Daara::all()
-                                ]);
+        return view('tarbiya.edit', ['tarbiya' => Tarbiya::findOrFail($id),
+            'daaras' => Daara::all()
+        ]);
     }
 
     /**
@@ -166,7 +132,7 @@ class DieuwController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
 
             'prenom' => 'required',
             'nom'    => 'required',
@@ -178,9 +144,9 @@ class DieuwController extends Controller
             'genre.required'   => 'Le genre est requis'
         ]);
 
-        $dieuw = dieuw::findOrFail($id);
+        $tarbiya = Tarbiya::findOrFail($id);
 
-        $dieuw->fill([
+        $tarbiya->fill([
 
             'prenom'    => $request->prenom,
             'nom'       => $request->nom,
@@ -201,29 +167,29 @@ class DieuwController extends Controller
 
         if($request->hasFile('avatar'))
         {
-            $validator->after(function() use($request, $dieuw){
+            $validator->after(function() use($request, $tarbiya){
 
                 if(!$request->file('avatar')->isValid()){
 
-                     $validator->arrors()->add('avatar','Erreur: Veuillez joindre l\'image à nouveau');
+                    $validator->arrors()->add('avatar','Erreur: Veuillez joindre l\'image à nouveau');
 
                 }else{
 
-                    $path = $request->avatar->store('public/dieuws');
-                    $dieuw->avatar = app_real_filename($path);
+                    $path =  $request->avatar->store('tarbiya', ['disk' => 'my_files']);
+                    $tarbiya->avatar = app_real_filename($path);
                 }
             });
         }
 
         if($validator->fails())
-            
+
             return back()->withErrors($validator);
 
-        $dieuw->save();
+        $tarbiya->save();
 
-        session()->flash('dieuwEvent','Le profil du dieuw '.$dieuw->fullname().' a été bien mis à jour');
+        session()->flash('tarbiyaEvent','Le profil du ndongo tarbiya '.$tarbiya->fullname().' a été bien mis à jour');
 
-        return redirect()->route('dieuw.index');
+        return redirect()->route('tarbiya.show', ['id' => $id]);
     }
 
     /**
@@ -234,25 +200,25 @@ class DieuwController extends Controller
      */
     public function destroy($id)
     {
-        $dieuw = Dieuw::findOrFail($id);
+        $tarbiya = Tarbiya::findOrFail($id);
 
-        $name = $dieuw->fullname();
+        $name = $tarbiya->fullname();
 
-        $dieuw->delete();
+        $tarbiya->delete();
 
-        session()->flash('dieuwEvent', 'Le Dieuw '.$name. ' a été supprimé avec succès');
+        session()->flash('tarbiyaEvent', 'Le ndongo tarbiya '.$name. ' a été supprimé avec succès');
 
-        return redirect()->route('dieuw.index');
+        return redirect()->route('tarbiya.index');
     }
 
     /**
-     * Importation par fichier excel des dieuwrines
+     * Importation par fichier excel des ndongos tarbiyas
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    function importation_dieuw(Request $request){
+    function importation_tarbiya(Request $request){
         if (!$request->file()){
-            return redirect()->route('dieuw.index');
+            return redirect()->route('tarbiya.index');
         }
         //Donnes sur les rapports d'importation
         $rapport_dupliques = array();
@@ -272,7 +238,7 @@ class DieuwController extends Controller
             // var_dump($data->toArray());die();
             foreach ($data->toArray() as $key => $value) {
                 $ligne++;
-                $dieuwrines = null;
+                $tarbiyas = null;
 
                 //Si toute la ligne est vide ou tous les champs sont vide
                 if ($value["nom"] == null && $value["prenom"] == null && $value["age"] == null && $value["adresse"] == null
@@ -288,11 +254,11 @@ class DieuwController extends Controller
                     $daara_nom = null;
                     $age = null;
                     $niveau = null;
-                    $date_naissance_dieuw = null;
+                    $date_naissance_tarbiya = null;
 
                     $date_arrivee = null;
                     $age = null;
-                    $dieuwrines = null;
+                    $tarbiyas = null;
                     $genre = 1; // Homme
 
                     $repetition = null; // donnees dupliquer
@@ -311,7 +277,7 @@ class DieuwController extends Controller
                     $date_arrivee = $value['date_arrivee'];
                     if ($age) {
                         //permet de connaitre la date de naissance grace à l'age
-                        $date_naissance_dieuw = date("Y-01-01", strtotime("-" . $age . " year"));
+                        $date_naissance_tarbiya = date("Y-01-01", strtotime("-" . $age . " year"));
                     }
                     if ($date_arrivee){
                         //permet de formater la date darrive
@@ -322,15 +288,15 @@ class DieuwController extends Controller
                     }
 
 
-                    $dieuwrines=null;
+                    $tarbiyas=null;
                     //var_dump($date_arrivee);die();
-                    $dieuwrines = new Dieuw();
+                    $tarbiyas = new Tarbiya();
 
                     $repetition=null;
                     //Si toutes les colonne sont vides
                     $nom = null;
                     $nom = $value['nom'];
-                    $repetition = DB::select('SELECT nom from dieuws where lower(nom) like lower (\''.$nom.'\')
+                    $repetition = DB::select('SELECT nom from tarbiyas where lower(nom) like lower (\''.$nom.'\')
                                     AND lower(prenom) like lower (\''.$value["prenom"].'\')
                                     AND lower(pere) like lower (\''.$value["pere"].'\')
                                     AND lower(mere) like lower (\''.$value["prenom_nom_de_la_mere"].'\')
@@ -352,7 +318,7 @@ class DieuwController extends Controller
                         );
                     }
                     else{//Si le talibe n'est pas dupliqué
-                        $dieuwrines->fill([
+                        $tarbiyas->fill([
                             'nom' => $value["nom"],
                             'prenom' => $value["prenom"],
                             'daara_id' => $daara_id,
@@ -360,7 +326,7 @@ class DieuwController extends Controller
                             // 'avatar'   => ,
                             'pere' => $value['pere'],
                             'mere' => $value['prenom_nom_de_la_mere'],
-                            'datenaissance' => $date_naissance_dieuw,
+                            'datenaissance' => $date_naissance_tarbiya,
                             'adresse' => $value['adresse'],
                             'region' => $value['region'],
                             'tuteur' => $value['tuteur'],
@@ -370,7 +336,7 @@ class DieuwController extends Controller
 
                         ]);
                         try{
-                            $dieuwrines->save();
+                            $tarbiyas->save();
                             // var_dump("enregistrer");die();
                             $rapport_enregistres[]= array(
                                 'numero' =>$ligne,
@@ -400,6 +366,7 @@ class DieuwController extends Controller
                 }
             }
         }
+
         if (count($rapport_enregistres)!=0){
             session()->flash('message_enregistrer', 'Données enregistrées avec succées');
             Session::flash('rapport_enregistres', $rapport_enregistres);
@@ -412,7 +379,8 @@ class DieuwController extends Controller
             session()->flash('message_erreur', 'Il existe des erreurs dans les données');
             Session::flash('rapport_erreurs', $rapport_erreurs);
         }
-        return redirect()->route('dieuw.index');
+        return redirect()->route('tarbiya.index');
 
     }
+
 }

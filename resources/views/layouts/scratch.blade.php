@@ -68,7 +68,7 @@
             </div>
           </li>
 
-          <li class="nav-item ">
+            <li class="nav-item ">
             <a class="nav-link" data-toggle="collapse" href="#dieuwrigne">
               <i class="fas fa-user-graduate"></i>
               <p> Dieuwrignes</p>
@@ -90,6 +90,28 @@
               </ul>
             </div>
           </li>
+            <li class="nav-item ">
+                <a class="nav-link" data-toggle="collapse" href="#tarbiya">
+                    <i class="fas fa-male"></i>
+                    <p> Ndongo Tarbiya</p>
+                </a>
+                <div class="collapse" id="tarbiya">
+                    <ul class="nav">
+                        <li class="nav-item ">
+                            <a class="nav-link" href="{{ route('tarbiya.index') }}">
+                                <span class="sidebar-mini"> L </span>
+                                <span class="sidebar-normal"> LISTER</span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="{{ route('tarbiya.create') }}">
+                                <span class="sidebar-mini"> A </span>
+                                <span class="sidebar-normal"> NOUVEAU </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
           <li class="nav-item ">
             <a class="nav-link" data-toggle="collapse" href="#daara">
               <i class="fas fa-home"></i>

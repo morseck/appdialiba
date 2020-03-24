@@ -18,6 +18,11 @@ class Daara extends Model
     	return $this->hasMany('App\Dieuw');
     }
 
+    public function tarbiyas()
+    {
+        return $this->hasMany('App\Tarbiya');
+    }
+
     public function location()
     {
     	return $this->lat.'   '.$this->lon;

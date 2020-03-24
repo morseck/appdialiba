@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 
+use App\Consultation;
 use App\Daara;
 use App\Dieuw;
+use App\Medecin;
 use App\Talibe;
 use App\Importation;
 use Validator;
@@ -98,7 +100,7 @@ class TalibeController extends Controller
         ], [
             'prenom.required' => 'Le prénom est requis',
             'nom.required' => 'Le nom est requis',
-            'gender.required' => 'Le genre est requis',
+            'genre.required' => 'Le genre est requis',
             'region.required' => 'La région est requise',
             'pere.required' => 'Le nom du père est requis',
             'mere.required' => 'Le nom de la mère est requis'
@@ -145,7 +147,12 @@ class TalibeController extends Controller
      */
     public function show($id)
     {
-        return view('talibe.show', ['talibe' => Talibe::findOrFail($id)]);
+        $consultations =  Consultation::where('talibe_id', $id)->orderBy('date', 'desc')->get();
+        return view('talibe.show', [  'talibe' => Talibe::findOrFail($id),
+                                            'medecins' => Medecin::all(),
+                                            'daaras' => Daara::all(),
+                                            'consultations'=>$consultations
+        ]);
     }
 
     /**
@@ -185,7 +192,7 @@ class TalibeController extends Controller
         ], [
             'prenom.required' => 'Le prénom est requis',
             'nom.required' => 'Le nom est requis',
-            'gender.required' => 'Le genre est requis',
+            'genre.required' => 'Le genre est requis',
             'region.required' => 'La région est requise',
             'pere.required' => 'Le nom du père est requis',
             'mere.required' => 'Le nom de la mère est requis'
@@ -199,7 +206,7 @@ class TalibeController extends Controller
         $talibe->fill([
             'prenom' => $request->prenom,
             'nom' => $request->nom,
-            'gerne' => $request->genre,
+            'genre' => $request->genre,
             'datenaissance' => app_date_reverse($request->datenaissance, '/', '-'),
             'lieunaissance' => $request->lieunaissance,
             'region' => $request->region,

@@ -30,6 +30,12 @@ Route::get('/importation_talibe', 'TalibeController@importation_talibe')->name('
 Route::post('/importation_dieuw', 'DieuwController@importation_dieuw')->name('importation_dieuw');
 Route::get('/importation_dieuw', 'DieuwController@importation_dieuw')->name('importation_dieuw');
 
+//Importer fichier excel ndongo tarbiya
+Route::post('/importation_tarbiya', 'TarbiyaController@importation_tarbiya')->name('importation_tarbiya');
+Route::get('/importation_tarbiya', 'TarbiyaController@importation_tarbiya')->name('importation_tarbiya');
+
+
+
 //Importer fichier excel medecin
 Route::post('/importation_medecin', 'MedecinController@importation_medecin')->name('importation_medecin');
 Route::get('/importation_medecin', 'MedecinController@importation_medecin')->name('importation_medecin');
@@ -57,3 +63,5 @@ Route::get('/dieuw/{id}/talibes/','DieuwController@talibeByDieuw')->name('by_die
 Route::resource('consultation','ConsultationController');
 
 Route::resource('medecin','MedecinController');
+
+Route::resource('tarbiya','TarbiyaController');

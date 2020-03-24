@@ -4,6 +4,7 @@ use App\Dieuw;
 use App\Daara;
 use App\Talibe;
 use App\Medecin;
+use App\Tarbiya;
 
 if(!function_exists('app_date_reverse'))
 {
@@ -42,6 +43,14 @@ if(!function_exists('nb_medecins'))
     function nb_medecins()
     {
         return (int) Medecin::all()->count();
+    }
+}
+
+if(!function_exists('nb_tarbiyas'))
+{
+    function nb_tarbiyas()
+    {
+        return (int) Tarbiya::all()->count();
     }
 }
 
