@@ -206,6 +206,21 @@
                   </div>
               </div>
           </div>
+          <div class="col-lg-12 col-md-12">
+              <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
+                  <div class="card-header card-header-icon card-header-danger">
+                      <div class="card-icon">
+                          <i class="material-icons">insert_chart</i>
+                      </div>
+                      <h4 class="card-title">Répartition des <b>Maladies</b> en fonction de leur apparution
+                          <!-- <small> - Rounded</small> -->
+                      </h4>
+                  </div>
+                  <div class="card-body">
+                      <canvas id="myChart7"></canvas>
+                  </div>
+              </div>
+          </div>
       </div>
     </div>
   </div>
@@ -238,6 +253,10 @@
         var medecins = 0;
         var myLabelmedecins= [] ;
         var myDatamedecins =[] ;
+
+        var maladies = 0;
+        var myLabelmaladies= [] ;
+        var myDatamaladies =[] ;
 
         var myBackgroundColors =[] ;
 
@@ -300,6 +319,14 @@
     </script>
     <?php endforeach; ?>
 
+    <?php foreach ($partMaladies as $key => $p) : ?>
+    <script type="text/javascript">
+        myLabelmaladies.push('<?= $p->maladie ?>') ;
+        myDatamaladies.push('{{ $p->poids }}');
+        myBackgroundColors.push(randomColor()) ;
+    </script>
+    <?php endforeach; ?>
+
     {{--Omar--}}
     <script type="text/javascript">
         for(var i=0,l=myData.length; i < l ; i++ ) {
@@ -331,12 +358,18 @@
         }
 
 
+        for(var i=0,l=myDatamaladies.length; i < l ; i++ ) {
+            maladies += parseInt(myDatamaladies[i]) ;
+        }
+
+
         console.log('talibes: '+talibes);
         console.log('Dieuwrines: '+dieuwrines);
         console.log('Niveau: '+niveaux);
         console.log('regions: '+regions);
         console.log('tarbiyas: '+tarbiyas);
         console.log('medecins: '+medecins);
+        console.log('maladies: '+maladies);
 
         for(var i=0,l=myData.length; i < l ; i++ )
         {
@@ -371,6 +404,12 @@
         }
 
 
+        for(var i=0,l=myDatamaladies.length; i < l ; i++ )
+        {
+            myLabelmaladies[i] += ' ('+ ((myDatamaladies[i] / maladies ) * 100 ).toFixed(2) +' %)'+'  ['+myDatamaladies[i]+']' ;
+        }
+
+
 
         myData.push(0);
         mydataNiveaus.push(0);
@@ -378,12 +417,15 @@
         myDatadieuwrines.push(0);
         myDatatarbiyas.push(0);
         myDatamedecins.push(0);
+        myDatamaladies.push(0);
+
         var ctx1 = document.getElementById('myChart1');
         var ctx2 = document.getElementById('myChart2');
         var ctx3 = document.getElementById('myChart3');
         var ctx4 = document.getElementById('myChart4');
         var ctx5 = document.getElementById('myChart5');
         var ctx6 = document.getElementById('myChart6');
+        var ctx7 = document.getElementById('myChart7');
 
         var data = {
             labels: myLabels,
@@ -473,6 +515,22 @@
             }]
         } ;
 
+
+        var dataMaladie = {
+            labels: myLabelmaladies,
+            datasets: [{
+                label: '#Maladies',
+                data: myDatamaladies,
+                backgroundColor: myBackgroundColors,
+                borderColor: myBackgroundColors,
+                borderWidth: 1,
+                barPercentage: 1,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+            }]
+        } ;
+
         var myChart1 = new Chart(ctx1,{
             type: 'doughnut',
             data: data,
@@ -535,6 +593,17 @@
             options: {
                 legend:{
                     display:false
+                }
+            }
+        });
+
+
+        var myChart7 = new Chart(ctx7,{
+            type: 'bar',
+            data: dataMaladie,
+            options: {
+                legend:{
+                    display:true
                 }
             }
         });
