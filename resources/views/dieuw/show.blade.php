@@ -11,7 +11,11 @@
 				        <div class="card-header">
 				           <div class="row">
 				           		<div class="col-lg-6">
+                                    <h4>Profil Serigne Daara</h4>
 				           			<h3 class="card-title">{{ $dieuw->fullname() }}</h3>
+                                    @if( $dieuw->age()!=null )
+                                        <h4>{{ $dieuw->age() }} ans</h4>
+                                    @endif
                                     @if($dieuw->daara != '' )
                                         <a href="{{ route('by_daara',['id' => $dieuw->daara->id]) }}"><h4 class="category badge badge-success">{{ $dieuw->daara != '' ? $dieuw->daara->nom : 'non orienté' }}</h4></a>
                                         </span>
@@ -21,7 +25,11 @@
                                     <a href="{{ route('by_dieuw',['id' => $dieuw->id]) }}"><h4 class="category badge badge-info pull-right">{{ $total}} Talibés</h4></a>
 				           		</div>
 				           		<div class="col-lg-6">
-				           			<img src="{{ asset('storage/dieuws/'.$dieuw->avatar) }}" style="width: 75px; height: 75px; border-radius: 50%;">
+                                    @if(($dieuw->avatar !='') && (($dieuw->avatar !='image dieuw') && $dieuw->avatar !='user_male.ico') && $dieuw->avatar !='user_female.ico')
+                                        <img src="{{ asset('myfiles/dieuw/'.$dieuw->avatar) }}" style="width:100px; height: 100px; border-radius: 50%;">
+                                    @else
+                                        <img src="{{ asset('assets/img/default-avatar.png') }}" style="width:100px; height: 100px; border-radius: 50%;">
+                                    @endif
 				           		</div>
 				           </div>
 				        </div>

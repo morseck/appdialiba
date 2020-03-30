@@ -118,7 +118,7 @@ class TalibeController extends Controller
                 if (!$request->file('avatar')->isValid()) {
                     $validator->errors()->add('avatar', 'Erreur: Veuillez joindre limage à nouveau');
                 } else {
-                    $path = $request->avatar->store('public/talibes');
+                     $path = $request->avatar->store('talibe', ['disk' => 'my_files']);
 
                     $talibe->avatar = app_real_filename($path);
                 }
@@ -148,10 +148,12 @@ class TalibeController extends Controller
     public function show($id)
     {
         $consultations =  Consultation::where('talibe_id', $id)->orderBy('date', 'desc')->get();
+        $partMaladies = DB::select('SELECT COUNT(*) as poids, consultations.maladie FROM consultations JOIN talibes ON talibes.id=consultations.talibe_id WHERE talibes.id = '.$id.' AND  talibes.deleted_at IS NULL GROUP BY consultations.maladie') ;
         return view('talibe.show', [  'talibe' => Talibe::findOrFail($id),
                                             'medecins' => Medecin::all(),
                                             'daaras' => Daara::all(),
-                                            'consultations'=>$consultations
+                                            'consultations'=>$consultations,
+                                            'partMaladies'=>$partMaladies
         ]);
     }
 
@@ -232,7 +234,7 @@ class TalibeController extends Controller
 
                 } else {
 
-                    $path = $request->avatar->store('public/talibes');
+                     $path = $request->avatar->store('talibe', ['disk' => 'my_files']);
                     $talibe->avatar = app_real_filename($path);
                 }
             });

@@ -72,10 +72,23 @@
                                 </tbody>
                             </table>
                         </div>
+                        <br>
+                        <div class="card-header card-header-icon card-header-warning">
+                            <div class="card-icon">
+                                <i class="material-icons">insert_chart</i>
+                            </div>
+                            <h4 class="card-title">Répartition des <b>Maladies</b> en fonction de leur apparution
+                                <!-- <small> - Rounded</small> -->
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="myChart1"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- end col-md-12 -->
+
         </div>
         {{--Fin bulletin de sante--}}
 
@@ -193,7 +206,11 @@
 				        <div class="card-header">
 				           <div class="row">
 				           		<div class="col-lg-5">
+                                    <h5>Profil Talibé</h5>
 				           			<h3 class="card-title">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></h3>
+                                    @if( $talibe->age()!=null )
+                                        <h4>{{ $talibe->age() }} ans</h4>
+                                    @endif
                                     @if($talibe->daara != '' )
                                         <a href="{{ route('by_daara',['id' => $talibe->daara->id]) }}" title="Cliquer pour voire les détails sur le Daara" ><h4 class="category badge badge-success">{{ $talibe->daara->nom  }}</h4></a>
                                     @else
@@ -203,8 +220,8 @@
 				           		<div class="col-lg-7">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            @if(($talibe->avatar !='') && ($talibe->avatar !='image talibe'))
-                                                <img src="{{ asset('myfiles/talibes/'.$talibe->avatar) }}" style="width:100px; height: 100px; border-radius: 50%;">
+                                            @if(($talibe->avatar !='') && (($talibe->avatar !='image talibe') && $talibe->avatar !='user_male.ico') && $talibe->avatar !='user_female.ico')
+                                                <img src="{{ asset('myfiles/talibe/'.$talibe->avatar) }}" style="width:100px; height: 100px; border-radius: 50%;">
                                             @else
                                                 <img src="{{ asset('assets/img/default-avatar.png') }}" style="width:100px; height: 100px; border-radius: 50%;">
                                             @endif
@@ -349,6 +366,9 @@
 </div>
 @endsection
 @push('scripts')
+    {{--Diagramme--}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
     {{--Debut datepicker--}}
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
@@ -477,6 +497,81 @@
         });
     </script>
     {{-- Fin Affichage bulletin de sante--}}
+
+
+    {{--Debut Diagramme Maladies --}}
+
+    <script>
+        var myBackgroundColors =[] ;
+
+        function randomColor()
+        {
+            var r=g=b=0;
+
+            r = Math.floor((Math.random()* 254) ) ;
+            g = Math.floor((Math.random()* 254) ) ;
+            b = Math.floor((Math.random()* 254) ) ;
+
+            return 'rgba('+r+','+g+','+b+',1)' ;
+        }
+
+        //Definition des variables globales
+        var maladies = 0;
+        var myLabelmaladies= [] ;
+        var myDatamaladies =[] ;
+    </script>
+
+    <?php foreach ($partMaladies as $key => $p) : ?>
+    <script type="text/javascript">
+        myLabelmaladies.push('<?= $p->maladie ?>') ;
+        myDatamaladies.push('{{ $p->poids }}');
+        myBackgroundColors.push(randomColor()) ;
+    </script>
+    <?php endforeach; ?>
+
+    <script>
+        for(var i=0,l=myDatamaladies.length; i < l ; i++ ) {
+            maladies += parseInt(myDatamaladies[i]) ;
+        }
+
+        console.log('maladies: '+maladies);
+
+        for(var i=0,l=myDatamaladies.length; i < l ; i++ )
+        {
+            myLabelmaladies[i] += ' ('+ ((myDatamaladies[i] / maladies ) * 100 ).toFixed(2) +' %)'+'  ['+myDatamaladies[i]+']' ;
+        }
+
+
+        myDatamaladies.push(0);
+
+        var ctx1 = document.getElementById('myChart1');
+        var dataMaladie = {
+            labels: myLabelmaladies,
+            datasets: [{
+                label: '#Maladies',
+                data: myDatamaladies,
+                backgroundColor: myBackgroundColors,
+                borderColor: myBackgroundColors,
+                borderWidth: 1,
+                barPercentage: 1,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+            }]
+        } ;
+
+
+        var myChart1 = new Chart(ctx1,{
+            type: 'bar',
+            data: dataMaladie,
+            options: {
+                legend:{
+                    display:true
+                }
+            }
+        });
+    </script>
+    {{--Fin Diagramme Maladies --}}
 @endpush
 
 

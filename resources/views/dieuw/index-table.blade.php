@@ -165,6 +165,7 @@
                               <tr>
                                   <th>n°</th>
                                   <th>Prenom <b>NOM</b></th>
+                                  <th>Age</th>
                                   <th>Daara</th>
                                   <th>Téléphone</th>
                                   <th>Adresse</th>
@@ -176,6 +177,7 @@
                                 <tr>
                                     <th>n°</th>
                                     <th>Prenom <b>NOM</b></th>
+                                    <th>Age</th>
                                     <th>Daara</th>
                                     <th>Téléphone</th>
                                     <th>Adresse</th>
@@ -189,6 +191,11 @@
                           <tr>
                               <td><strong><?php echo $i++;?></strong></td>
                               <td><a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($dieuw->prenom))}} <strong><b>{{ strtoupper($dieuw->nom) }}</b></strong></a></td>
+                              <td>
+                                  @if( $dieuw->age()!=null )
+                                      {{ $dieuw->age() }} ans
+                                  @endif
+                              </td>
                               <td>
                                 @if($dieuw->daara != '' )
                                     <span class="success-badge bootstrap-tagsinput">

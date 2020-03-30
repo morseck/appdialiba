@@ -26,4 +26,16 @@ class Dieuw extends Model
     {
     	return ucfirst($this->prenom).' '.ucfirst($this->nom) ;
     }
+
+    public function age()
+    {
+        $age = null;
+        if ($this->datenaissance !=null){
+            $date_naissance = app_date_reverse($this->datenaissance,'-','-');
+            $age = new \DateTime(''.$date_naissance.'');
+            $age = intval($age->diff(new \DateTime())->format('%Y'));
+
+        }
+        return $age;
+    }
 }

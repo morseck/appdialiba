@@ -13,6 +13,9 @@
                                     <div class="col-lg-6">
                                         <h4>Profil Ndongo Tarbiya</h4>
                                         <h3 class="card-title">{{ $tarbiya->fullname() }}</h3>
+                                        @if( $tarbiya->age()!=null )
+                                            <h4>{{ $tarbiya->age() }} ans</h4>
+                                        @endif
                                         @if($tarbiya->daara != '' )
                                             <a href="{{ route('by_daara',['id' => $tarbiya->daara->id]) }}"><h4 class="category badge badge-success">{{ $tarbiya->daara != '' ? $tarbiya->daara->nom : 'non orienté' }}</h4></a>
                                             </span>

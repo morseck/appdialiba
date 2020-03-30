@@ -165,6 +165,7 @@
                                 <tr>
                                     <th>n°</th>
                                     <th>Prenom <b>NOM</b></th>
+                                    <th>Age</th>
                                     <th>Daara</th>
                                     <th>Téléphone</th>
                                     <th>Adresse</th>
@@ -176,6 +177,7 @@
                                 <tr>
                                     <th>n°</th>
                                     <th>Prenom <b>NOM</b></th>
+                                    <th>Age</th>
                                     <th>Daara</th>
                                     <th>Téléphone</th>
                                     <th>Adresse</th>
@@ -189,6 +191,11 @@
                                     <tr>
                                         <td><strong><?php echo $i++;?></strong></td>
                                         <td><a href="{{ route('tarbiya.show',['id' => $tarbiya->id]) }}" title="Cliquez pour voir les détails sur le Ngongo Tarbiya">{{ ucfirst(strtolower($tarbiya->prenom))}} <strong><b>{{ strtoupper($tarbiya->nom) }}</b></strong></a></td>
+                                        <td>
+                                            @if( $tarbiya->age()!=null )
+                                                {{ $tarbiya->age() }} ans
+                                            @endif
+                                        </td>
                                         <td>
                                             @if($tarbiya->daara != '' )
                                                 <span class="success-badge bootstrap-tagsinput">

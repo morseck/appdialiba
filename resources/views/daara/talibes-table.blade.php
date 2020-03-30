@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header card-header-primary card-header-icon">
                                     <div class="card-icon">
@@ -34,6 +34,7 @@
                                             <thead>
                                             <tr>
                                                 <th>Prenom <strong>Nom</strong></th>
+                                                <th>Age</th>
                                                 <th>Niveau</th>
                                                 <th>Dieuwrigne</th>
                                                 <th>Tuteur</th>
@@ -43,6 +44,7 @@
                                             <tfoot>
                                             <tr>
                                                 <th>Prenom <strong>Nom</strong></th>
+                                                <th>Age</th>
                                                 <th>Niveau</th>
                                                 <th>Dieuwrigne</th>
                                                 <th>Tuteur</th>
@@ -54,6 +56,11 @@
                                             @foreach($talibes as $talibe)
                                                 <tr>
                                                     <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
+                                                    <td>
+                                                        @if( $talibe->age()!=null )
+                                                            {{ $talibe->age() }} ans
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $talibe->niveau }}</td>
                                                     <td>
                                                         @if($talibe->dieuw)
@@ -72,49 +79,111 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header card-header-danger card-header-icon">
-                                    <div class="card-icon">
-                                        <i class="fas fa-user-graduate"></i>
-                                    </div>
-                                    <h4 class="card-title mt-10"> Liste des Serigne Daara de {{$dname}}: [{{ $dieuwrines->count() }}] </h4>
-                                    <p class="card-category" style="color: #000000">Cliquez sur le nom d'un Serigne Daara pour afficher plus de détails</p>
-                                </div>
-                                <div class="card-body">
-                                    <div class="material-datatables">
-                                        <table id="dieuwrigneDatatable" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
-                                            <thead>
-                                            <tr>
-                                                <th>Prenom <strong>Nom</strong></th>
-                                                <th>Telephone</th>
-                                                <th class="text-right">Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tfoot>
-                                            <tr>
-                                                <th>Prenom <strong>Nom</strong></th>
-                                                <th>Telephone</th>
-                                                <th class="text-right">Actions</th>
-                                            </tr>
-                                            </tfoot>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header card-header-danger card-header-icon">
+                                            <div class="card-icon">
+                                                <i class="fas fa-user-graduate"></i>
+                                            </div>
+                                            <h4 class="card-title mt-10"> Liste des Serigne Daara de {{$dname}}: [{{ $dieuwrines->count() }}] </h4>
+                                            <p class="card-category" style="color: #000000">Cliquez sur le nom d'un Serigne Daara pour afficher plus de détails</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="material-datatables">
+                                                <table id="dieuwrigneDatatable" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Prenom <strong>Nom</strong></th>
+                                                        <th>Age</th>
+                                                        <th>Telephone</th>
+                                                        <th class="text-right">Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th>Prenom <strong>Nom</strong></th>
+                                                        <th>Age</th>
+                                                        <th>Telephone</th>
+                                                        <th class="text-right">Actions</th>
+                                                    </tr>
+                                                    </tfoot>
 
-                                            <tbody>
-                                            @foreach($dieuwrines as $dieuw)
-                                                <tr>
-                                                    <td><a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}" title="Cliquez pour voir les détails sur le Dieuwrine">{{ ucfirst(strtolower($dieuw->prenom))}} <strong><b>{{ strtoupper($dieuw->nom) }}</b></strong></a></td>
-                                                    <td>{{$dieuw->phone1}}</td>
-                                                    <td class="text-right">
-                                                        <a href="{{ route('dieuw.edit',['id' => $dieuw->id]) }}"  data-toggle="tooltip"  data-placement="left" title="Modifier" style="font-size: 1.5em; color: #FF9800"><i class="fa fa-edit"></i></a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
+                                                    <tbody>
+                                                    @foreach($dieuwrines as $dieuw)
+                                                        <tr>
+                                                            <td><a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}" title="Cliquez pour voir les détails sur le Dieuwrine">{{ ucfirst(strtolower($dieuw->prenom))}} <strong><b>{{ strtoupper($dieuw->nom) }}</b></strong></a></td>
+                                                            <td>
+                                                                @if( $dieuw->age()!=null )
+                                                                    {{ $dieuw->age() }} ans
+                                                                @endif
+                                                            </td>
+                                                            <td>{{$dieuw->phone1}}</td>
+                                                            <td class="text-right">
+                                                                <a href="{{ route('dieuw.edit',['id' => $dieuw->id]) }}"  data-toggle="tooltip"  data-placement="left" title="Modifier" style="font-size: 1.5em; color: #FF9800"><i class="fa fa-edit"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header card-header-success card-header-icon">
+                                            <div class="card-icon">
+                                                <i class="fas fa-male"></i>
+                                            </div>
+                                            <h4 class="card-title mt-10"> Liste des Ndongos Tarbiya Daara de {{$dname}}: [{{ $tarbiyas->count() }}] </h4>
+                                            <p class="card-category" style="color: #000000">Cliquez sur le nom d'un Serigne Daara pour afficher plus de détails</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="material-datatables">
+                                                <table id="dieuwrigneDatatable" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Prenom <strong>Nom</strong></th>
+                                                        <th>Age</th>
+                                                        <th>Telephone</th>
+                                                        <th class="text-right">Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th>Prenom <strong>Nom</strong></th>
+                                                        <th>Age</th>
+                                                        <th>Telephone</th>
+                                                        <th class="text-right">Actions</th>
+                                                    </tr>
+                                                    </tfoot>
+
+                                                    <tbody>
+                                                    @foreach($tarbiyas as $tarbiya)
+                                                        <tr>
+                                                            <td><a href="{{ route('tarbiya.show',['id' => $tarbiya->id]) }}" title="Cliquez pour voir les détails sur le Ndongo Tarbiya">{{ ucfirst(strtolower($tarbiya->prenom))}} <strong><b>{{ strtoupper($tarbiya->nom) }}</b></strong></a></td>
+                                                            <td>
+                                                                @if( $tarbiya->age()!=null )
+                                                                    {{ $tarbiya->age() }} ans
+                                                                @endif
+                                                            </td>
+                                                            <td>{{$tarbiya->phone1}}</td>
+                                                            <td class="text-right">
+                                                                <a href="{{ route('tarbiya.edit',['id' => $tarbiya->id]) }}"  data-toggle="tooltip"  data-placement="left" title="Modifier" style="font-size: 1.5em; color: #FF9800"><i class="fa fa-edit"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -153,6 +222,21 @@
                                 </div>
                                 <div class="card-body">
                                     <canvas id="myChart3"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card" >
+                                <div class="card-header card-header-icon card-header-danger">
+                                    <div class="card-icon">
+                                        <i class="material-icons">insert_chart</i>
+                                    </div>
+                                    <h4 class="card-title">Répartition des <b>Maladies</b> en fonction de leur apparution
+                                        <!-- <small> - Rounded</small> -->
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="myChart4"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -332,6 +416,66 @@
         });
 
     </script>
+
+    {{--Debut Diagramme Maladies --}}
+    <script>
+        //Definition des variables globales
+        var maladies = 0;
+        var myLabelmaladies= [] ;
+        var myDatamaladies =[] ;
+    </script>
+
+    <?php foreach ($partMaladies as $key => $p) : ?>
+    <script type="text/javascript">
+        myLabelmaladies.push('<?= $p->maladie ?>') ;
+        myDatamaladies.push('{{ $p->poids }}');
+        myBackgroundColors.push(randomColor()) ;
+    </script>
+    <?php endforeach; ?>
+
+    <script>
+        for(var i=0,l=myDatamaladies.length; i < l ; i++ ) {
+            maladies += parseInt(myDatamaladies[i]) ;
+        }
+
+        console.log('maladies: '+maladies);
+
+        for(var i=0,l=myDatamaladies.length; i < l ; i++ )
+        {
+            myLabelmaladies[i] += ' ('+ ((myDatamaladies[i] / maladies ) * 100 ).toFixed(2) +' %)'+'  ['+myDatamaladies[i]+']' ;
+        }
+
+
+        myDatamaladies.push(0);
+
+        var ctx4 = document.getElementById('myChart4');
+        var dataMaladie = {
+            labels: myLabelmaladies,
+            datasets: [{
+                label: '#Maladies',
+                data: myDatamaladies,
+                backgroundColor: myBackgroundColors,
+                borderColor: myBackgroundColors,
+                borderWidth: 1,
+                barPercentage: 1,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+            }]
+        } ;
+
+
+        var myChart4 = new Chart(ctx4,{
+            type: 'bar',
+            data: dataMaladie,
+            options: {
+                legend:{
+                    display:true
+                }
+            }
+        });
+    </script>
+    {{--Fin Diagramme Maladies --}}
 
     {{--DataTable--}}
     <script>

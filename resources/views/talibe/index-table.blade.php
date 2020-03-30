@@ -185,6 +185,7 @@
                                 <thead>
                                 <tr>
                                     <th>Prenom <strong>Nom</strong></th>
+                                    <th>Age</th>
                                     <th>Daara</th>
                                     <th>Dieuwrigne</th>
                                     <th>Téléphone</th>
@@ -196,6 +197,7 @@
                                 <tfoot>
                                 <tr>
                                     <th>Prenom <strong>Nom</strong></th>
+                                    <th>Age</th>
                                     <th>Daara</th>
                                     <th>Dieuwrigne</th>
                                     <th>Téléphone</th>
@@ -208,7 +210,10 @@
                                 @foreach($talibeList as $talibe)
                                     <tr>
                                         <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
-
+                                        <td>
+                                            @if( $talibe->age()!=null )
+                                                {{ $talibe->age() }} ans
+                                            @endif</td>
                                         <td>
                                             @if($talibe->daara != '' )
                                                 <span class="success-badge bootstrap-tagsinput">
