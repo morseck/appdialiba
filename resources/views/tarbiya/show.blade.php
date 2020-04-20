@@ -144,6 +144,7 @@
     </div>
 @endsection
 
+{{--Notification--}}
 @push('scripts')
     @if( session()->has('tarbiyaEvent')  )
         <script type="text/javascript">

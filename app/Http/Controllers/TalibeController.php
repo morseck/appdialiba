@@ -108,9 +108,17 @@ class TalibeController extends Controller
 
         $talibe = new Talibe($request->except(['datenaissance', 'arrivee']));
 
-        $talibe->arrivee = app_date_reverse($request->arrivee, '/', '-');
+        $talibe->arrivee = null;
+        if ($request->arrivee){
+            $talibe->arrivee = app_date_reverse($request->arrivee, '/', '-');
+        }
 
-        $talibe->datenaissance = app_date_reverse($request->datenaissance, '/', '-');
+        $request->datenaissance = null;
+        if ($request->datenaissance){
+            $talibe->datenaissance = app_date_reverse($request->datenaissance, '/', '-');
+        }
+
+
 
         if ($request->hasFile('avatar')) {
             $validator->after(function () use ($request, $talibe) {
@@ -132,10 +140,14 @@ class TalibeController extends Controller
             return back()->withErrors($validator);
 
         $talibe->save();
+        $talibe = Talibe::latest()->first();
+        $id = $talibe->id;
 
+        //var_dump($talibe);die();
         session()->flash('talibeEvent', 'Le talibé ' . $talibe->fullname() . ' a été bien ajouté');
 
-        return redirect()->route('talibe.index');
+       // return redirect()->route('talibe.index');
+        return redirect()->route('talibe.show', ['id' => $id]);
 
     }
 
@@ -273,9 +285,11 @@ class TalibeController extends Controller
     public function viewTrash()
     {
 
-        $trashedTalibes = Talibe::onlyTrashed()->orderBy('prenom')->paginate(20);
+       // $trashedTalibes = Talibe::where('deleted_at','!=', null);
+        $trashedTalibes = Talibe::onlyTrashed();
+       //var_dump($trashedTalibes);die();
 
-        return view('talibe.trash', ['trashed' => $trashedTalibes]);
+        return view('talibe.trash', ['talibeList' => $trashedTalibes, 'nbr'=>count($trashedTalibes)]);
     }
 
 

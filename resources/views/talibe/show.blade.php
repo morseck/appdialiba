@@ -365,6 +365,8 @@
   </div>
 </div>
 @endsection
+
+
 @push('scripts')
     {{--Diagramme--}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
@@ -431,6 +433,33 @@
 
     @endif
     {{--Fin alerte notification--}}
+
+    {{--DEBUT Notification d'ajouter et de modification d'un nouveau noveeau talibe--}}
+    @if( session()->has('talibeEvent')  )
+        <script type="text/javascript">
+            (function(from, align) {
+                //type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
+
+                color = Math.floor((Math.random() * 6) + 1);
+
+                $.notify({
+                    icon: "notifications",
+                    message: "{{ session('talibeEvent') }}"
+
+                }, {
+                    //type: type[color],
+                    type: 'success',
+                    timer: 3000,
+                    placement: {
+                        from: from,
+                        align: align
+                    }
+                });
+            })();
+
+        </script>
+    @endif
+    {{--FIN Notification d'ajouter et de modification d'un nouveau noveeau talibe--}}
 
     {{--Debut dataTable--}}
     <script>

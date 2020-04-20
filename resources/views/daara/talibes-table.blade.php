@@ -138,11 +138,11 @@
                                                 <i class="fas fa-male"></i>
                                             </div>
                                             <h4 class="card-title mt-10"> Liste des Ndongos Tarbiya Daara de {{$dname}}: [{{ $tarbiyas->count() }}] </h4>
-                                            <p class="card-category" style="color: #000000">Cliquez sur le nom d'un Serigne Daara pour afficher plus de détails</p>
+                                            <p class="card-category" style="color: #000000">Cliquez sur le n om d'un Serigne Daara pour afficher plus de détails</p>
                                         </div>
                                         <div class="card-body">
                                             <div class="material-datatables">
-                                                <table id="dieuwrigneDatatable" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                                <table id="datatableTarbiya" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                                                     <thead>
                                                     <tr>
                                                         <th>Prenom <strong>Nom</strong></th>
@@ -519,7 +519,7 @@
                 }
             });
 
-            var table = $('#datatable').DataTable();
+            var table = $('#datatableTarbiya').DataTable();
 
             // Edit record
             table.on('click', '.edit', function() {
