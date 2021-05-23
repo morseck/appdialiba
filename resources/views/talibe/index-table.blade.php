@@ -247,6 +247,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
+                            {{ $talibeList->links() }}
                         </div>
                     </div>
                     <!-- end content-->
@@ -294,6 +295,7 @@
         $(document).ready(function() {
             $('#datatables').DataTable({
                 "pagingType": "full_numbers",
+                "paging": false,
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
@@ -348,6 +350,7 @@
             table.on('click', '.like', function() {
                 alert('You clicked on Like button');
             });
+
         });
     </script>
 

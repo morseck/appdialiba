@@ -34,7 +34,7 @@ class TalibeController extends Controller
         //$data_import = DB::table('import_taiba')->orderBy('id')->get();
         $data_import = null;
 
-        return view($view, ['talibeList' => Talibe::all(), 'nbr' => Talibe::all()->count(), 'data_import' => $data_import]);
+        return view($view, ['talibeList' => Talibe::paginate(10), 'nbr' => Talibe::all()->count(), 'data_import' => $data_import]);
     }
 
     /**
@@ -405,7 +405,7 @@ class TalibeController extends Controller
                                     AND lower(tuteur) like lower (\''.$value["tuteur"].'\')
                                     AND daara_id like '.$daara_id.'
                                     AND dieuw_id like \''.$dieuw_id.'\'
-                                
+
                     ') ;
                            //var_dump($repetition);die();
                             if ($repetition){//si le talibe existe deja
