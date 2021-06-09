@@ -27,7 +27,7 @@ class DieuwController extends Controller
     {
         $view = $request->query('view') === 'card' ? 'dieuw.index-card' : 'dieuw.index-table';
 
-        return view($view,['dieuws' => Dieuw::all(), 'nbr' => Dieuw::all()->count() ]) ;
+        return view($view,['dieuws' => Dieuw::paginate(10), 'nbr' => Dieuw::all()->count() ]) ;
     }
 
     /**
@@ -48,7 +48,7 @@ class DieuwController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
 
             'prenom' => 'required',
@@ -204,11 +204,11 @@ class DieuwController extends Controller
             $validator->after(function() use($request, $dieuw){
 
                 if(!$request->file('avatar')->isValid()){
- 
+
                      $validator->arrors()->add('avatar','Erreur: Veuillez joindre l\'image à nouveau');
 
                 }else{
-                    
+
 
                     $path = $request->avatar->store('dieuw', ['disk' => 'my_files']);
                     $dieuw->avatar = app_real_filename($path);
@@ -217,7 +217,7 @@ class DieuwController extends Controller
         }
 
         if($validator->fails())
-            
+
             return back()->withErrors($validator);
 
         $dieuw->save();

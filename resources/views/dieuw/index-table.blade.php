@@ -220,6 +220,12 @@
                             @endforeach
                         </tbody>
                       </table>
+                      <br>
+                      <div class="row">
+                          <div class="offset-md-6 col-md-6 col-sm-12">
+                              <p>{{ $dieuws->links() }}</p>
+                          </div>
+                      </div>
                     </div>
                   </div>
 
@@ -228,11 +234,11 @@
                   </div>--}}
 
                 </div>
-              </div>          
+              </div>
             </div>
              {{--Fin Liste des dieuwrines--}}
 
-          </div>         
+          </div>
 @endsection
 
 
@@ -242,6 +248,8 @@
         $(document).ready(function() {
             $('#datatables').DataTable({
                 "pagingType": "full_numbers",
+                "info": false,
+                "paging": false,
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
@@ -256,7 +264,7 @@
                 responsive: true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search records",
+                    searchPlaceholder: "Rechercher des Dieuwrines",
                 }
             });
             $('#importation').DataTable({
@@ -275,7 +283,8 @@
                 responsive: true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search records",
+                    searchPlaceholder: "Rechercher des Dieuwrines importés",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ entrée(s)"
                 }
             });
 

@@ -239,29 +239,10 @@
                 responsive: true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search records",
+                    searchPlaceholder: "Rechercher...",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ entrée(s)"
                 }
             });
-            $('#importation').DataTable({
-                "pagingType": "full_numbers",
-                "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
-                ],
-                dom: 'Bfrtip',
-                buttons: [
-                    //'copyHtml5',
-                    'excelHtml5',
-                    //'csvHtml5',
-                    'pdfHtml5'
-                ],
-                responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records",
-                }
-            });
-
             var table = $('#datatable').DataTable();
 
             // Edit record

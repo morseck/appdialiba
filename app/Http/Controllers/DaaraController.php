@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 USE App\Daara;
+use App\Talibe;
+use Illuminate\Pagination\Paginator;
 use Validator;
 use Illuminate\Http\Request;
 use DB;
@@ -62,8 +64,8 @@ class DaaraController extends Controller
         if ($request->creation!=null){
             $creation ->app_date_reverse($request->creation,'/','-');
         }
-        $daara->fill([
 
+        $daara->fill([
             'nom'       => $request->nom,
             'dieuw'     => $request->dieuw,
             'creation'  => $creation,
@@ -224,19 +226,18 @@ class DaaraController extends Controller
         );
 
         $dname   = $daara->nom;
+        $total_talibes = $daara->talibes->count();
+        $talibes = Talibe::where('daara_id', '=', intval($id),'AND', 'deleted_at','IS', NULL)->paginate(10);
+        $numero = $talibes->currentPage() * $talibes->perPage() - $talibes->perPage() + 1;
 
-        $talibes = $daara->talibes;
         $dieuwrines = $daara->dieuws;
         $tarbiyas = $daara->tarbiyas;
-         $parts = DB::select('SELECT COUNT(talibes.id) as poids, talibes.niveau FROM talibes INNER JOIN daaras ON talibes.daara_id=daaras.id WHERE daaras.id = '.$id.' AND daaras.deleted_at IS NULL GROUP BY talibes.niveau') ;
-         $partDieuws = DB::select('SELECT COUNT(dieuws.id) as poids,CONCAT(dieuws.prenom,\' \', dieuws.nom) as fullname FROM dieuws INNER JOIN talibes on dieuws.id=talibes.dieuw_id INNER JOIN daaras on daaras.id=dieuws.daara_id WHERE dieuws.daara_id = '.$id.' AND dieuws.daara_id=daaras.id AND daaras.deleted_at IS NULL   GROUP BY fullname') ;
-         $partRegions = DB::select('SELECT COUNT(talibes.id) as poids, talibes.region FROM talibes INNER JOIN daaras ON talibes.daara_id=daaras.id WHERE daaras.id = '.$id.' AND daaras.deleted_at IS NULL GROUP BY talibes.region') ;
-         $partMaladies = DB::select('SELECT COUNT(*) as poids, consultations.maladie FROM consultations JOIN talibes ON talibes.id=consultations.talibe_id WHERE talibes.daara_id = '.$id.' AND  talibes.deleted_at IS NULL GROUP BY consultations.maladie') ;
-         //$partDieuws = DB::select('SELEC  T COUNT(talibes.id) as poids, dieuws.prenom FROM  talibes,dieuws INNER JOIN daaras ON dieuws.daara_id=daaras.id WHERE daaras.id = '.$id.' AND dieuws.daara_id = '.$id.' AND daaras.deleted_at IS NULL GROUP BY dieuws.prenom') ;
-         //var_dump(($partRegions));die();
+        $parts = DB::select('SELECT COUNT(talibes.id) as poids, talibes.niveau FROM talibes INNER JOIN daaras ON talibes.daara_id=daaras.id WHERE daaras.id = '.$id.' AND daaras.deleted_at IS NULL GROUP BY talibes.niveau') ;
+        $partDieuws = DB::select('SELECT COUNT(dieuws.id) as poids,CONCAT(dieuws.prenom,\' \', dieuws.nom) as fullname FROM dieuws INNER JOIN talibes on dieuws.id=talibes.dieuw_id INNER JOIN daaras on daaras.id=dieuws.daara_id WHERE dieuws.daara_id = '.$id.' AND dieuws.daara_id=daaras.id AND daaras.deleted_at IS NULL   GROUP BY fullname') ;
+        $partRegions = DB::select('SELECT COUNT(talibes.id) as poids, talibes.region FROM talibes INNER JOIN daaras ON talibes.daara_id=daaras.id WHERE daaras.id = '.$id.' AND daaras.deleted_at IS NULL GROUP BY talibes.region') ;
+        $partMaladies = DB::select('SELECT COUNT(*) as poids, consultations.maladie FROM consultations JOIN talibes ON talibes.id=consultations.talibe_id WHERE talibes.daara_id = '.$id.' AND  talibes.deleted_at IS NULL GROUP BY consultations.maladie') ;
 
-
-         return view($view,compact('talibes','dieuwrines','tarbiyas','dname','id', 'parts', 'partDieuws', 'partRegions','partMaladies','daara_info'));
+         return view($view,compact('talibes','dieuwrines','tarbiyas','dname','id', 'parts', 'partDieuws', 'partRegions','partMaladies','daara_info', 'total_talibes', 'numero'));
      }
 
 

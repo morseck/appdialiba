@@ -146,14 +146,14 @@
 			                          <option value="sedhiou">Sédhiou</option>
 			                          <option value="tambacounda">Tambacounda</option>
 			                          <option value="thies">Thiès</option>
-			                          <option value="ziguinchor">Ziguinchor</option>      
-                                <option value="etranger">Etranger</option>      
-                                <option value="inconnu">Inconnu</option>      
+			                          <option value="ziguinchor">Ziguinchor</option>
+                                <option value="etranger">Etranger</option>
+                                <option value="inconnu">Inconnu</option>
                                   </select>
                               </div>
                             </div>
                           </div>
-                          
+
                         </div>
                       </div>
                       <div class="tab-pane" id="account">
@@ -242,7 +242,7 @@
                       </div>
                       <div class="tab-pane" id="address">
                         <div class="row justify-content-center">
-                           <div class="col-sm-6">                      
+                           <div class="col-sm-6">
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -271,7 +271,7 @@
                             </div>
                           </div>
 
-                          <div class="col-sm-6">                      
+                          <div class="col-sm-6">
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -367,7 +367,7 @@
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                 
+
                                 </span>
                               </div>
                               <div class="form-group">
@@ -400,8 +400,15 @@
         </div>
 @endsection
 
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
 <script type="text/javascript">
 
@@ -415,7 +422,7 @@ $(document).ready(function() {
         $('.card.card-wizard').addClass('active');
       }, 200);
     });
-     
+
 // Initialise the datepicker
     let dateOpt = {dateFormat: "d/m/Y", locale: 'fr'};
 

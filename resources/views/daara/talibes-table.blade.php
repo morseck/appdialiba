@@ -25,7 +25,7 @@
                                     <div class="card-icon">
                                         <i class="material-icons">assignment</i>
                                     </div>
-                                    <h4 class="card-title mt-10"> Liste des Talibés de {{$dname}}: [{{ $talibes->count() }}] </h4>
+                                    <h4 class="card-title mt-10"> Liste des Talibés de {{$dname}}: [{{ $total_talibes }}] </h4>
                                     <p class="card-category" style="color: #000000">Cliquez sur le nom d'un talibé pour afficher plus de détails</p>
                                 </div>
                                 <div class="card-body">
@@ -33,6 +33,7 @@
                                         <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                                             <thead>
                                             <tr>
+                                                <th><strong>N°</strong></th>
                                                 <th>Prenom <strong>Nom</strong></th>
                                                 <th>Age</th>
                                                 <th>Niveau</th>
@@ -43,6 +44,7 @@
                                             </thead>
                                             <tfoot>
                                             <tr>
+                                                <th><strong>N°</strong></th>
                                                 <th>Prenom <strong>Nom</strong></th>
                                                 <th>Age</th>
                                                 <th>Niveau</th>
@@ -55,6 +57,7 @@
                                             <tbody>
                                             @foreach($talibes as $talibe)
                                                 <tr>
+                                                    <td><span>{{$numero++}}</span></td>
                                                     <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
                                                     <td>
                                                         @if( $talibe->age()!=null )
@@ -75,6 +78,12 @@
                                             @endforeach
                                             </tbody>
                                         </table>
+                                        <br>
+                                        <div class="row">
+                                            <div class="offset-7 col-md-5 col-sm-12">
+                                                <p>{{ $talibes->links() }}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -241,9 +250,9 @@
                             </div>
                         </div>
                     </div>
-              </div>          
+              </div>
             </div>
-          </div>         
+          </div>
 @endsection
 @push('scripts')
     {{--Diagramme--}}
@@ -482,6 +491,8 @@
         $(document).ready(function() {
             $('#datatables').DataTable({
                 "pagingType": "full_numbers",
+                "info": false,
+                "paging": false,
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
@@ -496,7 +507,8 @@
                 responsive: true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search records",
+                    searchPlaceholder: "Rechercher des Talibés",
+                  //  info: "Affichage de _START_ à _END_ sur _TOTAL_",
                 }
             });
             $('#dieuwrigneDatatable').DataTable({
@@ -515,11 +527,32 @@
                 responsive: true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search records",
+                    searchPlaceholder: "Rechercher des Dieuwrines",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ entrée(s)"
                 }
             });
 
-            var table = $('#datatableTarbiya').DataTable();
+            var table = $('#datatableTarbiya').DataTable({
+
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    //'copyHtml5',
+                    'excelHtml5',
+                    //'csvHtml5',
+                    'pdfHtml5'
+                ],
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Rechercher des Ndongos Tarbiyah",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ entrée(s)"
+                }
+            });
 
             // Edit record
             table.on('click', '.edit', function() {

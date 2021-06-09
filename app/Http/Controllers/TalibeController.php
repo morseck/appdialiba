@@ -26,15 +26,16 @@ class TalibeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function index(Request $request)
     {
         $view = $request->query('view') === 'card' ? 'talibe.index-card' : 'talibe.index-table';
         //$data_import = DB::table('import_taiba')->orderBy('id')->get();
         $data_import = null;
-
-        return view($view, ['talibeList' => Talibe::paginate(10), 'nbr' => Talibe::all()->count(), 'data_import' => $data_import]);
+        $talibeList = Talibe::paginate(25);
+        $numero = $talibeList->currentPage() * $talibeList->perPage() - $talibeList->perPage() + 1;
+        return view($view, ['talibeList' => $talibeList, 'nbr' => Talibe::all()->count(), 'data_import' => $data_import, 'numero' => $numero]);
     }
 
     /**

@@ -184,6 +184,7 @@
                             <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                                 <thead>
                                 <tr>
+                                    <th><strong>N°</strong></th>
                                     <th>Prenom <strong>Nom</strong></th>
                                     <th>Age</th>
                                     <th>Daara</th>
@@ -196,6 +197,7 @@
                                 </thead>
                                 <tfoot>
                                 <tr>
+                                    <th><strong>N°</strong></th>
                                     <th>Prenom <strong>Nom</strong></th>
                                     <th>Age</th>
                                     <th>Daara</th>
@@ -209,6 +211,7 @@
                                 <tbody>
                                 @foreach($talibeList as $talibe)
                                     <tr>
+                                        <td><span>{{$numero++}}</span></td>
                                         <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
                                         <td>
                                             @if( $talibe->age()!=null )
@@ -247,7 +250,12 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            {{ $talibeList->links() }}
+                            <br>
+                            <div class="row">
+                                <div class="offset-md-6 col-md-6 col-sm-12">
+                                    <p>{{ $talibeList->links() }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- end content-->
@@ -296,6 +304,7 @@
             $('#datatables').DataTable({
                 "pagingType": "full_numbers",
                 "paging": false,
+                "info": false,
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
@@ -310,7 +319,7 @@
                 responsive: true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search records",
+                    searchPlaceholder: "Rechercher des Talibes",
                 }
             });
             $('#importation').DataTable({
@@ -329,7 +338,8 @@
                 responsive: true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search records",
+                    searchPlaceholder: "Rechercher... ",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ entrée(s)"
                 }
             });
             var table = $('#datatable').DataTable();
@@ -345,11 +355,11 @@
                 table.row($tr).remove().draw();
                 e.preventDefault();
             });
-
             //Like record
             table.on('click', '.like', function() {
                 alert('You clicked on Like button');
             });
+
 
         });
     </script>
