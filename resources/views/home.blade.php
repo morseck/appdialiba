@@ -13,14 +13,14 @@
                 </div>
               </a>
               <a href="{{ route('dieuw.index') }}">
-                  <p class="card-category">Dieuwrignes</p>
+                  <p class="card-category">Dieuwrines</p>
                   <h3 class="card-title">{{ nb_dieuws() }}</h3>
               </a>
           </div>
           <div class="card-footer">
             <div class="stats">
               <!-- <i class="material-icons text-danger">warning</i> -->
-              <a href="{{ route('dieuw.index') }}"> Liste des Dieuwrigne</a>
+              <a href="{{ route('dieuw.index') }}"> Liste des Dieuwrines</a>
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@
                       <div class="card-icon">
                           <i class="material-icons">insert_chart</i>
                       </div>
-                      <h4 class="card-title">Répartition des talibés en <b>des serignes daara</b>
+                      <h4 class="card-title">Répartition des talibés en <b>fonction des serignes daara</b>
                           <!-- <small> - Rounded</small> -->
                       </h4>
                   </div>
@@ -226,6 +226,10 @@
   </div>
 @endsection
 
+
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
 @push('scripts')
     {{--Diagramme--}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>

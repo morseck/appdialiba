@@ -159,6 +159,9 @@
         </div>
     </div>
 @endsection
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -181,16 +184,5 @@
 
         $('#arrivee').flatpickr(dateOpt);
         $('#datenaissance').flatpickr(dateOpt);
-
-        //    $('#input-file').change(function(event) {
-
-        //      var fileList = event.target.files;
-
-        //      console.log(fileList);
-
-        //    if (fileList.length) {
-        //      $('#filename').text(fileList[0].name)
-        //    }
-        // });
     </script>
 @endpush

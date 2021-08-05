@@ -138,27 +138,10 @@
             </div>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#consultation">
+            <a class="nav-link collapse"  href="{{ route('consultation.index') }}">
               <i class="material-icons">grid_on</i>
               <p> Consultations </p>
             </a>
-            <div class="collapse" id="consultation">
-              <ul class="nav">
-                <li class="nav-item ">
-                  <a class="nav-link" href="{{ route('consultation.index') }}">
-                    <span class="sidebar-mini"> L </span>
-                    <span class="sidebar-normal"> LISTER </span>
-                  </a>
-                </li>
-                <li class="nav-item ">
-                  <a class="nav-link" href="{{ route('consultation.create') }}">
-                    <span class="sidebar-mini"> N </span>
-                    <span class="sidebar-normal"> NOUVEAU </span>
-                  </a>
-                </li>
-
-              </ul>
-            </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#medecin">

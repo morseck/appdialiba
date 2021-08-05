@@ -94,7 +94,7 @@
                                                     </span>
                                                 </div>
                                                 <div class="form-group">
-                                                    <select class="selectpicker" data-style="select-with-transition" title="Genre" name="genre" required>
+                                                    <select class="selectpicker" data-style="select-with-transition" title="Sexe" name="genre" required>
                                                         <option value="1" {{ $tarbiya->genre == 1 ? 'selected' : ''}}><i class="fas fa-male"></i> Homme</option>
                                                         <option value="0" {{ $tarbiya->genre == 0 ? 'selected' : ''}}><i class="fas fa-female"></i> Femme</option>
                                                     </select>
@@ -313,6 +313,9 @@
         </div>
     </div>
 @endsection
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

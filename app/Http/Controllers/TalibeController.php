@@ -119,11 +119,8 @@ class TalibeController extends Controller
             $talibe->datenaissance = app_date_reverse($request->datenaissance, '/', '-');
         }
 
-
-
         if ($request->hasFile('avatar')) {
             $validator->after(function () use ($request, $talibe) {
-
                 if (!$request->file('avatar')->isValid()) {
                     $validator->errors()->add('avatar', 'Erreur: Veuillez joindre limage à nouveau');
                 } else {
@@ -342,6 +339,7 @@ class TalibeController extends Controller
                         $age = null;
                         $niveau = null;
                         $date_naissance_talibe = null;
+                        $avatar = null;
 
                         $date_naissance_talibe = null;
                         $date_arrivee = null;
@@ -395,6 +393,10 @@ class TalibeController extends Controller
                             $niveau = $value['niveau'];
                         }
 
+                            //Cas avatar
+                            if (($value['avatar']) || ($value['avatar'] != 'neant')){
+                                $avatar = $value['avatar'];
+                            }
 
                         //var_dump($date_arrivee);die();
                         $talibes = new Talibe();
@@ -431,7 +433,7 @@ class TalibeController extends Controller
                                     'daara_id' => $daara_id,
                                     'dieuw_id' => $dieuw_id,
                                     'genre' => $genre,
-                                    // 'avatar'   => ,
+                                     'avatar'   => $avatar,
                                     'pere' => $value['pere'],
                                     'mere' => $value['prenom_nom_de_la_mere'],
                                     'datenaissance' => $date_naissance_talibe,

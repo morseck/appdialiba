@@ -38,12 +38,12 @@
                             </b>
                         </p>
 
-                        
+
                       </div>
                       <div class="card-body" style="line-height: 80%;margin-top: -15px;">
                         <div class="row">
                             <div class="col-md-5">
-                                @if($daara->image == null)
+                                @if($daara->image == null || $daara->image == "")
                                     <img src="{{ asset('assets/img/touba.jpg') }}" style="width: 120px; height: 115px; border-radius: 50%;">
                                 @else
                                     <img src="{{ asset('myfiles/daara/'.$daara->image) }}" style="width: 120px; height: 115px; border-radius: 50%;">
@@ -53,7 +53,7 @@
                                <p>Phone :  {{ $daara->phone }}</p>
                                <p>Dieuwrigne : <span class="badge badge-pill badge-success">{{ $daara->dieuw }}</span></p>
                                <p>Localisation : <a href="" title="Voir dans Maps">{{ $daara->location() }}</a></p>
-								                               
+
                             </div>
                         </div>
                       </div>

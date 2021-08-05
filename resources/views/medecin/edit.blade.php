@@ -1,5 +1,18 @@
 @extends('layouts.scratch',['title' => 'Création d\'un nouveau Talibé | '])
 
+@push('styles')
+    <style type="text/css">
+        div b {
+            font-size: 1.1em;
+        }
+
+        .mbt-15 {
+            margin-bottom: 7px;
+        }
+
+    </style>
+@endpush
+
 
 @push('styles')
     <style type="text/css">
@@ -163,6 +176,9 @@
         </div>
     </div>
 @endsection
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

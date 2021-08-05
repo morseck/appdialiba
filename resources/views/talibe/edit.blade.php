@@ -1,6 +1,5 @@
 @extends('layouts.scratch',['title' => 'Création d\'un nouveau Talibé | '])
 
-
 @push('styles')
 	<style type="text/css">
 		label{
@@ -94,7 +93,7 @@
                                 </span>
                               </div>
                               <div class="form-group">
-                                 <select class="selectpicker" data-style="select-with-transition" title="Genre" name="genre" required>
+                                 <select class="selectpicker" data-style="select-with-transition" title="Sexe" name="genre" required>
                                     <option value="1" {{ $talibe->genre == 1 ? 'selected' : ''}}><i class="fas fa-male"></i> Homme</option>
                                     <option value="0" {{ $talibe->genre == 0 ? 'selected' : ''}}><i class="fas fa-female"></i> Femme</option>
                                   </select>
@@ -147,14 +146,14 @@
 			                          <option value="sedhiou" {{ $talibe->region == 'sedhiou' ? 'selected' : ''}}>Sédhiou</option>
 			                          <option value="tambacounda" {{ $talibe->region == 'tambacounda' ? 'selected' : ''}}>Tambacounda</option>
 			                          <option value="thies" {{ $talibe->region == 'thies' ? 'selected' : ''}}>Thiès</option>
-			                          <option value="ziguinchor" {{ $talibe->region == 'ziguinchor' ? 'selected' : ''}}>Ziguinchor</option>      
-                                <option value="etranger" {{ $talibe->region == 'etranger' ? 'selected' : ''}}>Etranger</option>      
-                                <option value="inconnu" {{ $talibe->region == 'inconnu' ? 'selected' : ''}}>Inconnu</option>      
+			                          <option value="ziguinchor" {{ $talibe->region == 'ziguinchor' ? 'selected' : ''}}>Ziguinchor</option>
+                                <option value="etranger" {{ $talibe->region == 'etranger' ? 'selected' : ''}}>Etranger</option>
+                                <option value="inconnu" {{ $talibe->region == 'inconnu' ? 'selected' : ''}}>Inconnu</option>
                                   </select>
                               </div>
                             </div>
                           </div>
-                          
+
                         </div>
                       </div>
                       <div class="tab-pane" id="account">
@@ -243,7 +242,7 @@
                       </div>
                       <div class="tab-pane" id="address">
                         <div class="row justify-content-center">
-                           <div class="col-sm-6">                      
+                           <div class="col-sm-6">
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -272,7 +271,7 @@
                             </div>
                           </div>
 
-                          <div class="col-sm-6">                      
+                          <div class="col-sm-6">
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -368,7 +367,7 @@
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                 
+
                                 </span>
                               </div>
                               <div class="form-group">
@@ -401,6 +400,9 @@
         </div>
 @endsection
 
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
@@ -416,13 +418,13 @@ $(document).ready(function() {
         $('.card.card-wizard').addClass('active');
       }, 200);
     });
-     
+
 // Initialise the datepicker
     let dateOpt = {dateFormat: "d/m/Y", locale: 'fr'};
 
     $('#arrivee').flatpickr(dateOpt);
     $('#datenaissance').flatpickr(dateOpt);
 
-  
+
 </script>
 @endpush

@@ -1,22 +1,9 @@
 @extends('layouts.scratch',['title' => 'Profil de '.$medecin->fullname().' | '])
 
 
-@push('styles')
-    <style type="text/css">
-        div b {
-            font-size: 1.1em;
-        }
-
-        .mbt-15 {
-            margin-bottom: 7px;
-        }
-
-    </style>
-@endpush
-
 @section('content')
 
-    <div class="container-fluid">
+    <div class="container-fluid text-center">
         <div class="row">
             <div class="col-lg-7 col-xs-8" style="margin: auto;">
                 <div class="row">
@@ -40,17 +27,17 @@
                             <div class="card-body">
                                 <div class="row mbt-15">
                                     <div class="col-lg-4 col-xs-6"><b>Hôpital</b></div>
-                                    <div class="col-lg-6 col-xs-6">{{ $medecin->hopital }}</div>
+                                    <div class="col-lg-6 col-xs-6"><b style="font-size: 1.4em"><strong>{{ $medecin->hopital }}</strong></b></div>
                                 </div>
                                 <hr>
                                 <div class="row mbt-15">
                                     <div class="col-lg-4 col-xs-6"><b>Spécialité</b></div>
-                                    <div class="col-lg-6 col-xs-6">{{ $medecin->spec }}</div>
+                                    <div class="col-lg-6 col-xs-6"><b style="font-size: 1.4em"><strong>{{ $medecin->spec }}</strong></b></div>
                                 </div>
                                 <hr>
                                 <div class="row mbt-15">
                                     <div class="col-lg-4 col-xs-6"><b>Téléphone</b></div>
-                                    <div class="col-lg-6 col-xs-6"><strong><b>{{ $medecin->phone }}</b></strong></div>
+                                    <div class="col-lg-6 col-xs-6"><b style="font-size: 1.4em"><strong>{{ $medecin->phone }}</strong></b></div>
                                 </div>
                                 <br>
                             </div>

@@ -1,5 +1,16 @@
 @extends('layouts.scratch',['title' => 'Création d\'un nouveau Talibé | '])
+@push('styles')
+    <style type="text/css">
+        label{
+            color: black !important;
+        }
+        .bootstrap-select>.dropdown-toggle{
+            width: 114% !important;
+        }
 
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
 
 @push('styles')
 	<style type="text/css">
@@ -24,8 +35,8 @@
                   {{ method_field('PUT')}}
                   <!--        You can switch " data-color="primary" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
                   <div class="card-header text-center">
-                    <h4 class="card-title">Dieuw </h4>
-                    <h5 class="card-description">Edition de profil.</h5>
+                    <h4 class="card-title">Dieuwrine</h4>
+                    <h5 class="card-description">Modification profil du Dieuwrine ou Serigne Daara.</h5>
                   </div>
                   @include('partials.errors')
                   <div class="wizard-navigation">
@@ -94,7 +105,7 @@
                                 </span>
                               </div>
                               <div class="form-group">
-                                 <select class="selectpicker" data-style="select-with-transition" title="Genre" name="genre" required>
+                                 <select class="selectpicker" data-style="select-with-transition" title="Sexe" name="genre" required>
                                     <option value="1" {{ $dieuw->genre == 1 ? 'selected' : ''}}><i class="fas fa-male"></i> Homme</option>
                                     <option value="0" {{ $dieuw->genre == 0 ? 'selected' : ''}}><i class="fas fa-female"></i> Femme</option>
                                   </select>
@@ -147,14 +158,14 @@
 			                          <option value="sedhiou" {{ $dieuw->region == 'sedhiou' ? 'selected' : ''}}>Sédhiou</option>
 			                          <option value="tambacounda" {{ $dieuw->region == 'tambacounda' ? 'selected' : ''}}>Tambacounda</option>
 			                          <option value="thies" {{ $dieuw->region == 'thies' ? 'selected' : ''}}>Thiès</option>
-			                          <option value="ziguinchor" {{ $dieuw->region == 'ziguinchor' ? 'selected' : ''}}>Ziguinchor</option>      
-                                <option value="etranger" {{ $dieuw->region == 'etranger' ? 'selected' : ''}}>Etranger</option>      
-                                <option value="inconnu" {{ $dieuw->region == 'inconnu' ? 'selected' : ''}}>Inconnu</option>      
+			                          <option value="ziguinchor" {{ $dieuw->region == 'ziguinchor' ? 'selected' : ''}}>Ziguinchor</option>
+                                <option value="etranger" {{ $dieuw->region == 'etranger' ? 'selected' : ''}}>Etranger</option>
+                                <option value="inconnu" {{ $dieuw->region == 'inconnu' ? 'selected' : ''}}>Inconnu</option>
                                   </select>
                               </div>
                             </div>
                           </div>
-                          
+
                         </div>
                       </div>
                       <div class="tab-pane" id="account">
@@ -243,7 +254,7 @@
                       </div>
                       <div class="tab-pane" id="address">
                         <div class="row justify-content-center">
-                           <div class="col-sm-6">                      
+                           <div class="col-sm-6">
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -273,7 +284,7 @@
                               </div>
                             </div>
                           </div>
-                          
+
                         </div>
 
                         <div class="row justify-content-center">
@@ -281,7 +292,7 @@
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                 
+
                                 </span>
                               </div>
                               <div class="form-group">
@@ -314,6 +325,10 @@
         </div>
 @endsection
 
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
@@ -329,13 +344,13 @@ $(document).ready(function() {
         $('.card.card-wizard').addClass('active');
       }, 200);
     });
-     
+
 // Initialise the datepicker
     let dateOpt = {dateFormat: "d/m/Y", locale: 'fr'};
 
     $('#arrivee').flatpickr(dateOpt);
     $('#datenaissance').flatpickr(dateOpt);
 
-  
+
 </script>
 @endpush

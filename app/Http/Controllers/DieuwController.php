@@ -294,6 +294,7 @@ class DieuwController extends Controller
                     $date_arrivee = null;
                     $age = null;
                     $dieuwrines = null;
+                    $avatar = null;
                     $genre = 1; // Homme
 
                     $repetition = null; // donnees dupliquer
@@ -331,6 +332,12 @@ class DieuwController extends Controller
                     //Si toutes les colonne sont vides
                     $nom = null;
                     $nom = $value['nom'];
+
+                    //Cas niveau vide
+                    if (($value['avatar']) || ($value['avatar'] != 'neant')){
+                        $avatar = $value['avatar'];
+                    }
+
                     $repetition = DB::select('SELECT nom from dieuws where lower(nom) like lower (\''.$nom.'\')
                                     AND lower(prenom) like lower (\''.$value["prenom"].'\')
                                     AND lower(pere) like lower (\''.$value["pere"].'\')
@@ -358,7 +365,7 @@ class DieuwController extends Controller
                             'prenom' => $value["prenom"],
                             'daara_id' => $daara_id,
                             'genre' => $genre,
-                            // 'avatar'   => ,
+                            'avatar'   => $avatar,
                             'pere' => $value['pere'],
                             'mere' => $value['prenom_nom_de_la_mere'],
                             'datenaissance' => $date_naissance_dieuw,

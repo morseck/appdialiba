@@ -1,18 +1,17 @@
 @extends('layouts.scratch',['title' => 'Création d\'un nouveau Dieuwrine | '])
 
-
 @push('styles')
-	<style type="text/css">
-		label{
-			color: black !important;
-		}
-		.bootstrap-select>.dropdown-toggle{
-			width: 114% !important;
-		}
-	</style>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-@endpush
+    <style type="text/css">
+        label{
+            color: black !important;
+        }
+        .bootstrap-select>.dropdown-toggle{
+            width: 114% !important;
+        }
 
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
 @section('content')
 		<div class="container-fluid">
           <div class="col-md-8 col-12 mr-auto ml-auto">
@@ -93,7 +92,7 @@
                                 </span>
                               </div>
                               <div class="form-group">
-                                 <select class="selectpicker" data-style="select-with-transition" title="Genre" name="genre" required>
+                                 <select class="selectpicker" data-style="select-with-transition" title="Sexe" name="genre" required>
                                     <option value="1"><i class="fas fa-male"></i> Homme</option>
                                     <option value="0"><i class="fas fa-female"></i> Femme</option>
                                   </select>
@@ -146,14 +145,14 @@
 			                          <option value="sedhiou">Sédhiou</option>
 			                          <option value="tambacounda">Tambacounda</option>
 			                          <option value="thies">Thiès</option>
-			                          <option value="ziguinchor">Ziguinchor</option>      
-                                <option value="etranger">Etranger</option>      
-                                <option value="inconnu">Inconnu</option>      
+			                          <option value="ziguinchor">Ziguinchor</option>
+                                <option value="etranger">Etranger</option>
+                                <option value="inconnu">Inconnu</option>
                                   </select>
                               </div>
                             </div>
                           </div>
-                          
+
                         </div>
                       </div>
                       <div class="tab-pane" id="account">
@@ -236,13 +235,13 @@
                               </div>
                             </div>
                           </div>
-                          </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                       <div class="tab-pane" id="address">
                         <div class="row justify-content-center">
-                           <div class="col-sm-6">                      
+                           <div class="col-sm-6">
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -254,10 +253,10 @@
                                   @foreach($daaras as $daara)
                                   <option value="{{ $daara->id }}">{{ $daara->nom }}</option>
                                   @endforeach
-                                  
+
                                  </select>
                               </div>
-                            </div>                            
+                            </div>
                           </div>
 
                           <div class="col-sm-6">
@@ -281,7 +280,7 @@
                             <div class="input-group form-control-lg">
                               <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                 
+
                                 </span>
                               </div>
                               <div class="form-group">
@@ -314,37 +313,40 @@
         </div>
 @endsection
 
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
-<script type="text/javascript">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
+    <script type="text/javascript">
 
-$(document).ready(function() {
-     	      //init DateTimePickers
-    md.initFormExtendedDatetimepickers();
+        $(document).ready(function() {
+            //init DateTimePickers
+            md.initFormExtendedDatetimepickers();
 
-      // Initialise the wizard
-      demo.initMaterialWizard();
-      setTimeout(function() {
-        $('.card.card-wizard').addClass('active');
-      }, 200);
-    });
-     
-// Initialise the datepicker
-    let dateOpt = {dateFormat: "d/m/Y", locale: 'fr'};
+            // Initialise the wizard
+            demo.initMaterialWizard();
+            setTimeout(function() {
+                $('.card.card-wizard').addClass('active');
+            }, 200);
+        });
 
-    $('#arrivee').flatpickr(dateOpt);
-    $('#datenaissance').flatpickr(dateOpt);
+        // Initialise the datepicker
+        let dateOpt = {dateFormat: "d/m/Y", locale: 'fr'};
 
-   //    $('#input-file').change(function(event) {
+        $('#arrivee').flatpickr(dateOpt);
+        $('#datenaissance').flatpickr(dateOpt);
 
-   //      var fileList = event.target.files;
+        //    $('#input-file').change(function(event) {
 
-   //      console.log(fileList);
+        //      var fileList = event.target.files;
 
-   //    if (fileList.length) {
-   //      $('#filename').text(fileList[0].name)
-   //    }
-   // });
-</script>
+        //      console.log(fileList);
+
+        //    if (fileList.length) {
+        //      $('#filename').text(fileList[0].name)
+        //    }
+        // });
+    </script>
 @endpush
