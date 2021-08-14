@@ -366,15 +366,6 @@
             maladies += parseInt(myDatamaladies[i]) ;
         }
 
-
-        console.log('talibes: '+talibes);
-        console.log('Dieuwrines: '+dieuwrines);
-        console.log('Niveau: '+niveaux);
-        console.log('regions: '+regions);
-        console.log('tarbiyas: '+tarbiyas);
-        console.log('medecins: '+medecins);
-        console.log('maladies: '+maladies);
-
         for(var i=0,l=myData.length; i < l ; i++ )
         {
             myLabels[i] += ' ('+ ((myData[i] / talibes ) * 100 ).toFixed(2) +' %)'+'  ['+myData[i]+']' ;
@@ -412,8 +403,6 @@
         {
             myLabelmaladies[i] += ' ('+ ((myDatamaladies[i] / maladies ) * 100 ).toFixed(2) +' %)'+'  ['+myDatamaladies[i]+']' ;
         }
-
-
 
         myData.push(0);
         mydataNiveaus.push(0);

@@ -304,7 +304,7 @@ class DieuwController extends Controller
                     //Recherche Daara correspondant
                     $daara_nom = $value['daara'];
                     if ((($daara_nom) && ($daara_nom != 'neant')) ){
-                        $daara_id = Daara::select('id')->where(strtolower('nom'), strtolower($daara_nom))->first();
+                        $daara_id = Daara::select('id')->where('nom', 'ilike', strtolower($daara_nom))->first();
                         $daara_id = $daara_id['id'];
                     }
 
@@ -338,12 +338,12 @@ class DieuwController extends Controller
                         $avatar = $value['avatar'];
                     }
 
-                    $repetition = DB::select('SELECT nom from dieuws where lower(nom) like lower (\''.$nom.'\')
-                                    AND lower(prenom) like lower (\''.$value["prenom"].'\')
-                                    AND lower(pere) like lower (\''.$value["pere"].'\')
-                                    AND lower(mere) like lower (\''.$value["prenom_nom_de_la_mere"].'\')
-                                    AND lower(tuteur) like lower (\''.$value["tuteur"].'\')
-                                    AND daara_id like '.$daara_id.'
+                    $repetition = DB::select('SELECT nom from dieuws where lower(nom) ilike lower (\''.$nom.'\')
+                                    AND lower(prenom) ilike lower (\''.$value["prenom"].'\')
+                                    AND lower(pere) ilike lower (\''.$value["pere"].'\')
+                                    AND lower(mere) ilike lower (\''.$value["prenom_nom_de_la_mere"].'\')
+                                    AND lower(tuteur) ilike lower (\''.$value["tuteur"].'\')
+                                    AND daara_id = '.$daara_id.'
                     ') ;
 
                     if ($repetition){//si le talibe existe deja

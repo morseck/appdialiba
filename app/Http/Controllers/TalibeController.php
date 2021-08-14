@@ -51,11 +51,11 @@ class TalibeController extends Controller
         if ($recherche) {
             // var_dump($recherche); die();
             //$talibeList = Talibe::query();
-            $talibeList = Talibe::query()->where(DB::raw("lower(CONCAT(prenom,' ', nom))"), 'LIKE', strtolower('%' . $recherche . '%'))
+            $talibeList = Talibe::query()->where(DB::raw("lower(CONCAT(prenom,' ', nom))"), 'ilike', strtolower('%' . $recherche . '%'))
                 ->get();
             //var_dump($talibes);die();
             /* $talibeList = DB::table('talibes')
-                 ->where(DB::raw('CONCAT(prenom, " ", nom)'), 'LIKE' , '%'.$recherche.'%')
+                 ->where(DB::raw('CONCAT(prenom, " ", nom)'), 'ilike' , '%'.$recherche.'%')
                  ->get();*/
             $nombre = count($talibeList);
             // var_dump($resultats);die();
@@ -354,7 +354,7 @@ class TalibeController extends Controller
                         //Recherche Daara correspondant
                         $daara_nom = $value['daara'];
                         if ((($daara_nom) && ($daara_nom != 'neant')) ){
-                            $daara_id = DB::select('SELECT id From daaras where lower(nom) like lower (\''.$daara_nom.'\') limit 1');
+                            $daara_id = DB::select('SELECT id From daaras where nom ilike (\''.$daara_nom.'\') limit 1');
                               //  ->where(('nom'), strtolower($daara_nom))->first();
                             $daara_id = $daara_id[0];
                             $daara_id = $daara_id->id;
@@ -364,12 +364,19 @@ class TalibeController extends Controller
 
                         //Recherche Dieuwrine correspondant
                         $dieuw = $value['serigne'];
+                        //Recuperation distinct du nom et prenom du dieuwrine
+                        $prenomArray = explode( " ",$dieuw, -1); //transformation d'une chaine de caractere en array
+                        $prenomDieuwrine = implode(" ", $prenomArray); //transformation d'un array en chaine de caractrere
+                        $nomDieuwrine = explode(" ", $dieuw)[count(explode(" ", $dieuw))-1];
+
                         if (($daara_nom) && ($daara_nom != 'neant')){//si daara est non existant
                             $dieuw_id = Dieuw::select('id')
-                                ->where(DB::raw('lower(CONCAT(prenom, " ", nom))'), strtolower($dieuw))
+                                ->where('prenom','ilike', $prenomDieuwrine)
+                                ->where('nom','ilike', $nomDieuwrine)
                                 ->where('daara_id', $daara_id)
-                                ->first();
-                            $dieuw_id = $dieuw_id['id'];
+                                ->first()
+                            ;
+                           $dieuw_id = $dieuw_id['id'];
                         }
 
 
@@ -398,21 +405,18 @@ class TalibeController extends Controller
                                 $avatar = $value['avatar'];
                             }
 
-                        //var_dump($date_arrivee);die();
                         $talibes = new Talibe();
                         //Si toutes les colonne sont vides
-                            $repetition = DB::select('SELECT nom from talibes where lower(nom) like lower (\''.$value["nom"].'\')
-                                    AND lower(prenom) like lower (\''.$value["prenom"].'\')
-                                    AND lower(pere) like lower (\''.$value["pere"].'\')
-                                    AND lower(mere) like lower (\''.$value["prenom_nom_de_la_mere"].'\')
-                                    AND lower(tuteur) like lower (\''.$value["tuteur"].'\')
-                                    AND daara_id like '.$daara_id.'
-                                    AND dieuw_id like \''.$dieuw_id.'\'
+                            $repetition = DB::select('SELECT nom from talibes where lower(nom) ilike lower (\''.$value["nom"].'\')
+                                    AND lower(prenom) ilike lower (\''.$value["prenom"].'\')
+                                    AND lower(pere) ilike lower (\''.$value["pere"].'\')
+                                    AND lower(mere) ilike lower (\''.$value["prenom_nom_de_la_mere"].'\')
+                                    AND lower(tuteur) ilike lower (\''.$value["tuteur"].'\')
+                                    AND daara_id = '.$daara_id.'
+                                    AND dieuw_id = \''.$dieuw_id.'\'
 
                     ') ;
-                           //var_dump($repetition);die();
                             if ($repetition){//si le talibe existe deja
-                                //var_dump("dupliquer");die();
                                 $rapport_dupliques[]= array(
                                     'numero' =>$ligne,
                                     'nom' => $value["nom"],
@@ -473,10 +477,7 @@ class TalibeController extends Controller
                                        'tuteur' => $value['tuteur'],
                                        'niveau' => $niveau
                                    );
-                                        //var_dump("catch"); die();
                                }
-
-                               // var_dump("enregistrer");die();
                             }
                     }
             }
@@ -499,17 +500,12 @@ class TalibeController extends Controller
 
     function importation_dieuwrine(Request $request)
     {
-        // var_dump("import");die();
-        /*  $this->validate($request, [
-              'importation_excel'   =>  'required|mimes:xls, xlsx'
-          ]);*/
 
         $path = $request->file('importation_excel')->getRealPath();
         $data = Excel::load($path)->get();
 
         $daara = null;
         $daara_nom = null;
-        //var_dump($data); die();
         $insert_data[] = array();
         if ($data->count() > 0) {
             // var_dump($data->toArray());die();
