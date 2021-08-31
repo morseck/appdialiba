@@ -286,8 +286,9 @@
             message: "{{ session('talibeEvent') }}"
 
         }, {
-            type: type[color],
+            //type: type[color],
             timer: 3000,
+            type: 'success',
             placement: {
                 from: from,
                 align: align

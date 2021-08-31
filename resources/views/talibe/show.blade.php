@@ -208,7 +208,7 @@
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-lg-5">
-                                        <h5>Profil Talibé</h5>
+                                        <h5  class="badge badge-success" style="font-size: medium">Profil Talibé</h5>
                                         <h3 class="card-title">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></h3>
                                         @if( $talibe->age()!=null )
                                             <h3><strong>{{ $talibe->age() }} </strong> ans</h3>

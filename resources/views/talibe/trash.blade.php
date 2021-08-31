@@ -50,7 +50,9 @@
                                 <tbody>
                                 @foreach($talibeList as $talibe)
                                     <tr>
-                                        <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
+                                        <td>
+                                            <a href="{{ route('talibe.show_talibe_delete',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a>
+                                        </td>
                                         <td>
                                             @if( $talibe->age()!=null )
                                                 {{ $talibe->age() }} ans
@@ -103,31 +105,6 @@
 
 
 @push('scripts')
-    @if( session()->has('talibeEvent')  )
-
-        <script type="text/javascript">
-            (function(from, align) {
-                type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
-
-                color = Math.floor((Math.random() * 6) + 1);
-
-                $.notify({
-                    icon: "notifications",
-                    message: "{{ session('talibeEvent') }}"
-
-                }, {
-                    type: type[color],
-                    timer: 3000,
-                    placement: {
-                        from: from,
-                        align: align
-                    }
-                });
-            })();
-
-        </script>
-
-    @endif
 
     <script>
         $(document).ready(function() {
