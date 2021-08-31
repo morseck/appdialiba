@@ -42,6 +42,10 @@ Route::get('/importation_medecin', 'MedecinController@importation_medecin')->nam
 
 //Rechercher un talibe a partir de son nom prenom
 Route::get('/talibe/recherche', 'TalibeController@recherche')->name('reccherche_talibe');
+//Consulter un talibe supprimé à parit de son id
+Route::get('/talibe/show_talibe_delete/{id}', 'TalibeController@showTalibeDelete')->name('talibe.show_talibe_delete');
+//Restaurer un talibé supprimé à partir de son id
+Route::post('/talibe/restore/{id}', 'TalibeController@restore')->name('talibe.restore');
 
 Route::get('/galerie', 'GalerieController@index');
 

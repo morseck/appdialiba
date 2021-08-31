@@ -54,14 +54,14 @@
                 </li>
                 <li class="nav-item ">
                   <a class="nav-link" href="{{ route('talibe.create') }}">
-                    <span class="sidebar-mini"> A</span>
+                    <span class="sidebar-mini"> N</span>
                     <span class="sidebar-normal"> NOUVEAU </span>
                   </a>
                 </li>
                 <li class="nav-item ">
                   <a class="nav-link" href="{{ route('talibe.deleted') }}">
-                    <span class="sidebar-mini"> P</span>
-                    <span class="sidebar-normal"> POUBELLE </span>
+                    <span class="sidebar-mini"> A</span>
+                    <span class="sidebar-normal"> ARCHIVES </span>
                   </a>
                 </li>
               </ul>

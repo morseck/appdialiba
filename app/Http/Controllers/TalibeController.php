@@ -168,6 +168,25 @@ class TalibeController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showTalibeDelete($id)
+    {
+        $consultations =  Consultation::where('talibe_id', $id)->orderBy('date', 'desc')->get();
+        $partMaladies = DB::select('SELECT COUNT(*) as poids, consultations.maladie FROM consultations JOIN talibes ON talibes.id=consultations.talibe_id WHERE talibes.id = '.$id.' GROUP BY consultations.maladie') ;
+        return view('talibe.show-talibe-deleted', ['talibe' => Talibe::onlyTrashed()->where('id', $id)->get()->first(),
+            'medecins' => Medecin::all(),
+            'daaras' => Daara::all(),
+            'consultations'=>$consultations,
+            'partMaladies'=>$partMaladies,
+            'deleted' => true
+        ]);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param int $id
@@ -280,11 +299,34 @@ class TalibeController extends Controller
         return redirect()->route('talibe.index');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function restore($id)
+    {
+        //dd($id);
+        $talibe = Talibe::onlyTrashed()->where('id', $id)->get()->first();
+        $name = $talibe->fullname();
+
+       if ($talibe){
+           Talibe::withTrashed()
+               ->where('id', $id)
+               ->restore();
+           session()->flash('talibeEvent', 'Le Talibé ' . $name . ' a été restauré avec succès');
+           return redirect()->route('talibe.show', ['id' => $id]);
+       }
+        return redirect()->route('talibe.deleted');
+    }
+
     public function viewTrash()
     {
 
        // $trashedTalibes = Talibe::where('deleted_at','!=', null);
-        $trashedTalibes = Talibe::onlyTrashed();
+        $trashedTalibes = Talibe::onlyTrashed()->get();
        //var_dump($trashedTalibes);die();
 
         return view('talibe.trash', ['talibeList' => $trashedTalibes, 'nbr'=>count($trashedTalibes)]);

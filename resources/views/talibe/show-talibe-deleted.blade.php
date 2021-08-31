@@ -92,110 +92,6 @@
         </div>
         {{--Fin bulletin de sante--}}
 
-        {{--Debut modal formulaire de consultation--}}
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Classic Modal -->
-                <div class="modal fade" id="modalConsultation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header bg-success text-white">
-                                <h4 class="modal-title">Formulaire de consultation du talibé <strong>{{ ucfirst(strtolower($talibe->prenom))}} <b>{{ strtoupper($talibe->nom) }}</b></strong></h4>
-                                <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true">
-                                    <i class="material-icons" style="font-size: 1em;">clear</i>
-                                </button>
-                            </div>
-                            <form method="POST" enctype="multipart/form-data" action="{{route('consultation.store')}}" class="navbar-form">
-                                <div class="modal-body">
-                                    @csrf()
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="input-group form-control-lg">
-                                                <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                 <i class="fas fa-user-md"></i>
-                                                </span>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="hidden" class="form-control" name="talibe_id"  value="{{ $talibe->id }}"  style="background-color: transparent;">
-                                                    <select class="selectpicker" data-style="select-with-transition" title="Médecin" name="medecin_id">
-                                                        @foreach($medecins as $medecin)
-                                                            <option value="{{ $medecin->id }}">{{ $medecin->fullname() }} - {{ $medecin->spec ?? ''}} - {{ $medecin->hopital ?? ''}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="input-group form-control-lg">
-                                                <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                 <i class="fas fa-map-marker-alt"></i>
-                                                </span>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="selectpicker" data-style="select-with-transition" title="Lieu de la consultation" name="lieu">
-                                                        @foreach($daaras as $daara)
-                                                            <option value="{{ $daara->nom}}" {{ $daara->nom == ''.$talibe->daara->nom.'' ? 'selected' :'' }}>{{ $daara->nom }}</option>
-                                                        @endforeach
-                                                        <option value="autre">Autre</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="input-group form-control-lg">
-                                                <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                 <i class="fas fa-calendar"></i>
-                                                </span>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="exampleInput11" class="">Date</label>
-                                                    <input type="date" class="form-control" name="date"  value="{{ old('date') }}"  style="background-color: transparent;" placeholder="Format: jj/mm/aa - exemple: 21/02/2020">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="input-group form-control-lg">
-                                                <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                 <i class="fas fa-medkit"></i>
-                                                </span>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="selectpicker" data-style="select-with-transition" title="Maladie" name="maladie">
-                                                        <option value="paludisme">Paludisme</option>
-                                                        <option value="diabète">Diabète</option>
-                                                        <option value="rougeole">Rougeole</option>
-                                                        <option value="fievre jaune">Fièvre jaune</option>
-                                                        <option value="diarrhe">Diarrhé</option>
-                                                        <option value="autre">Autre</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="input-group form-control-lg">
-                                                <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                 <i class="fas fa-stethoscope"></i>
-                                                </span>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="exampleInput11" class="bmd-label-floating">Avis</label>
-                                                    <textarea class="form-control" name="avis" style="background-color: transparent;">{{(old('avis')) }}</textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-link">valider <i class="material-icons">done</i></button>
-                                    <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Fermer <i class="material-icons">close</i></button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{--Fin modal formulaire de consultation--}}
-
         {{--Debut show talibe--}}
 
         <div class="row">
@@ -208,7 +104,7 @@
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-lg-5">
-                                        <h5  class="badge badge-success" style="font-size: medium">Profil Talibé</h5>
+                                        <h5 class="badge badge-danger" style="font-size: medium">Profil Talibé supprimé <i class="fa fa-trash"></i></h5>
                                         <h3 class="card-title">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></h3>
                                         @if( $talibe->age()!=null )
                                             <h3><strong>{{ $talibe->age() }} </strong> ans</h3>
@@ -225,7 +121,6 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <p class="text-center">
-                                                    <button type="button" class="btn btn-round btn-outline-success" data-toggle="modal" data-target="#modalConsultation" href="#"><i class="fas fa-medkit"></i> Nouvelle consultation</button>
                                                     <button type="button" class="btn btn-round btn-outline-info button_rapport"><i class="fas fa-stethoscope"></i> <span id="libelle">Voir bulletin médical</span></button>
                                                 </p>
                                             </div>
@@ -312,14 +207,12 @@
                             </div>
                             <div class="card-footer">
                                 <div class="row">
+
                                     <div class="col-lg-4">
-                                        <a class="btn btn-info" href="{{ route('talibe.edit',['id' => $talibe->id]) }}"><i class="fas fa-user-edit"></i> Editer</a>
+                                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deletmodal"><i class="fas fa-reply"></i> Restaurer</button>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletmodal"><i class="fas fa-trash-alt"></i> Supprimer</button>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <a class="btn btn-default" href="{{ route('talibe.index') }}"><i class="fas fa-list"></i> Liste Talibés</a>
+                                    <div class="col-lg-4 offset-1">
+                                        <a class="btn btn-default" href="{{ route('talibe.deleted') }}"><i class="fas fa-list"></i> Liste Talibés supprimés</a>
                                     </div>
                                 </div>
                             </div>
@@ -355,7 +248,7 @@
                     </button>
                 </div>
                 <div class="modal-body text-center">
-                    Voulez-vous vraiment supprimer ce profil ?
+                    Voulez-vous vraiment restaurer ce talibé?
                 </div>
                 <div class="modal-footer text-center">
                     <div class="row text-center">
@@ -364,10 +257,9 @@
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                         </div>
                         <div class="col-lg-6">
-                            <form action="{{ route('talibe.destroy',['id' => $talibe->id ]) }}" method="post">
+                            <form action="{{ route('talibe.restore',['id' => $talibe->id ]) }}" method="post">
                                 {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                <button type="submit" class="btn btn-warning">Restaurer</button>
                             </form>
                         </div>
                     </div>
@@ -418,60 +310,6 @@
     </script>
     {{--Fin datepicker--}}
 
-    {{--Debut alerte notification--}}
-    @if( session()->has('consultationEvent')  )
-        <script type="text/javascript">
-            (function(from, align) {
-                //type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
-
-                color = Math.floor((Math.random() * 6) + 1);
-
-                $.notify({
-                    icon: "notifications",
-                    message: "{{ session('consultationEvent') }}"
-
-                }, {
-                    //type: type[color],
-                    type: 'success',
-                    timer: 3000,
-                    placement: {
-                        from: from,
-                        align: align
-                    }
-                });
-            })();
-
-        </script>
-
-    @endif
-    {{--Fin alerte notification--}}
-
-    {{--DEBUT Notification d'ajouter et de modification d'un nouveau noveeau talibe--}}
-    @if( session()->has('talibeEvent')  )
-        <script type="text/javascript">
-            (function(from, align) {
-                //type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
-
-                color = Math.floor((Math.random() * 6) + 1);
-
-                $.notify({
-                    icon: "notifications",
-                    message: "{{ session('talibeEvent') }}"
-
-                }, {
-                    //type: type[color],
-                    type: 'success',
-                    timer: 3000,
-                    placement: {
-                        from: from,
-                        align: align
-                    }
-                });
-            })();
-
-        </script>
-    @endif
-    {{--FIN Notification d'ajouter et de modification d'un nouveau noveeau talibe--}}
 
     {{--Debut dataTable--}}
     <script>

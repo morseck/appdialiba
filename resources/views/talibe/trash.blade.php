@@ -50,7 +50,9 @@
                                 <tbody>
                                 @foreach($talibeList as $talibe)
                                     <tr>
-                                        <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
+                                        <td>
+                                            <a href="{{ route('talibe.show_talibe_delete',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a>
+                                        </td>
                                         <td>
                                             @if( $talibe->age()!=null )
                                                 {{ $talibe->age() }} ans
@@ -80,7 +82,7 @@
                                         <td> {{ $talibe->niveau }} </td>
                                         <td> {{ $talibe->region }} </td>
                                         <td class="text-right" style="font-size: 0.1em;">
-                                            <a href="{{ route('talibe.show',['id' => $talibe->id]) }}" class="btn btn-link btn-info btn-just-icon" data-toggle="tooltip"  data-placement="left" title="Voir détails"><i class="fa fa-eye"></i></a>
+                                            <a href="{{ route('talibe.show_talibe_delete',['id' => $talibe->id]) }}" class="btn btn-link btn-info btn-just-icon" data-toggle="tooltip"  data-placement="left" title="Voir détails"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -103,31 +105,6 @@
 
 
 @push('scripts')
-    @if( session()->has('talibeEvent')  )
-
-        <script type="text/javascript">
-            (function(from, align) {
-                type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
-
-                color = Math.floor((Math.random() * 6) + 1);
-
-                $.notify({
-                    icon: "notifications",
-                    message: "{{ session('talibeEvent') }}"
-
-                }, {
-                    type: type[color],
-                    timer: 3000,
-                    placement: {
-                        from: from,
-                        align: align
-                    }
-                });
-            })();
-
-        </script>
-
-    @endif
 
     <script>
         $(document).ready(function() {
