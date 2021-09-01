@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use App\Dieuw;
 use App\Daara;
@@ -69,5 +69,13 @@ if(!function_exists('app_real_filename'))
 
 	    return explode('/', $str)[1];
 	}
+}
+
+if(!function_exists('fullName'))
+{
+    function fullName($prenom, $nom)
+    {
+        return ucfirst(strtolower($prenom)).' '.strtoupper($nom);
+    }
 }
 ?>

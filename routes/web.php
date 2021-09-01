@@ -65,6 +65,8 @@ Route::get('/daara/{id}/talibes/','DaaraController@talibes')->name('by_daara');
 Route::get('/dieuw/{id}/talibes/','DieuwController@talibeByDieuw')->name('by_dieuw');
 
 Route::resource('consultation','ConsultationController');
+//Consulter une campagne de consultation à parit de sa date
+Route::get('/consultation/show_consultation_by_date/{date}', 'ConsultationController@showConsultationByDate')->name('consultation.show_consultation_by_date');
 
 Route::resource('medecin','MedecinController');
 

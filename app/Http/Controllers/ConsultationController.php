@@ -6,8 +6,8 @@ use App\Consultation;
 use Illuminate\Http\Request;
 use App\Talibe;
 use Excel;
-use DB;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use Session;
 
@@ -21,7 +21,20 @@ class ConsultationController extends Controller
      */
     public function index()
     {
-        return view('consultation.index');
+        $view = 'consultation.index';
+        $consultations = Consultation::select('date')
+            ->GroupBy('date')
+            ->OrderBy('date', 'desc')
+            ->paginate(10);
+
+        $numero = $consultations->currentPage() * $consultations->perPage() - $consultations->perPage() + 1;
+        $nombreCampagneConsultation = count(Consultation::select('*')->GroupBy('id', 'date')->get());
+
+        return view($view, [
+            'consultations' => $consultations,
+            'numero' => $numero,
+            'nombreCampagneConsultation' => $nombreCampagneConsultation
+        ]);
     }
 
     /**
@@ -79,12 +92,60 @@ class ConsultationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Consultation  $consultation
+     * * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Consultation $consultation)
+    public function show(int $id)
     {
         //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * * @param string $date
+     * @return \Illuminate\Http\Response
+     */
+    public function showConsultationByDate($date)
+    {
+        $view = 'consultation.detail';
+
+        $detailsConsultations = DB::table('talibes')
+            ->join('consultations', 'talibes.id', '=', 'consultations.talibe_id')
+            ->join('medecins', 'medecins.id', '=', 'consultations.medecin_id')
+            ->join('daaras', 'daaras.id', '=', 'talibes.daara_id')
+            ->where('consultations.date', 'ilike', $date)
+            ->select(
+                'talibes.id as talibe_id',
+                'talibes.nom as talibe_nom',
+                'talibes.prenom as talibe_prenom',
+                'daaras.id as daara_id',
+                'daaras.nom as daara_nom',
+                'medecins.id as medecin_id',
+                'medecins.nom as medecin_nom',
+                'medecins.prenom as medecin_prenom',
+                'medecins.spec as medecin_specialiste',
+                'medecins.hopital as medecin_hopital',
+                'consultations.id as consultation_id',
+                'consultations.lieu as consultation_lieu',
+                'consultations.maladie as consultation_maladie',
+                'consultations.avis as consultation_avis',
+                'consultations.date as consultation_date'
+            );
+
+        $totalConsultations = count($detailsConsultations->get());
+
+        $listeConsultations = $detailsConsultations->paginate(25);
+
+        //dd($listeConsultations);
+        $numero = $listeConsultations->currentPage() * $listeConsultations->perPage() - $listeConsultations->perPage() + 1;
+
+        return view($view, [
+            'listeConsultations' => $listeConsultations,
+            'numero' => $numero,
+            'totalConsultations' => $totalConsultations,
+            'date' => $date
+        ]);
     }
 
     /**

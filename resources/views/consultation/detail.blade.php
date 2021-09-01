@@ -1,4 +1,4 @@
-@extends('layouts.scratch',['title' => 'Liste des campagnes de consulatations | '])
+@extends('layouts.scratch',['title' => 'Details consultations | '.app_date_reverse($date, '-', '-')])
 @push('styles')
 
 @endpush
@@ -6,15 +6,16 @@
 @section('content')
 
     <div class="container-fluid">
-        {{--Debut Liste des campagnes de consultations--}}
+        {{--Debut Liste des  consultations--}}
         <div class="row">
-            <div class="col-md-8 col-sm-12 offset-md-2">
+            <div class="col-md-12 ">
                 <div class="card">
                     <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
                             <i class="material-icons">assignment</i>
                         </div>
-                        <h4 class="card-title mt-10"> Liste des campagnes de consultation: [{{ $nombreCampagneConsultation }}]</h4>
+                        <h4 class="card-title mt-10"> Détails de la journée de consultation du <span class="badge badge-info" style="font-size: medium"> {{app_date_reverse($date, '-', '-')}}</span>: [{{ $totalConsultations }}]</h4>
+                        <h6 class="pull-right"> <a href="{{ route('consultation.index') }}">Aller à la liste des consultations</a></h6>
                     </div>
                     <div class="card-body">
                         <div class="toolbar">
@@ -24,26 +25,49 @@
                                 <thead>
                                 <tr>
                                     <th><strong>N°</strong></th>
-                                    <th><strong>Date</strong></th>
-                                    <th class="disabled-sorting text-right">Actions</th>
+                                    <th><strong>Talibes</strong></th>
+                                    <th>Médecin</th>
+                                    <th>Maladie</th>
+                                    <th>Avis</th>
+                                    <th>Lieu consultation</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
                                     <th><strong>N°</strong></th>
-                                    <th><strong>Date</strong></th>
-                                    <th class="text-right">Actions</th>
+                                    <th><strong>Talibes</strong></th>
+                                    <th>Médecin</th>
+                                    <th>Maladie</th>
+                                    <th>Lieu consultation</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                @foreach($consultations as $consulation)
+                                @foreach($listeConsultations as $item)
                                     <tr>
                                         <td><span>{{$numero++}} </span></td>
                                         <td>
-                                            <a href="{{ route('consultation.show_consultation_by_date',['date' => $consulation->date]) }}" title="Cliquez pour voir les détails sur la campagne de conulatation"> <span  class="category badge badge-pill badge-success " style="font-size: medium">{{ app_date_reverse($consulation->date, '-', '-') }}</span></a>
+                                            <a href="{{ route('talibe.show',['id' => $item->talibe_id]) }}" title="Cliquez pour voir les détails sur le talibé"> <span style="color: black"><strong>{{ fullName($item->talibe_prenom,$item->talibe_nom)}}</strong></span></a>
+                                            -
+                                            <a href="{{ route('by_daara',['id' => $item->daara_id]) }}" title="Cliquez pour voir les détails sur le daaras"> <span class="category badge badge-pill badge-success " >{{$item->daara_nom}}</span></a>
+
                                         </td>
-                                        <td class="text-right">
-                                            <a  href="{{ route('consultation.show_consultation_by_date',['date' => $consulation->date]) }}" class="btn btn-link btn-info btn-just-icon"  data-placement="left" title="Voir détails"><i class="fa fa-eye"></i></a>
+                                        <td>
+                                            <a href="{{ route('medecin.show',['id' => $item->medecin_id]) }}">
+                                                <span>
+                                                    {{ fullName($item->medecin_prenom, $item->medecin_nom) }}
+                                                </span>
+                                            </a>
+                                            -
+                                            <span class="badge badge-warning badge-pill"> {{ $item->medecin_specialiste.' - '.$item->medecin_hopital }}</span>
+                                        </td>
+                                        <td>
+                                            {{ $item->consultation_maladie }}
+                                        </td>
+                                        <td>
+                                            {{ $item->consultation_avis }}
+                                        </td>
+                                        <td>
+                                            {{ $item->consultation_lieu }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -52,7 +76,7 @@
                             <br>
                             <div class="row">
                                 <div class="offset-md-6 col-md-6 col-sm-12">
-                                    <p>{{ $consultations->links() }}</p>
+                                    <p>{{ $listeConsultations->links() }}</p>
                                 </div>
                             </div>
                         </div>
@@ -63,7 +87,7 @@
             </div>
             <!-- end col-md-12 -->
         </div>
-        {{--Fin Liste des campagnes de consultations--}}
+    {{--Fin Liste des consultations--}}
     <!-- end row -->
     </div>
 
