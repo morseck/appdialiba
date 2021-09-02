@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Medecin;
 use Illuminate\Http\Request;
 use Excel;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use Session;
 
@@ -119,7 +119,15 @@ class MedecinController extends Controller
      */
     public function show($id)
     {
-        return view('medecin.show', ['medecin' => Medecin::findOrFail($id)]);
+        $totalConsultation = count(DB::table('medecins')
+            ->join('consultations', 'medecins.id', '=', 'consultations.medecin_id')
+            ->where('consultations.medecin_id', '=', $id)
+            ->get());
+        //dd($totalConsultation);
+        return view('medecin.show', [
+            'medecin' => Medecin::findOrFail($id),
+            'totalConsultation' => $totalConsultation
+        ]);
     }
 
     /**

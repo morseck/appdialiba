@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Consultation;
+use App\Medecin;
 use Illuminate\Http\Request;
 use App\Talibe;
 use Excel;
@@ -101,8 +102,6 @@ class ConsultationController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
      * * @param string $date
      * @return \Illuminate\Http\Response
      */
@@ -147,6 +146,51 @@ class ConsultationController extends Controller
             'date' => $date
         ]);
     }
+
+    /**
+     * * @param int $medecin_id
+     * @return \Illuminate\Http\Response
+     */
+    public function showConsultationByMedecin($medecin_id)
+    {
+        $medecin = Medecin::findOrFail($medecin_id);
+
+        $view = 'medecin.detail';
+
+        $detailsConsultations = DB::table('talibes')
+            ->join('consultations', 'talibes.id', '=', 'consultations.talibe_id')
+            ->join('medecins', 'medecins.id', '=', 'consultations.medecin_id')
+            ->join('daaras', 'daaras.id', '=', 'talibes.daara_id')
+            ->where('consultations.medecin_id', '=', $medecin_id)
+            ->orderBy('consultations.date', 'desc')
+            ->select(
+                'talibes.id as talibe_id',
+                'talibes.nom as talibe_nom',
+                'talibes.prenom as talibe_prenom',
+                'daaras.id as daara_id',
+                'daaras.nom as daara_nom',
+                'consultations.id as consultation_id',
+                'consultations.lieu as consultation_lieu',
+                'consultations.maladie as consultation_maladie',
+                'consultations.avis as consultation_avis',
+                'consultations.date as consultation_date'
+            );
+
+        $totalConsultations = count($detailsConsultations->get());
+
+        $listeConsultations = $detailsConsultations->paginate(25);
+
+        $numero = $listeConsultations->currentPage() * $listeConsultations->perPage() - $listeConsultations->perPage() + 1;
+
+        return view($view, [
+            'listeConsultations' => $listeConsultations,
+            'numero' => $numero,
+            'totalConsultations' => $totalConsultations,
+            'medecin' => $medecin
+        ]);
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.

@@ -14,6 +14,12 @@
                                     <div class="col-lg-6">
                                         <h5>Profil Médecin</h5>
                                         <h3 class="card-title">{{ ucfirst(strtolower($medecin->prenom))}} <strong><b>{{ strtoupper($medecin->nom) }}</b></strong></h3>
+                                        <a href="{{ route('consultation.show_consultation_by_medecin',['medecin_id' => $medecin->id]) }}" title="Cliquez pour voir les détails sur les consultations du médecin">
+                                            <h6 class="badge badge-info">
+                                                <b>Nombre total de consultations : </b>
+                                                <strong>{{ $totalConsultation }}</strong>
+                                            </h6>
+                                        </a>
                                     </div>
                                     <div class="col-lg-6">
                                         @if(($medecin->image !='') && ($medecin->image !='image medecin'))
