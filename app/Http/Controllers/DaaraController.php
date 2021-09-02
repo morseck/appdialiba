@@ -23,7 +23,10 @@ class DaaraController extends Controller
      */
     public function index()
     {
-        return view('daara.index',['daaraList' => Daara::all()]);
+        return view('daara.index',[
+            'daaraList' => Daara::all(),
+            'totalDaara' => Daara::all()->count(),
+        ]);
     }
 
     /**

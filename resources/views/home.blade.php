@@ -1,119 +1,120 @@
 @extends('layouts.scratch',['titre' => 'Acceuil'])
 
 @section('content')
-	<div class="row">
-    <div class="col-lg-11 card" style="margin:auto;">
-      <div class="row">
-          <div class="col-lg-4 col-md-6 col-sm-6">
-        <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
-          <div class="card-header card-header-warning card-header-icon">
-              <a href="{{ route('dieuw.index') }}" class="text-white">
-                 <div class="card-icon">
-                    <i class="fas fa-user-graduate"></i>
+    <div class="container-fluid">
+        <div class="row">
+        <div class="col-lg-11 card" style="margin:auto;">
+          <div class="row">
+              <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
+              <div class="card-header card-header-warning card-header-icon">
+                  <a href="{{ route('dieuw.index') }}" class="text-white">
+                     <div class="card-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                  </a>
+                  <a href="{{ route('dieuw.index') }}">
+                      <p class="card-category">Dieuwrines</p>
+                      <h3 class="card-title">{{ nb_dieuws() }}</h3>
+                  </a>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <!-- <i class="material-icons text-danger">warning</i> -->
+                  <a href="{{ route('dieuw.index') }}"> Liste des Dieuwrines</a>
                 </div>
-              </a>
-              <a href="{{ route('dieuw.index') }}">
-                  <p class="card-category">Dieuwrines</p>
-                  <h3 class="card-title">{{ nb_dieuws() }}</h3>
-              </a>
-          </div>
-          <div class="card-footer">
-            <div class="stats">
-              <!-- <i class="material-icons text-danger">warning</i> -->
-              <a href="{{ route('dieuw.index') }}"> Liste des Dieuwrines</a>
+              </div>
             </div>
+          </div>
+              <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1);">
+                  <div class="card-header card-header-rose card-header-icon">
+                      <a href="{{ route('daara.index') }}" class="text-white">
+                        <div class="card-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                      </a>
+                      <a href="{{ route('daara.index') }}">
+                          <p class="card-category">Daaras</p>
+                          <h3 class="card-title">{{ nb_daaras() }}</h3>
+                      </a>
+                  </div>
+                  <div class="card-footer">
+                    <div class="stats">
+                      <!-- <i class="material-icons">local_offer</i>  -->
+                      <a href="{{ route('daara.index') }}"> Liste des Daaras</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1);">
+                  <div class="card-header card-header-success card-header-icon">
+                      <a href="{{ route('talibe.index') }}" class="text-white">
+                         <div class="card-icon">
+                            <i class='fas fa-users'></i>
+                         </div>
+                      </a>
+                      <a href="{{ route('talibe.index') }}">
+                          <p class="card-category">Talibés</p>
+                          <h3 class="card-title">{{ nb_talibes() }}</h3>
+                      </a>
+                  </div>
+                  <div class="card-footer">
+                    <div class="stats">
+                      <!-- <i class="material-icons">date_range</i> -->
+                      <a href="{{ route('talibe.index') }}"> Liste des Talibés</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                  <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1);">
+                      <div class="card-header card-header-default card-header-icon">
+                          <a href="{{ route('medecin.index') }}" class="text-white">
+                              <div class="card-icon">
+                                <i class='fas fa-user-md'></i>
+                              </div>
+                          </a>
+                          <a href="{{ route('medecin.index') }}">
+                              <p class="card-category">Médecins</p>
+                              <h3 class="card-title">{{ nb_medecins() }}</h3>
+                          </a>
+                      </div>
+                      <div class="card-footer">
+                          <div class="stats">
+                              <!-- <i class="material-icons">date_range</i> -->
+                              <a href="{{ route('medecin.index') }}"> Liste des Médecins</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                  <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1);">
+                      <div class="card-header card-header-info card-header-icon">
+                          <a href="{{ route('tarbiya.index') }}" class="text-white">
+                              <div class="card-icon">
+                                  <i class='fas fa-male'></i>
+                              </div>
+                          </a>
+                          <a href="{{ route('tarbiya.index') }}">
+                              <p class="card-category">Ngongos Tarbiya</p>
+                              <h3 class="card-title">{{nb_tarbiyas()}}</h3>
+                          </a>
+                      </div>
+                      <div class="card-footer">
+                          <div class="stats">
+                              <!-- <i class="material-icons">date_range</i> -->
+                              <a href="{{ route('tarbiya.index') }}"> Liste des ndongos tarbiya</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
           </div>
         </div>
       </div>
-          <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1);">
-              <div class="card-header card-header-rose card-header-icon">
-                  <a href="{{ route('daara.index') }}" class="text-white">
-                    <div class="card-icon">
-                        <i class="fas fa-igloo"></i>
-                    </div>
-                  </a>
-                  <a href="{{ route('daara.index') }}">
-                      <p class="card-category">Daaras</p>
-                      <h3 class="card-title">{{ nb_daaras() }}</h3>
-                  </a>
-              </div>
-              <div class="card-footer">
-                <div class="stats">
-                  <!-- <i class="material-icons">local_offer</i>  -->
-                  <a href="{{ route('daara.index') }}"> Liste des Daaras</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1);">
-              <div class="card-header card-header-success card-header-icon">
-                  <a href="{{ route('talibe.index') }}" class="text-white">
-                     <div class="card-icon">
-                        <i class='fas fa-users'></i>
-                     </div>
-                  </a>
-                  <a href="{{ route('talibe.index') }}">
-                      <p class="card-category">Talibés</p>
-                      <h3 class="card-title">{{ nb_talibes() }}</h3>
-                  </a>
-              </div>
-              <div class="card-footer">
-                <div class="stats">
-                  <!-- <i class="material-icons">date_range</i> -->
-                  <a href="{{ route('talibe.index') }}"> Liste des Talibés</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-6">
-              <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1);">
-                  <div class="card-header card-header-default card-header-icon">
-                      <a href="{{ route('medecin.index') }}" class="text-white">
-                          <div class="card-icon">
-                            <i class='fas fa-user-md'></i>
-                          </div>
-                      </a>
-                      <a href="{{ route('medecin.index') }}">
-                          <p class="card-category">Médecins</p>
-                          <h3 class="card-title">{{ nb_medecins() }}</h3>
-                      </a>
-                  </div>
-                  <div class="card-footer">
-                      <div class="stats">
-                          <!-- <i class="material-icons">date_range</i> -->
-                          <a href="{{ route('medecin.index') }}"> Liste des Médecins</a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-6">
-              <div class="card card-stats" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1);">
-                  <div class="card-header card-header-info card-header-icon">
-                      <a href="{{ route('tarbiya.index') }}" class="text-white">
-                          <div class="card-icon">
-                              <i class='fas fa-male'></i>
-                          </div>
-                      </a>
-                      <a href="{{ route('tarbiya.index') }}">
-                          <p class="card-category">Ngongos Tarbiya</p>
-                          <h3 class="card-title">{{nb_tarbiyas()}}</h3>
-                      </a>
-                  </div>
-                  <div class="card-footer">
-                      <div class="stats">
-                          <!-- <i class="material-icons">date_range</i> -->
-                          <a href="{{ route('tarbiya.index') }}"> Liste des ndongos tarbiya</a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-    </div>
-  </div>
-<br><br>
-  <div class="row">
+        <br><br>
+        <div class="row">
     <div class="col-lg-10 card" style="margin: auto;">
       <div class="row">
           <div class="col-lg-6 col-md-6">
@@ -224,6 +225,7 @@
       </div>
     </div>
   </div>
+    </div>
 @endsection
 
 

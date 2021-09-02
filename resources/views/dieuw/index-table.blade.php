@@ -145,11 +145,11 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card">
-                  <div class="card-header card-header-icon card-header-success">
-                    <div class="card-icon">
-                      <i class="material-icons">assignment</i>
-                    </div>
-                    <h4 class="card-title mt-10"> Liste des Dieuwrigne [{{ $nbr }}]</h4>
+                  <div class="card-header card-header-icon card-header-warning">
+                      <div class="card-icon">
+                          <i class="fas fa-user-graduate m-1" style="font-size: x-large"></i>
+                      </div>
+                    <h4 class="card-title mt-10"> Liste des Dieuwrigne: [{{ $nbr }}]</h4>
                     <p class="card-category text-dark">Cliquez sur le nom d'un dieuwrine pour afficher plus de détails</p>
                     <a class="btn btn-success" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px;" href="{{ route('dieuw.create') }}"><i class="fas fa-user-plus"></i>Nouveau</a>
                       <a class="btn btn-primary" style="float: right; padding-top: 1px; padding-bottom: 1px;padding-left: 3px;padding-right: 8px;" data-toggle="modal" data-target="#myModal" href="#"><i class="fas fa-file"></i>Importer fichier excel</a>

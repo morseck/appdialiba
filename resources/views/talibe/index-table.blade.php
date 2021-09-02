@@ -160,9 +160,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header card-header-primary card-header-icon">
+                    <div class="card-header card-header-success card-header-icon">
                         <div class="card-icon">
-                            <i class="material-icons">assignment</i>
+                            <i class="fas fa-user m-1" style="font-size: x-large"></i>
                         </div>
                         <h4 class="card-title mt-10" > Liste des Talibés: [{{ $nbr }}]</h4>
                         <p class="card-category" style="color: #000000">Cliquez sur le nom d'un talibé pour afficher plus de détails</p>

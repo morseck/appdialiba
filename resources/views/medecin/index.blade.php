@@ -140,9 +140,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header card-header-icon card-header-success">
+                    <div class="card-header card-header-icon card-header-default">
                         <div class="card-icon">
-                            <i class="material-icons">assignment</i>
+                            <i class="fas fa-user-md m-1" style="font-size: x-large"></i>
                         </div>
                         <h4 class="card-title mt-10"> Liste des Médecin [{{ $nbr }}]</h4>
                         <p class="card-category text-dark">Cliquez sur le nom d'un Médecin pour afficher plus de détails</p>
@@ -157,7 +157,7 @@
                         <div class="material-datatables">
                             <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                                 <thead class="text-primary">
-                                <tr>
+                                    <tr>
                                     <th>n°</th>
                                     <th>Prenom <b>NOM</b></th>
                                     <th>Specilite</th>
@@ -166,9 +166,8 @@
                                     <th>Action</th>
                                 </tr>
                                 </thead>
-
                                 <tfoot class="text-primary">
-                                <tr>
+                                    <tr>
                                     <th>n°</th>
                                     <th>Prenom <b>NOM</b></th>
                                     <th>Specilite</th>
@@ -177,50 +176,138 @@
                                     <th>Action</th>
                                 </tr>
                                 </tfoot>
-
                                 <tbody>
-                                <?php $i=1; ?>
-                                @foreach($medecins as $medecin)
-                                    <tr>
-                                        <td><strong><?php echo $i++;?></strong></td>
-                                        <td><a href="{{ route('medecin.show',['id' => $medecin->id]) }}" title="Cliquez pour voir les détails sur le Médecin">{{ ucfirst(strtolower($medecin->prenom))}} <strong><b>{{ strtoupper($medecin->nom) }}</b></strong></a></td>
-                                        <td>
-                                            @if($medecin->spec != '' )
-                                                {{$medecin->spec}}
-                                            @else
-                                                <span class="badge badge-pill badge-warning">Pas de spécialité</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                           {{ $medecin->phone }}
-                                        </td>
-                                        <td> {{ $medecin->hopital }} </td>
-                                        <td>
-                                            <a href="{{ route('medecin.show',['id' => $medecin->id]) }}" class="btn btn-link btn-info btn-just-icon" data-toggle="tooltip"  data-placement="left" title="Voir détails"><i class="fa fa-eye"></i></a>
-                                            <a href="{{ route('medecin.edit',['id' => $medecin->id]) }}" class="btn btn-link btn-warning btn-just-icon"  data-toggle="tooltip"  data-placement="left" title="Modifier"><i class="fa fa-edit"></i></a>
+                                    <?php $i=1; ?>
+                                    @foreach($medecins as $medecin)
+                                        <tr>
+                                            <td><strong><?php echo $i++;?></strong></td>
+                                            <td><a href="{{ route('medecin.show',['id' => $medecin->id]) }}" title="Cliquez pour voir les détails sur le Médecin">{{ ucfirst(strtolower($medecin->prenom))}} <strong><b>{{ strtoupper($medecin->nom) }}</b></strong></a></td>
+                                            <td>
+                                                @if($medecin->spec != '' )
+                                                    {{$medecin->spec}}
+                                                @else
+                                                    <span class="badge badge-pill badge-warning">Pas de spécialité</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                               {{ $medecin->phone }}
+                                            </td>
+                                            <td> {{ $medecin->hopital }} </td>
+                                            <td>
+                                                <a href="{{ route('medecin.show',['id' => $medecin->id]) }}" class="btn btn-link btn-info btn-just-icon" data-toggle="tooltip"  data-placement="left" title="Voir détails"><i class="fa fa-eye"></i></a>
+                                                <a href="{{ route('medecin.edit',['id' => $medecin->id]) }}" class="btn btn-link btn-warning btn-just-icon"  data-toggle="tooltip"  data-placement="left" title="Modifier"><i class="fa fa-edit"></i></a>
 
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
-                    {{--     <div class="card-footer">
-                             <p>{{ $medecins->links() }}</p>
-                         </div>--}}
-
                 </div>
             </div>
         </div>
         {{--Fin Liste des medecinrines--}}
 
+        {{--Debut diagramme--}}
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon card-header-danger">
+                        <div class="card-icon">
+                            <i class="material-icons">insert_chart</i>
+                        </div>
+                        <h4 class="card-title">Répartition des <b>Médecins</b> en fonctions de leur nombre de consultations
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="myChart7"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--Fin diagramme--}}
     </div>
 @endsection
 
 
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
+
 @push('scripts')
+    {{--Debut diagramme--}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script>
+        var medecins = 0;
+        var myLabelmedecins= [] ;
+        var myDatamedecins =[] ;
+
+        var myBackgroundColors =[] ;
+
+        function randomColor()
+        {
+            var r=g=b=0;
+            r = Math.floor((Math.random()* 254) ) ;
+            g = Math.floor((Math.random()* 254) ) ;
+            b = Math.floor((Math.random()* 254) ) ;
+            return 'rgba('+r+','+g+','+b+',1)' ;
+        }
+    </script>
+
+    <?php foreach ($diagramemeMedecin as $key => $p) : ?>
+    <script type="text/javascript">
+        myLabelmedecins.push('<?= fullName($p->medecin_prenom, $p->medecin_nom) .' | '.  $p->medecin_hopital?>') ;
+        myDatamedecins.push('{{ $p->medecin_total }}');
+        myBackgroundColors.push(randomColor()) ;
+    </script>
+    <?php endforeach; ?>
+
+    <script>
+        for(var i=0,l=myDatamedecins.length; i < l ; i++ ) {
+            medecins += parseInt(myDatamedecins[i]) ;
+        }
+
+        for(var i=0,l=myDatamedecins.length; i < l ; i++ )
+        {
+            myLabelmedecins[i] += ' ('+ ((myDatamedecins[i] / medecins ) * 100 ).toFixed(2) +' %)'+'  ['+myDatamedecins[i]+']' ;
+        }
+
+        myDatamedecins.push(0);
+
+        var ctx7 = document.getElementById('myChart7');
+
+        var dataMedecin = {
+            labels: myLabelmedecins,
+            datasets: [{
+                label: '#Medecins',
+                data: myDatamedecins,
+                backgroundColor: myBackgroundColors,
+                borderColor: myBackgroundColors,
+                borderWidth: 1,
+                barPercentage: 1,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+            }]
+        } ;
+
+        var myChart7 = new Chart(ctx7,{
+            type: 'bar',
+            data: dataMedecin,
+            options: {
+                legend:{
+                    display:false
+                }
+            }
+        });
+
+    </script>
+    {{--Fin diagramme--}}
+
+
+
+
     {{--DataTable--}}
     <script>
         $(document).ready(function() {

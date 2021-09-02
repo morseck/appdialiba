@@ -45,6 +45,11 @@
                                     <div class="col-lg-4 col-xs-6"><b>Téléphone</b></div>
                                     <div class="col-lg-6 col-xs-6"><b style="font-size: 1.4em"><strong>{{ $medecin->phone }}</strong></b></div>
                                 </div>
+                                <hr>
+                                <div class="row mbt-15">
+                                    <div class="col-lg-4 col-xs-6"><b>Email</b></div>
+                                    <div class="col-lg-6 col-xs-6"><b style="font-size: 1.4em"><strong>{{ $medecin->email }}</strong></b></div>
+                                </div>
                                 <br>
                             </div>
                             <div class="card-footer">

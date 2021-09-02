@@ -12,7 +12,7 @@
                 <div class="card">
                     <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
-                            <i class="material-icons">assignment</i>
+                            <i class="material-icons">grid_on</i>
                         </div>
                         <h4 class="card-title mt-10"> Liste des campagnes de consultation: [{{ $nombreCampagneConsultation }}]</h4>
                     </div>

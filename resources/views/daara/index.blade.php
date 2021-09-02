@@ -10,11 +10,11 @@
 @section('content')
 <div class="container-fluid">
 		<div class="row card">
-            <div class="card-header card-header-primary card-header-icon">
+            <div class="card-header card-header-rose card-header-icon">
                 <div class="card-icon">
-                    <i class="material-icons">domain</i>
+                    <i class="fas fa-home m-1" style="font-size: x-large"></i>
                 </div>
-                <h4 class="card-title mt-10"> Daaras</h4>
+                <h4 class="card-title mt-10"> Liste des Daaras: [{{ $totalDaara }}]</h4>
             </div>
                 <div class="col-lg-10" style="margin: auto;">
                 	<div class="row">

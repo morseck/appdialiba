@@ -22,7 +22,26 @@ class MedecinController extends Controller
      */
     public function index()
     {
-        return view('medecin.index',['medecins' => Medecin::all(), 'nbr' => Medecin::all()->count() ]);
+        $view = 'medecin.index';
+
+        $diagramemeMedecin = DB::table('medecins')
+            ->join('consultations', 'medecins.id', '=', 'consultations.medecin_id')
+            ->groupBy('medecins.id')
+            ->selectRaw('
+                count(medecins.id) as medecin_total,
+                medecins.nom as medecin_nom,
+                medecins.prenom as medecin_prenom,
+                medecins.hopital as medecin_hopital
+            ')
+            ->where( 'medecins.deleted_at', '=', null)
+            ->get();
+
+        //dd($diagramemeMedecin);
+        return view($view,[
+            'medecins' => Medecin::all(),
+            'nbr' => Medecin::all()->count(),
+            'diagramemeMedecin' => $diagramemeMedecin
+            ]);
 
     }
 
@@ -123,7 +142,6 @@ class MedecinController extends Controller
             ->join('consultations', 'medecins.id', '=', 'consultations.medecin_id')
             ->where('consultations.medecin_id', '=', $id)
             ->get());
-        //dd($totalConsultation);
         return view('medecin.show', [
             'medecin' => Medecin::findOrFail($id),
             'totalConsultation' => $totalConsultation

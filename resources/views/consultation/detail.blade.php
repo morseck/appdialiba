@@ -48,17 +48,30 @@
                                         <td>
                                             <a href="{{ route('talibe.show',['id' => $item->talibe_id]) }}" title="Cliquez pour voir les détails sur le talibé"> <span style="color: black"><strong>{{ fullName($item->talibe_prenom,$item->talibe_nom)}}</strong></span></a>
                                             -
-                                            <a href="{{ route('by_daara',['id' => $item->daara_id]) }}" title="Cliquez pour voir les détails sur le daaras"> <span class="category badge badge-pill badge-success " >{{$item->daara_nom}}</span></a>
 
+                                            <span class="badge-white badge bootstrap-tagsinput">
+                                                    <span class="tag">
+                                                        <a href="{{ route('by_daara',['id' => $item->daara_id]) }}" title="Cliquez pour voir les détails sur le daaras">
+                                                            <span style="font-size: small">
+                                                                <span class="category badge badge-pill badge-success " >{{$item->daara_nom}}</span>
+                                                           </span>
+                                                        </a>
+                                                    </span>
+                                                </span>
                                         </td>
                                         <td>
-                                            <a href="{{ route('medecin.show',['id' => $item->medecin_id]) }}">
-                                                <span>
-                                                    {{ fullName($item->medecin_prenom, $item->medecin_nom) }}
+                                             <span class="badge-info badge bootstrap-tagsinput">
+                                                 <span class="tag">
+                                                    <a href="{{ route('medecin.show',['id' => $item->medecin_id]) }}" class="text-white">
+                                                        <span style="font-size: small">
+                                                            {{ fullName($item->medecin_prenom, $item->medecin_nom) }}
+                                                        </span>
+                                                    </a>
                                                 </span>
-                                            </a>
-                                            -
-                                            <span class="badge badge-warning badge-pill"> {{ $item->medecin_specialiste.' - '.$item->medecin_hopital }}</span>
+                                             </span>
+                                            <span class="category badge  badge-white" style="color: dimgrey">
+                                                  {{ $item->medecin_specialiste.' - '.$item->medecin_hopital }}
+                                            </span>
                                         </td>
                                         <td>
                                             {{ $item->consultation_maladie }}
