@@ -25,11 +25,12 @@ class ConsultationController extends Controller
         $view = 'consultation.index';
         $consultations = Consultation::select('date')
             ->GroupBy('date')
-            ->OrderBy('date', 'desc')
-            ->paginate(10);
+            ->OrderBy('date', 'desc');
 
+        //l'ordre est primordial
+        $nombreCampagneConsultation = count($consultations->get());
+        $consultations =  $consultations->paginate(10);
         $numero = $consultations->currentPage() * $consultations->perPage() - $consultations->perPage() + 1;
-        $nombreCampagneConsultation = count(Consultation::select('*')->GroupBy('id', 'date')->get());
 
         return view($view, [
             'consultations' => $consultations,

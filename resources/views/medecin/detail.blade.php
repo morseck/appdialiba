@@ -45,14 +45,21 @@
                                         <tr>
                                             <td><span>{{$numero++}} </span></td>
                                             <td>
-                                                <a href="{{ route('talibe.show',['id' => $item->talibe_id]) }}" title="Cliquez pour voir les détails sur le talibé">
-                                                    <span style="color: black"><strong>{{ fullName($item->talibe_prenom,$item->talibe_nom)}}</strong></span>
-                                                </a>
-                                                -
-                                                <a href="{{ route('by_daara',['id' => $item->daara_id]) }}" title="Cliquez pour voir les détails sur le daaras">
-                                                    <span class="category badge badge-pill badge-success " >{{$item->daara_nom}}</span>
+                                                <a href="{{ route('talibe.show',['id' => $item->talibe_id]) }}" title="Cliquez pour voir les détails sur le talibé" class="btn btn-outline-success">
+                                                <span style="">
+                                                    <strong>{{ fullName($item->talibe_prenom,$item->talibe_nom)}}</strong>
+                                                </span>
                                                 </a>
 
+                                                <span class="badge-white badge bootstrap-tagsinput">
+                                                    <span class="tag">
+                                                        <a href="{{ route('by_daara',['id' => $item->daara_id]) }}" title="Cliquez pour voir les détails sur le daaras">
+                                                            <span  style="font-size: small">
+                                                                <span class="btn btn-success category badge badge-pill " >{{$item->daara_nom}}</span>
+                                                           </span>
+                                                        </a>
+                                                    </span>
+                                                </span>
                                             </td>
                                             <td>
                                                 <span class="badge-info badge bootstrap-tagsinput">

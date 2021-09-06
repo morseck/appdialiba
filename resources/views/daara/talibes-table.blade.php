@@ -21,9 +21,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header card-header-primary card-header-icon">
+                                <div class="card-header card-header-success card-header-icon">
                                     <div class="card-icon">
-                                        <i class="material-icons">assignment</i>
+                                        <i class="fas fa-user m-1" style="font-size: x-large"></i>
                                     </div>
                                     <h4 class="card-title mt-10"> Liste des Talibés de {{$dname}}: [{{ $total_talibes }}] </h4>
                                     <p class="card-category" style="color: #000000">Cliquez sur le nom d'un talibé pour afficher plus de détails</p>
@@ -92,9 +92,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header card-header-danger card-header-icon">
+                                        <div class="card-header card-header-warning card-header-icon">
                                             <div class="card-icon">
-                                                <i class="fas fa-user-graduate"></i>
+                                                <i class="fas fa-user-graduate m-1" style="font-size: x-large"></i>
                                             </div>
                                             <h4 class="card-title mt-10"> Liste des Serigne Daara de {{$dname}}: [{{ $dieuwrines->count() }}] </h4>
                                             <p class="card-category" style="color: #000000">Cliquez sur le nom d'un Serigne Daara pour afficher plus de détails</p>
@@ -142,9 +142,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header card-header-success card-header-icon">
+                                        <div class="card-header card-header-info card-header-icon">
                                             <div class="card-icon">
-                                                <i class="fas fa-male"></i>
+                                                <i class="fas fa-male m-1" style="font-size: x-large"></i>
                                             </div>
                                             <h4 class="card-title mt-10"> Liste des Ndongos Tarbiya Daara de {{$dname}}: [{{ $tarbiyas->count() }}] </h4>
                                             <p class="card-category" style="color: #000000">Cliquez sur le n om d'un Serigne Daara pour afficher plus de détails</p>
