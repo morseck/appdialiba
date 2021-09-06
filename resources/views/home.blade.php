@@ -553,7 +553,7 @@
             options: {
 
                 legend:{
-                    display:true
+                    display: false
                 }
             }
         });
@@ -598,7 +598,7 @@
             data: dataMaladie,
             options: {
                 legend:{
-                    display:true
+                    display: false
                 }
             }
         });

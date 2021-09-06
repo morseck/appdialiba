@@ -121,7 +121,7 @@
                                     <i class="material-icons">clear</i>
                                 </button>
                             </div>
-                            <form method="POST" enctype="multipart/form-data" action="{{route('importation_tarbiya')}}" class="navbar-form">
+                            <form method="POST" enctype="multipart/form-data" action="{{route('importation_tarbiya')}}">
                                 <div class="modal-body">
                                     @csrf()
                                     <input type="file" class="form-control" name="importation_excel">

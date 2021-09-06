@@ -16,11 +16,6 @@
 <body class="sidebar-mini">
   <div class="wrapper ">
     <div class="sidebar" data-color="green" data-background-color="black" >
-      <!--
-        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
-
-        Tip 2: you can also add an image using data-image tag
-    -->
       <div class="logo">
         <a href="#" class="simple-text logo-mini">
           DL
@@ -205,20 +200,22 @@
               <ul class="navbar-nav" style="padding-right:35px;padding-left: 50px;">
                 <li class="nav-item">
                   <a class="nav-link" href="#" title="Profil" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user fa-3x"></i>
+                    <i class="fas fa-user-lock fa-3x"></i>
                     <p class="d-lg-none d-md-block">
-                      Account
+                      Administrateur
                     </p>
                   </a>
                   <!-- dropdown -->
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                      <a class="dropdown-item" href="#">Mon compte</a>
+                    <div class="dropdown-menu dropdown-menu-right text-black-50" aria-labelledby="navbarDropdownMenuLink">
+                      <a class="dropdown-item" href="#">
+                          <span style="color: black">Mon compte</span>
+                      </a>
 
                        <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        Déconnexion
-                                    </a>
+                           <span style="color: black">Déconnexion</span>
+                       </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf

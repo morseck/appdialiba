@@ -116,16 +116,13 @@
                                     <i class="material-icons">clear</i>
                                 </button>
                             </div>
-                            <form method="POST" enctype="multipart/form-data" action="{{route('importation_medecin')}}" class="navbar-form">
+                            <form method="POST" enctype="multipart/form-data" action="{{route('importation_medecin')}}">
                                 <div class="modal-body">
                                     @csrf()
                                     <input type="file" class="form-control" name="importation_excel">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-link">valider <i class="material-icons">done</i></button>
-                                    {{--
-                                                                    <button type="button" class="btn btn-link">Valider <i class="material-icons">done</i></button>
-                                    --}}
                                     <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Close <i class="material-icons">close</i></button>
                                 </div>
                             </form>

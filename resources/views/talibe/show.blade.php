@@ -105,18 +105,18 @@
                                     <i class="material-icons" style="font-size: 1em;">clear</i>
                                 </button>
                             </div>
-                            <form method="POST" enctype="multipart/form-data" action="{{route('consultation.store')}}" class="navbar-form">
+                            <form method="POST" enctype="multipart/form-data" action="{{route('consultation.store')}}">
                                 <div class="modal-body">
                                     @csrf()
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="input-group form-control-lg">
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                 <i class="fas fa-user-md"></i>
-                                                </span>
+                                                    <span class="input-group-text">
+                                                     <i class="fas fa-user-md"></i>
+                                                    </span>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" style="width: 80%">
                                                     <input type="hidden" class="form-control" name="talibe_id"  value="{{ $talibe->id }}"  style="background-color: transparent;">
                                                     <select class="selectpicker" data-style="select-with-transition" title="Médecin" name="medecin_id">
                                                         @foreach($medecins as $medecin)
@@ -131,7 +131,7 @@
                                                  <i class="fas fa-map-marker-alt"></i>
                                                 </span>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" style="width: 80%">
                                                     <select class="selectpicker" data-style="select-with-transition" title="Lieu de la consultation" name="lieu">
                                                         @foreach($daaras as $daara)
                                                             <option value="{{ $daara->nom}}" {{ $daara->nom == ''.$talibe->daara->nom.'' ? 'selected' :'' }}>{{ $daara->nom }}</option>
@@ -146,20 +146,20 @@
                                                  <i class="fas fa-calendar"></i>
                                                 </span>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" style="width: 80%">
                                                     <label for="exampleInput11" class="">Date</label>
                                                     <input type="date" class="form-control" name="date"  value="{{ old('date') }}"  style="background-color: transparent;" placeholder="Format: jj/mm/aa - exemple: 21/02/2020">
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-md-6 col-sm-12">
                                             <div class="input-group form-control-lg">
                                                 <div class="input-group-prepend">
                                                 <span class="input-group-text">
                                                  <i class="fas fa-medkit"></i>
                                                 </span>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" style="width: 80%">
                                                     <select class="selectpicker" data-style="select-with-transition" title="Maladie" name="maladie">
                                                         <option value="paludisme">Paludisme</option>
                                                         <option value="diabète">Diabète</option>
@@ -176,7 +176,7 @@
                                                  <i class="fas fa-stethoscope"></i>
                                                 </span>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" style="width: 80%">
                                                     <label for="exampleInput11" class="bmd-label-floating">Avis</label>
                                                     <textarea class="form-control" name="avis" style="background-color: transparent;">{{(old('avis')) }}</textarea>
                                                 </div>
