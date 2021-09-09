@@ -209,16 +209,28 @@
                                 @foreach($talibeList as $talibe)
                                     <tr>
                                         <td><span>{{$numero++}}</span></td>
-                                        <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
+                                        <td>
+                                            <a href="{{ route('talibe.show',['id' => $talibe->id]) }}"
+                                               title="Cliquez pour voir les détails sur le Talibé"
+                                               class="btn btn-outline-success"
+                                            >
+                                                <i class="mr-1 fas fa-user"></i>
+                                                <strong>{{ fullName($talibe->prenom, $talibe->nom) }}</strong>
+                                            </a>
+                                        </td>
                                         <td>
                                             @if( $talibe->age()!=null )
                                                 {{ $talibe->age() }} ans
                                             @endif</td>
                                         <td>
                                             @if($talibe->daara != '' )
-                                                <span class="success-badge bootstrap-tagsinput">
+                                                <span class="danger-badge bootstrap-tagsinput">
                                                     <span class="tag badge">
-                                                        <a href="{{ route('by_daara',['id' => $talibe->daara->id]) }}" title="Cliquer pour voire les détails sur le Daara" class="text-white"><strong>{{$talibe->daara->nom}}</strong></a>
+                                                        <a href="{{ route('by_daara',['id' => $talibe->daara->id]) }}"
+                                                           title="Cliquer pour voire les détails sur le Daara" class="text-white">
+                                                            <i class="mr-1 fas fa-home"></i>
+                                                            <strong>{{$talibe->daara->nom}}</strong>
+                                                        </a>
                                                     </span>
                                                 </span>
                                             @else
@@ -230,7 +242,12 @@
 
                                         <td>
                                             @if($talibe->dieuw)
-                                                <a href="{{ route('dieuw.show',['id' =>  $talibe->dieuw->id]) }}" title="Cliquer pour voire les détails sur le Dieuwrine" class="category badge badge-default text-white">{{ $talibe->dieuw->fullname() }}</a>
+                                                <a href="{{ route('dieuw.show',['id' =>  $talibe->dieuw->id]) }}"
+                                                   title="Cliquer pour voire les détails sur le Dieuwrine"
+                                                   class="category badge badge-warning text-white">
+                                                    <i class="mr-1 fas fa-user-graduate"></i>
+                                                    {{ $talibe->dieuw->fullname() }}
+                                                </a>
                                             @endif
                                         </td>
                                         <td>
@@ -361,14 +378,6 @@
 
         });
     </script>
-
-   {{-- --}}{{--Tooltip--}}{{--
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-    </script>--}}
-
     {{--Affichage rapport d'importation--}}
     <script>
         $(function () {
@@ -437,7 +446,6 @@
 
     @endif
     @if( session()->has('message_erreur')  )
-
         <script type="text/javascript">
             (function(from, align) {
 
@@ -456,6 +464,5 @@
             })();
 
         </script>
-
     @endif
 @endpush

@@ -178,7 +178,17 @@
                                     @foreach($medecins as $medecin)
                                         <tr>
                                             <td><strong><?php echo $i++;?></strong></td>
-                                            <td><a href="{{ route('medecin.show',['id' => $medecin->id]) }}" title="Cliquez pour voir les détails sur le Médecin">{{ ucfirst(strtolower($medecin->prenom))}} <strong><b>{{ strtoupper($medecin->nom) }}</b></strong></a></td>
+                                            <td>
+                                                <a href="{{ route('medecin.show',['id' => $medecin->id]) }}"
+                                                   title="Cliquez pour voir les détails sur le Médecin"
+                                                   class="btn btn-outline-secondary"
+                                                >
+                                                    <i class="fas fa-user-md mr-1"></i>
+                                                    <strong>
+                                                        {{ fullName($medecin->prenom , $medecin->nom) }}
+                                                    </strong>
+                                                </a>
+                                            </td>
                                             <td>
                                                 @if($medecin->spec != '' )
                                                     {{$medecin->spec}}

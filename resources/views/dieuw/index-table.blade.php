@@ -188,7 +188,15 @@
                           @foreach($dieuws as $dieuw)
                           <tr>
                               <td><strong><?php echo $i++;?></strong></td>
-                              <td><a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($dieuw->prenom))}} <strong><b>{{ strtoupper($dieuw->nom) }}</b></strong></a></td>
+                              <td>
+                                  <a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}"
+                                     title="Cliquez pour voir les détails sur le Talibé"
+                                     class="btn btn-outline-warning"
+                                  >
+                                      <i class="mr-1 fas fa-user-graduate"></i>
+                                      <strong>{{ fullName($dieuw->prenom, $dieuw->nom) }}</strong>
+                                  </a>
+                              </td>
                               <td>
                                   @if( $dieuw->age()!=null )
                                       {{ $dieuw->age() }} ans
@@ -198,7 +206,13 @@
                                 @if($dieuw->daara != '' )
                                     <span class="success-badge bootstrap-tagsinput">
                                         <span class="tag badge">
-                                            <a href="{{ route('by_daara',['id' => $dieuw->daara->id]) }}" title="Cliquer pour voire les détails sur le Daara" class="text-white"><strong>{{$dieuw->daara->nom}}</strong></a>
+                                            <a href="{{ route('by_daara',['id' => $dieuw->daara->id]) }}"
+                                               title="Cliquer pour voire les détails sur le Daara"
+                                               class="text-white"
+                                            >
+                                                <i class="mr-1 fas fa-home"></i>
+                                                <strong>{{$dieuw->daara->nom}}</strong>
+                                            </a>
                                         </span>
                                     </span>
                                 @else

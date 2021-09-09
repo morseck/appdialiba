@@ -48,7 +48,7 @@
                                         <td>
                                             <a href="{{ route('talibe.show',['id' => $item->talibe_id]) }}" title="Cliquez pour voir les détails sur le talibé" class="btn btn-outline-success">
                                                 <span style="">
-                                                    <strong>{{ fullName($item->talibe_prenom,$item->talibe_nom)}}</strong>
+                                                   <i class="fas fa-user mr-1"></i> <strong>{{ fullName($item->talibe_prenom,$item->talibe_nom)}}</strong>
                                                 </span>
                                             </a>
 
@@ -56,7 +56,10 @@
                                                     <span class="tag">
                                                         <a href="{{ route('by_daara',['id' => $item->daara_id]) }}" title="Cliquez pour voir les détails sur le daaras">
                                                             <span  style="font-size: small">
-                                                                <span class="btn btn-success category badge badge-pill " >{{$item->daara_nom}}</span>
+                                                                <span class="btn btn-success category badge badge-pill " >
+                                                                    <i class="fas fa-home mr-1"></i>
+                                                                    {{$item->daara_nom}}
+                                                                </span>
                                                            </span>
                                                         </a>
                                                     </span>
@@ -67,6 +70,7 @@
                                                  <span class="tag">
                                                     <a href="{{ route('medecin.show',['id' => $item->medecin_id]) }}" class="text-white">
                                                         <span style="font-size: small">
+                                                            <i class="fas fa-user-md mr-1"></i>
                                                             {{ fullName($item->medecin_prenom, $item->medecin_nom) }}
                                                         </span>
                                                     </a>

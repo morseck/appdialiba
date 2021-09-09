@@ -128,9 +128,6 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-link">valider <i class="material-icons">done</i></button>
-                                    {{--
-                                                                    <button type="button" class="btn btn-link">Valider <i class="material-icons">done</i></button>
-                                    --}}
                                     <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Close <i class="material-icons">close</i></button>
                                 </div>
                             </form>
@@ -190,7 +187,15 @@
                                 @foreach($tarbiyas as $tarbiya)
                                     <tr>
                                         <td><strong><?php echo $i++;?></strong></td>
-                                        <td><a href="{{ route('tarbiya.show',['id' => $tarbiya->id]) }}" title="Cliquez pour voir les détails sur le Ngongo Tarbiya">{{ ucfirst(strtolower($tarbiya->prenom))}} <strong><b>{{ strtoupper($tarbiya->nom) }}</b></strong></a></td>
+                                        <td>
+                                            <a href="{{ route('tarbiya.show',['id' => $tarbiya->id]) }}"
+                                               title="Cliquez pour voir les détails sur le Ngongo Tarbiya"
+                                               class="btn btn-outline-info"
+                                            >
+                                                <i class="mr-1 fas fa-male"></i>
+                                                <strong><b>{{ fullName($tarbiya->prenom, $tarbiya->nom) }}</b></strong>
+                                            </a>
+                                        </td>
                                         <td>
                                             @if( $tarbiya->age()!=null )
                                                 {{ $tarbiya->age() }} ans
@@ -199,10 +204,16 @@
                                         <td>
                                             @if($tarbiya->daara != '' )
                                                 <span class="success-badge bootstrap-tagsinput">
-                                        <span class="tag badge">
-                                            <a href="{{ route('by_daara',['id' => $tarbiya->daara->id]) }}" title="Cliquer pour voire les détails sur le Daara" class="text-white"><strong>{{$tarbiya->daara->nom}}</strong></a>
-                                        </span>
-                                    </span>
+                                                    <span class="tag badge">
+                                                        <a href="{{ route('by_daara',['id' => $tarbiya->daara->id]) }}"
+                                                           title="Cliquer pour voire les détails sur le Daara"
+                                                           class="text-white"
+                                                        >
+                                                            <i class="mr-1 fas fa-home"></i>
+                                                            {{$tarbiya->daara->nom}}
+                                                        </a>
+                                                    </span>
+                                                </span>
                                             @else
                                                 <span class="badge badge-pill badge-warning">non orienté</span>
                                             @endif

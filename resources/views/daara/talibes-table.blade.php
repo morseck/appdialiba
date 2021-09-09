@@ -58,7 +58,17 @@
                                             @foreach($talibes as $talibe)
                                                 <tr>
                                                     <td><span>{{$numero++}}</span></td>
-                                                    <td><a href="{{ route('talibe.show',['id' => $talibe->id]) }}" title="Cliquez pour voir les détails sur le Talibé">{{ ucfirst(strtolower($talibe->prenom))}} <strong><b>{{ strtoupper($talibe->nom) }}</b></strong></a></td>
+                                                    <td>
+                                                        <a href="{{ route('talibe.show',['id' => $talibe->id]) }}"
+                                                           title="Cliquez pour voir les détails sur le Talibé"
+                                                           class="btn btn-outline-success"
+                                                        >
+                                                           <i class="mr-1 fas fa-user"></i>
+                                                            <strong>
+                                                               {{ fullName($talibe->prenom, $talibe->nom) }}
+                                                           </strong>
+                                                        </a>
+                                                    </td>
                                                     <td>
                                                         @if( $talibe->age()!=null )
                                                             {{ $talibe->age() }} ans
@@ -67,7 +77,12 @@
                                                     <td>{{ $talibe->niveau }}</td>
                                                     <td>
                                                         @if($talibe->dieuw)
-                                                            <a href="{{ route('dieuw.show',['id' =>  $talibe->dieuw->id]) }}" title="Cliquer pour voire les détails sur le Dieuwrine" class="category badge badge-default text-white">{{ $talibe->dieuw->fullname() }}</a>
+                                                            <a href="{{ route('dieuw.show',['id' =>  $talibe->dieuw->id]) }}"
+                                                               title="Cliquer pour voire les détails sur le Dieuwrine"
+                                                               class="category badge badge-default text-white"
+                                                            >
+                                                                <i class="mr-1 fas fa-user-graduate"></i>
+                                                                {{ $talibe->dieuw->fullname() }}</a>
                                                         @endif
                                                     </td>
                                                     <td> {{ $talibe->tuteur }} </td>
@@ -122,7 +137,15 @@
                                                     <tbody>
                                                     @foreach($dieuwrines as $dieuw)
                                                         <tr>
-                                                            <td><a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}" title="Cliquez pour voir les détails sur le Dieuwrine">{{ ucfirst(strtolower($dieuw->prenom))}} <strong><b>{{ strtoupper($dieuw->nom) }}</b></strong></a></td>
+                                                            <td>
+                                                                <a href="{{ route('dieuw.show',['id' => $dieuw->id]) }}"
+                                                                   title="Cliquez pour voir les détails sur le Dieuwrine"
+                                                                   class="btn btn-outline-warning"
+                                                                >
+                                                                    <i class="mr-1 fas fa-user-graduate"></i>
+                                                                    <strong>{{ fullName($dieuw->prenom,$dieuw->nom) }}</strong>
+                                                                </a>
+                                                            </td>
                                                             <td>
                                                                 @if( $dieuw->age()!=null )
                                                                     {{ $dieuw->age() }} ans
@@ -172,7 +195,15 @@
                                                     <tbody>
                                                     @foreach($tarbiyas as $tarbiya)
                                                         <tr>
-                                                            <td><a href="{{ route('tarbiya.show',['id' => $tarbiya->id]) }}" title="Cliquez pour voir les détails sur le Ndongo Tarbiya">{{ ucfirst(strtolower($tarbiya->prenom))}} <strong><b>{{ strtoupper($tarbiya->nom) }}</b></strong></a></td>
+                                                            <td>
+                                                                <a href="{{ route('tarbiya.show',['id' => $tarbiya->id]) }}"
+                                                                   title="Cliquez pour voir les détails sur le Ndongo Tarbiya"
+                                                                   class="btn btn-outline-info"
+                                                                >
+                                                                    <i class="mr-1 fas fa-male"></i>
+                                                                    <strong><b>{{ fullName($tarbiya->prenom, $tarbiya->nom) }}</b></strong>
+                                                                </a>
+                                                            </td>
                                                             <td>
                                                                 @if( $tarbiya->age()!=null )
                                                                     {{ $tarbiya->age() }} ans
