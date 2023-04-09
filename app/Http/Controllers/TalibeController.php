@@ -160,7 +160,7 @@ class TalibeController extends Controller
         if (Talibe::onlyTrashed()->where('id', $id)->get()->first()){
             return redirect()->route('talibe.show_talibe_delete', ['id'=>$id]);
         }
-        
+
         $consultations =  Consultation::where('talibe_id', $id)->orderBy('date', 'desc')->get();
         $partMaladies = DB::select('SELECT COUNT(*) as poids, consultations.maladie FROM consultations JOIN talibes ON talibes.id=consultations.talibe_id WHERE talibes.id = '.$id.' AND  talibes.deleted_at IS NULL GROUP BY consultations.maladie') ;
         return view('talibe.show', [  'talibe' => Talibe::findOrFail($id),
