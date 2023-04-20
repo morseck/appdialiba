@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Consultation;
 use App\Daara;
 use App\Dieuw;
+use App\Hopital;
 use App\Medecin;
 use App\Talibe;
 use App\Importation;
@@ -157,6 +158,7 @@ class TalibeController extends Controller
      */
     public function show($id)
     {
+
         if (Talibe::onlyTrashed()->where('id', $id)->get()->first()){
             return redirect()->route('talibe.show_talibe_delete', ['id'=>$id]);
         }
@@ -167,7 +169,8 @@ class TalibeController extends Controller
                                             'medecins' => Medecin::all(),
                                             'daaras' => Daara::all(),
                                             'consultations'=>$consultations,
-                                            'partMaladies'=>$partMaladies
+                                            'partMaladies'=>$partMaladies,
+                                            'hopitals' => Hopital::all()
         ]);
     }
 

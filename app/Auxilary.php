@@ -78,4 +78,12 @@ if(!function_exists('fullName'))
         return ucfirst(strtolower($prenom)).' '.strtoupper($nom);
     }
 }
+
+if(!function_exists('getMedecin'))
+{
+    function getMedecin($id)
+    {
+        return Medecin::find($id);
+    }
+}
 ?>

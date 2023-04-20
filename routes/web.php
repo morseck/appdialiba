@@ -73,3 +73,5 @@ Route::get('/consultation/show_consultation_by_medecin/{medecin_id}', 'Consultat
 Route::resource('medecin','MedecinController');
 
 Route::resource('tarbiya','TarbiyaController');
+
+Route::resource('ordonnance','OrdonnanceController');

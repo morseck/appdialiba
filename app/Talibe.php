@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Talibe extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable=['prenom','nom','genre','pere','mere','datenaissance','lieunaissance','adresse','region','dieuw_id',
                          'tuteur','phone1','phone2','arrivee','depart','deces','commentaire','avatar','niveau','daara_id'
         ];
 
-	
+
 	public function daara()
     {
     	return $this->belongsTo('App\Daara');
@@ -27,6 +27,15 @@ class Talibe extends Model
     public function consultations()
     {
         return $this->hasMany('App\Consultation');
+
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ordonnances()
+    {
+        return $this->hasMany('App\Ordonnance');
     }
 
     public function fullname()

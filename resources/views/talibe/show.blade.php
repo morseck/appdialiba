@@ -11,6 +11,71 @@
             margin-bottom: 7px;
         }
 
+        .zoomable {
+            width: 200px;
+            height: 200px;
+        }
+
+        .zoomable:hover {
+            cursor: zoom-in;
+        }
+
+        /* Style pour les miniatures */
+        .thumbnail {
+            cursor: pointer;
+            width: 200px;
+            height: 200px;
+            /* <--  transition: transform 0.2s ease-in-out;*/ /* <-- Nouvelle propriété pour ajouter une transition */
+        }
+
+
+        /* Style pour le modal */
+        .modalOrdonnanceZoom {
+            display: none; /* Par défaut, le modal est masqué */
+            position: fixed; /* Le modal est positionné en absolu sur l'écran */
+            z-index: 99; /* Le modal est placé au-dessus des autres éléments */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        /* Style pour le contenu du modal */
+        .modal-contentmodalOrdonnanceZoom {
+            margin: auto;
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Style pour le bouton de fermeture */
+        .close {
+            position: absolute;
+            top: 2%;
+            right: 20%;
+            font-size: 40px;
+            font-weight: bold;
+            color: red;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Style pour la miniature */
+        .thumbnail {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+        }
+
+
     </style>
 @endpush
 
@@ -86,6 +151,8 @@
                         </div>
                     </div>
                 </div>
+
+
             </div>
             <!-- end col-md-12 -->
 
@@ -196,10 +263,149 @@
         </div>
         {{--Fin modal formulaire de consultation--}}
 
+
+        {{--Debut modal formulaire de ordonnance--}}
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Classic Modal -->
+                <div class="modal fade" id="modalOrdonnance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-success text-white">
+                                <h4 class="modal-title">Ajouter une photo d'ordonnance à <strong>{{ ucfirst(strtolower($talibe->prenom))}} <b>{{ strtoupper($talibe->nom) }}</b></strong></h4>
+                                <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true">
+                                    <i class="material-icons" style="font-size: 1em;">clear</i>
+                                </button>
+                            </div>
+                            <form method="POST" enctype="multipart/form-data" action="{{route('ordonnance.store')}}">
+                                <div class="modal-body">
+                                    @csrf()
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="input-group form-control-lg">
+                                                <div class="picture-container text-center">
+                                                    <div class="picture">
+                                                        <label for="wizard-picture">
+                                                            <span>Ajouter une image de l'ordonnance</span>
+                                                            <img style="width: 80%" src="../../assets/img/avatar-ordonnance.png" class="picture-src" id="wizardPicturePreview" title="" />
+                                                        </label>
+                                                        <input type="file" required id="wizard-picture" name="file_ordonnance">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                     <i class="fas fa-user-md"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="form-group" style="width: 80%">
+                                                    <input type="hidden" class="form-control" name="talibe_id"  value="{{ $talibe->id }}"  style="background-color: transparent;">
+                                                    <select class="selectpicker" data-style="select-with-transition" title="Médecin" name="medecin_id">
+                                                        @foreach($medecins as $medecin)
+                                                            <option value="{{ $medecin->id }}">{{ $medecin->fullname() }} - {{ $medecin->spec ?? ''}} - {{ $medecin->hopital ?? ''}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="input-group form-control-lg">
+                                                <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                 <i class="fas fa-hospital"></i>
+                                                </span>
+                                                </div>
+                                                <div class="form-group" style="width: 80%">
+                                                    <select class="selectpicker" data-style="select-with-transition" title="Hôpital" name="nom_hopital">
+                                                        @foreach($hopitals as $hopital)
+                                                            <option value="{{ $hopital->nom}}">{{ $hopital->nom }}</option>
+                                                        @endforeach
+                                                        <option value="autre">Autre</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="input-group form-control-lg">
+                                                <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                 <i class="fas fa-calendar"></i>
+                                                </span>
+                                                </div>
+                                                <div class="form-group" style="width: 80%">
+                                                    <label for="exampleInput11" class="">Date</label>
+                                                    <input type="date" class="form-control" name="date_ordonnance"  value="{{ old('date_ordonnance') }}"  style="background-color: transparent;" placeholder="Format: jj/mm/aa - exemple: 21/02/2020">
+                                                </div>
+                                            </div>
+                                            <div class="input-group form-control-lg">
+                                                <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                 <i class="fas fa-stethoscope"></i>
+                                                </span>
+                                                </div>
+                                                <div class="form-group" style="width: 80%">
+                                                    <label for="exampleInput11" class="bmd-label-floating">Avis</label>
+                                                    <textarea class="form-control" name="commentaire" style="background-color: transparent;">{{(old('commentaire')) }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-link">valider <i class="material-icons">done</i></button>
+                                    <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Fermer <i class="material-icons">close</i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--Fin modal formulaire de ordonnance--}}
+
+        {{--Debut modal zoom image ordonnance --}}
+
+         <div id="zoomImage" class="modalOrdonnanceZoom">
+             <span class="close">&times;</span>
+             <img class="modal-contentmodalOrdonnanceZoom " id="img01">
+             <div id="caption"></div>
+         </div>
+        {{--
+               <div class="row" >
+                   <div class="col-md-12">
+                       <div id="zoomImage" class="modalOrdonnanceZoom">
+                           <div class="modal-contentmodalOrdonnanceZoom">
+                               <div class="">
+                                    <div class="modal-body">
+                                        <span class="close">&times;</span>
+                                        <img class="modal-content" id="img01">
+                                        <div id="caption"></div>
+                                    </div>
+                                   <div class="modal-footer">
+                                       <button type="button" class="btn btn-danger btn-link close-bottom" >Fermer <i class="material-icons">close</i></button>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            --}}
+
+                {{--Debut modal zoom image ordonnance--}}
+
         {{--Debut show talibe--}}
 
         <div class="row">
-
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Informations générales</h3>
+                    </div>
+                </div>
+            </div>
             <div class="col-lg-7 col-xs-8">
                 @include('partials.errors')
                 <div class="row">
@@ -227,6 +433,8 @@
                                                 <p class="text-center">
                                                     <button type="button" class="btn btn-round btn-outline-success" data-toggle="modal" data-target="#modalConsultation" href="#"><i class="fas fa-medkit"></i> Nouvelle consultation</button>
                                                     <button type="button" class="btn btn-round btn-outline-info button_rapport"><i class="fas fa-stethoscope"></i> <span id="libelle">Voir bulletin médical</span></button>
+
+                                                    <button type="button" class="btn btn-round btn-outline-warning" data-toggle="modal" data-target="#modalOrdonnance" href="#"><i class="fas fa-tablets"></i> <span>Ajouter une ordonnance</span></button>
                                                 </p>
                                             </div>
                                         </div>
@@ -340,8 +548,47 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>La liste des ordonnances</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="row">
+                    @foreach(array_reverse($talibe->ordonnances->toArray()) as $ordonnance)
+                        <div class="col-lg-4 col-xs-12">
+                            <div class="card">
+
+                                <div class="card-body text-center">
+                                    <img class="zoomable thumbnail" id="{{str_replace('.', '', $ordonnance['file_ordonnance'])}}" src="{{ asset('myfiles/ordonnances/'.$ordonnance['file_ordonnance']) }}" style="width:150px; height: 150px">
+                                </div>
+                                <div class="card-header text-center">
+                                    <p><i class="fas fa-user-md"></i> {{$ordonnance['medecin_id'] ? getMedecin($ordonnance['medecin_id'])->fullName() : null}}</p>
+                                    <p><i class="fas fa-hospital"></i> {{$ordonnance['nom_hopital']}}</p>
+                                    <p><i class="fas fa-calendar"></i> {{ app_date_reverse($ordonnance['date_ordonnance'], '-', '-') }}</p>
+                                </div>
+                                <div class="card-footer ">
+                                    <div class="row">
+                                        <div class="offset-md-1 col-md-4 col-sm-12">
+                                            <a class="btn btn-outline-info" href="{{ route('talibe.edit',['id' => $talibe->id]) }}"><i class="fas fa-file-prescription"></i> Editer</a>
+                                        </div>
+                                        <div class="offset-md-2 col-md-4 col-sm-12">
+                                            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deletmodal"><i class="fas fa-trash-alt"></i> Supprimer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
         {{--Fin show talibe--}}
+
+
     </div>
 
     <!-- deletion confirmation modal -->
@@ -378,6 +625,9 @@
     </div>
 @endsection
 
+@push('scripts-scroll')
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+@endpush
 
 @push('scripts')
     {{--Diagramme--}}
@@ -429,6 +679,32 @@
                 $.notify({
                     icon: "notifications",
                     message: "{{ session('consultationEvent') }}"
+
+                }, {
+                    //type: type[color],
+                    type: 'success',
+                    timer: 3000,
+                    placement: {
+                        from: from,
+                        align: align
+                    }
+                });
+            })();
+
+        </script>
+
+    @endif
+
+    @if( session()->has('ordonnanceEvent')  )
+        <script type="text/javascript">
+            (function(from, align) {
+                //type = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
+
+                color = Math.floor((Math.random() * 6) + 1);
+
+                $.notify({
+                    icon: "notifications",
+                    message: "{{ session('ordonnanceEvent') }}"
 
                 }, {
                     //type: type[color],
@@ -611,6 +887,108 @@
                 }
             }
         });
+    </script>
+
+    <script>
+        $('.zoomable').hover(
+            function() {
+                $(this).stop().animate({ width: '100%', height: '100%' }, 300);
+            },
+            function() {
+                $(this).stop().animate({ width: '150px', height: '150px' }, 300);
+            }
+        );
+    </script>
+
+    <script>
+        // Lorsqu'on clique sur une miniature
+        $('.thumbnail').on('click', function() {
+            // On remplit le modal avec l'image correspondante
+            var modalImg = $('#img01');
+            modalImg.attr('src', $(this).attr('src'));
+            modalImg.attr('alt', $(this).next('.caption').html());
+
+            // On affiche le modal
+            $('#zoomImage').css('display', 'block');
+            //$('#zoomImage').css('background', 'rgba(0,0,0,0.7)');
+
+            if ($(window).width() < 700) {
+                $('#img01').css('width', '100%');
+                $('#img01').css('margin', 'auto');
+
+                // On affiche le modal en utilisant une animation de fondu enchaînée à une animation d'agrandissement de l'image
+                $('#zoomImage').fadeIn(200, function() {
+                    $('#img01').animate({width: '100%'}, 400);
+                });
+            } else if ($(window).width() >= 700 && $(window).width() < 992) {
+                $('#img01').css('width', '70%');
+                $('#img01').css('margin', 'auto');
+
+                // On affiche le modal en utilisant une animation de fondu enchaînée à une animation d'agrandissement de l'image
+                $('#zoomImage').fadeIn(200, function() {
+                    $('#img01').animate({width: '70%'}, 400);
+                });
+            } else {
+                $('#img01').css('width', '40%');
+                $('#img01').css('margin', 'auto');
+
+                // On affiche le modal en utilisant une animation de fondu enchaînée à une animation d'agrandissement de l'image
+                $('#zoomImage').fadeIn(200, function() {
+                    $('#img01').animate({width: '40%'}, 400);
+                });
+            }
+
+
+        });
+
+        // Lorsqu'on clique sur le bouton de fermeture du modal
+        $('.close').on('click', function() {
+            // On masque le modal
+           // $('#zoomImage').css('display', 'none');
+
+            // On réduit l'image en utilisant une animation, puis on masque le modal en utilisant une animation de fondu
+            $('#img01').animate({width: '0%'}, 400, function() {
+                $('#zoomImage').fadeOut(200);
+            });
+        });
+
+        // Lorsqu'on clique sur le bouton de
+        $('.close-bottom').on('click', function() {
+            // On réduit l'image en utilisant une animation, puis on masque le modal en utilisant une animation de fondu
+            $('#img01').animate({width: '0%'}, 400, function() {
+                $('#zoomImage').fadeOut(200);
+            });
+        });
+
+
+
+
+        // Lorsqu'on clique en dehors du contenu du modal
+
+        $(window).on('click', function(event) {
+            if (event.target.id == 'zoomImage') {
+                // On masque le modal
+               // $('#zoomImage').css('display', 'none');
+
+                $('#img01').animate({width: '0%'}, 400, function() {
+                    $('#zoomImage').fadeOut(200);
+                });
+            }
+        });
+
+
+        $(document).ready(function() {
+            if ($(window).width() < 480) {
+
+            } else if ($(window).width() >= 768 && $(window).width() < 992) {
+                /* exécuter du code pour les écrans dont la largeur est comprise entre 768px et 992px */
+            } else {
+                /* exécuter du code pour les écrans de plus de 992px de largeur */
+            }
+        });
+
+
+
     </script>
     {{--Fin Diagramme Maladies --}}
 @endpush

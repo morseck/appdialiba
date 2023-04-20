@@ -21,4 +21,9 @@ class Medecin extends Model
     {
         return ucfirst(strtolower($this->prenom)).' '.strtoupper($this->nom) ;
     }
+
+    public function ordonnances()
+    {
+        return $this->hasMany('App\Ordonnance');
+    }
 }
