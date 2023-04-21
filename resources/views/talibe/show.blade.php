@@ -576,7 +576,7 @@
                                             <a class="btn btn-outline-info" href="{{ route('talibe.edit',['id' => $talibe->id]) }}"><i class="fas fa-file-prescription"></i> Editer</a>
                                         </div>
                                         <div class="offset-md-2 col-md-4 col-sm-12">
-                                            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deletmodal"><i class="fas fa-trash-alt"></i> Supprimer</button>
+                                            <button onclick="deleteOrdonnance({{$ordonnance['id']}})" type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deletmodalOrdonnance"><i class="fas fa-trash-alt"></i> Supprimer</button>
                                         </div>
                                     </div>
                                 </div>
@@ -591,7 +591,7 @@
 
     </div>
 
-    <!-- deletion confirmation modal -->
+    <!-- debut deletion talube confirmation modal -->
     <div class="modal fade" id="deletmodal" tabindex="-1" role="dialog" aria-labelledby="deletmodalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -623,6 +623,42 @@
             </div>
         </div>
     </div>
+    <!-- Fin deletion talube confirmation modal -->
+
+
+    <!-- debut deletion ordonnance confirmation modal -->
+    <div class="modal fade" id="deletmodalOrdonnance" tabindex="-1" role="dialog" aria-labelledby="deletmodalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deletmodalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    Voulez-vous vraiment supprimer cette ordonnance ?
+                </div>
+                <div class="modal-footer text-center">
+                    <div class="row text-center">
+                        <br>
+                        <div class="col-lg-6">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        </div>
+                        <div class="col-lg-6">
+                            <form id="deleteOrdonnanceForm" >
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin deletion ordonnance confirmation modal -->
 @endsection
 
 @push('scripts-scroll')
@@ -988,6 +1024,14 @@
         });
 
 
+
+        function deleteOrdonnance(idOrdonnance) {
+            const baseUrl = window.location.protocol + "//" + window.location.host;
+            console.log(baseUrl);
+
+            $('#deleteOrdonnanceForm').attr('action', baseUrl+"/ordonnance/"+idOrdonnance)
+            $('#deleteOrdonnanceForm').attr('method', "POST")
+        }
 
     </script>
     {{--Fin Diagramme Maladies --}}

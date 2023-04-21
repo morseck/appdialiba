@@ -134,6 +134,12 @@ class OrdonnanceController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $ordonnace = Ordonnance::findOrFail($id);
+        $ordonnace->delete();
+
+        session()->flash('ordonnanceEvent', 'L\'Ordonnance a été bien supprimée pour le talibé ');
+
+        return back();
     }
 }
