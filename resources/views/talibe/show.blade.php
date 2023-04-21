@@ -573,7 +573,7 @@
                                 <div class="card-footer ">
                                     <div class="row">
                                         <div class="offset-md-1 col-md-4 col-sm-12">
-                                            <a class="btn btn-outline-info" href="{{ route('talibe.edit',['id' => $talibe->id]) }}"><i class="fas fa-file-prescription"></i> Editer</a>
+                                            <a class="btn btn-outline-info" href="{{ route('ordonnance.edit',['id' => $ordonnance['id']]) }}"><i class="fas fa-file-prescription"></i> Editer</a>
                                         </div>
                                         <div class="offset-md-2 col-md-4 col-sm-12">
                                             <button onclick="deleteOrdonnance({{$ordonnance['id']}})" type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deletmodalOrdonnance"><i class="fas fa-trash-alt"></i> Supprimer</button>

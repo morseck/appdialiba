@@ -13,7 +13,7 @@ class Ordonnance extends Model
      */
     protected $table = 'ordonnances';
 
-    protected $fillable = ['medecin_id','talibe_id','lieu','date','avis', 'maladie', 'file_ordonnance'] ;
+    protected $fillable = ['medecin_id','talibe_id','nom_hopital','date_ordonnance','commentaire', 'file_ordonnance'] ;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
