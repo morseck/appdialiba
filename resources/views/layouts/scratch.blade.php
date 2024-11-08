@@ -5,7 +5,8 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>{{ $title ?? ''}} {{ config('app.name') }}</title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link href="/assets/css/material-dashboard.css?v=2.0.2" rel="stylesheet" />
@@ -18,10 +19,11 @@
     <div class="sidebar" data-color="green" data-background-color="black" >
       <div class="logo">
         <a href="#" class="simple-text logo-mini">
-          DL
+            <img class="img-thumbnail left" src="/assets/img/Ndongoyi-logo-sans-name.png" alt="">
         </a>
-        <a href="#" class="simple-text logo-normal">
-          Dialiba
+          <br>
+        <a href="#" class="logo-normal">
+            <img class="w-100" src="/assets/img/Ndongo_yi-name.png" alt="">
         </a>
       </div>
       <div class="sidebar-wrapper">
