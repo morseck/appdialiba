@@ -26,7 +26,7 @@
         </a>
       </div>
       <div class="sidebar-wrapper">
-          <a href="#" class="logo-normal">
+          <a href="{{ route('home') }}" class="logo-normal">
               <img class="w-100" src="/assets/img/Ndongo_yi-name.png" alt="">
           </a>
 
