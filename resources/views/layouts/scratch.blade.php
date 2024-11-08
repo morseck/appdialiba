@@ -19,14 +19,16 @@
     <div class="sidebar" data-color="green" data-background-color="black" >
       <div class="logo">
         <a href="#" class="simple-text logo-mini">
-            <img class="img-thumbnail left" src="/assets/img/Ndongoyi-logo-sans-name.png" alt="">
+          N Y
         </a>
-          <br>
-        <a href="#" class="logo-normal">
-            <img class="w-100" src="/assets/img/Ndongo_yi-name.png" alt="">
+        <a href="#" class="simple-text logo-normal">
+            <span style="visibility: hidden ">Ndongo yi</span>
         </a>
       </div>
       <div class="sidebar-wrapper">
+          <a href="#" class="logo-normal">
+              <img class="w-100" src="/assets/img/Ndongo_yi-name.png" alt="">
+          </a>
 
         <ul class="nav">
           <li class="nav-item active ">
@@ -172,6 +174,7 @@
 
         </ul>
       </div>
+
     </div>
 
 <div class="main-panel">
