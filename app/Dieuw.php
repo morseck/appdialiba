@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Dieuw extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable=['prenom','nom','genre','pere','mere','datenaissance','lieunaissance','adresse','region',
                          'tuteur','phone1','phone2','arrivee','depart','deces','commentaire','avatar','daara_id'
         ];
@@ -37,5 +37,17 @@ class Dieuw extends Model
 
         }
         return $age;
+    }
+
+    public function getTitleStart($withPreposition = null)
+    {
+
+        return $withPreposition ? ($this->genre ? 'du serigne' : 'de la sokhna')
+            : ($this->genre  ? 'serigne' : 'sokhna');
+    }
+    public function getTitleEnd($withPreposition = null)
+    {
+        return $withPreposition ? ($this->genre ? 'au serigne' : 'à la sokhna')
+            : ($this->genre ? 'serigne' : 'sokhna');
     }
 }

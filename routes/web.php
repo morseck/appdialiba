@@ -1,5 +1,55 @@
 <?php
 
+
+
+
+//**********************************START NEW ROUTE**********************************
+
+
+//use Illuminate\Support\Facades\Route;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', 'HomeController@index')->name('home');
+    //Route::resource('/admin/users', 'AdminController');
+});
+
+/*
+// Routes protégées par plusieurs rôles
+Route::middleware(['auth', 'role:admin,manager'])->group(function () {
+    //Route::get('/management', 'ManagementController@index');
+});
+
+// Routes protégées par permission
+Route::middleware(['auth', 'permission:edit-tablibes'])->group(function () {
+   // Route::get('/posts/{post}/edit', 'PostController@edit');
+    //Route::put('/posts/{post}', 'PostController@update');
+});
+
+// Routes protégées par permission
+Route::middleware(['auth', 'permission:delete-tablibes'])->group(function () {
+    //Route::delete('/posts/{post}', 'PostController@destroy');
+});
+
+// Exemple d'utilisation dans un contrôleur individuel
+//Route::get('/profile', 'UserController@profile')->middleware(['auth', 'role:user']);
+
+// Combinaison de middleware
+Route::middleware(['auth', 'role:admin', 'permission:manage-users'])->group(function () {
+  //  Route::resource('/admin/roles', 'RoleController');
+   // Route::resource('/admin/permissions', 'PermissionController');
+});
+ * /
+
+//**********************************END NEW ROUTE**********************************
+
+
+
+
+
+
+
+//**********************************START OLD ROUTE**********************************
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,9 +65,11 @@ Route::get('/', function () {
     return view('welcome');
 });*/
 
+
+
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+//Route::get('/', 'HomeController@index')->name('home');
 
 //Importer fichier excel dieuwrine
 //Route::post('/importation', 'TalibeController@importation_dieuwrine')->name('importation');
@@ -75,3 +127,5 @@ Route::resource('medecin','MedecinController');
 Route::resource('tarbiya','TarbiyaController');
 
 Route::resource('ordonnance','OrdonnanceController');
+
+//**********************************END OLD ROUTE**********************************

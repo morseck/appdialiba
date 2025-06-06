@@ -38,139 +38,255 @@
             </a>
           </li>
 
-          <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#talibe">
-              <i class="fas fa-user"></i>
-              <p> Talibés</p>
-            </a>
-            <div class="collapse" id="talibe">
-              <ul class="nav">
-                <li class="nav-item ">
-                  <a class="nav-link" href="{{ route('talibe.index') }}">
-                    <span class="sidebar-mini"> L </span>
-                    <span class="sidebar-normal"> LISTER </span>
-                  </a>
-                </li>
-                <li class="nav-item ">
-                  <a class="nav-link" href="{{ route('talibe.create') }}">
-                    <span class="sidebar-mini"> N</span>
-                    <span class="sidebar-normal"> NOUVEAU </span>
-                  </a>
-                </li>
-                <li class="nav-item ">
-                  <a class="nav-link" href="{{ route('talibe.deleted') }}">
-                    <span class="sidebar-mini"> A</span>
-                    <span class="sidebar-normal"> ARCHIVES </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </li>
 
-            <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#dieuwrigne">
-              <i class="fas fa-user-graduate"></i>
-              <p> Dieuwrignes</p>
-            </a>
-            <div class="collapse" id="dieuwrigne">
-              <ul class="nav">
+            <!--talibe-->
+            @if(auth()->user()->hasPermission('view-talibes') ||
+                auth()->user()->hasPermission('create-talibes') ||
+                auth()->user()->hasPermission('edit-talibes') ||
+                auth()->user()->hasPermission('delete-talibes') ||
+                auth()->user()->hasPermission('view-talibes-archives') ||
+                auth()->user()->hasPermission('restore-talibes-archives') ||
+                auth()->user()->is_admin
+                )
                 <li class="nav-item ">
-                  <a class="nav-link" href="{{ route('dieuw.index') }}">
-                    <span class="sidebar-mini"> L </span>
-                    <span class="sidebar-normal"> LISTER</span>
-                  </a>
-                </li>
+                <a class="nav-link" data-toggle="collapse" href="#talibe">
+                  <i class="fas fa-user"></i>
+                  <p> Talibés</p>
+                </a>
+                <div class="collapse" id="talibe">
+                  <ul class="nav">
+                      <!--Lister talibe-->
+                      @if(auth()->user()->hasPermission('view-talibes') ||
+                          auth()->user()->is_admin
+                       )
+                        <li class="nav-item ">
+                          <a class="nav-link" href="{{ route('talibe.index') }}">
+                            <span class="sidebar-mini"> L </span>
+                            <span class="sidebar-normal"> LISTER </span>
+                          </a>
+                        </li>
+                      @endif
+
+                      <!--Creer talibe-->
+                      @if(auth()->user()->hasPermission('create-talibes') ||
+                          auth()->user()->is_admin
+                       )
+                        <li class="nav-item ">
+                          <a class="nav-link" href="{{ route('talibe.create') }}">
+                            <span class="sidebar-mini"> N</span>
+                            <span class="sidebar-normal"> NOUVEAU </span>
+                          </a>
+                        </li>
+                      @endif
+
+                          <!--Lister archive talibe-->
+                      @if(auth()->user()->hasPermission('view-talibes-archives') ||
+                          auth()->user()->is_admin
+                     )
+                        <li class="nav-item ">
+                          <a class="nav-link" href="{{ route('talibe.deleted') }}">
+                            <span class="sidebar-mini"> A</span>
+                            <span class="sidebar-normal"> ARCHIVES </span>
+                          </a>
+                        </li>
+                      @endif
+                  </ul>
+                </div>
+              </li>
+            @endif
+
+
+            <!--Dieuwrine-->
+            @if(auth()->user()->hasPermission('view-dieuwrine') ||
+              auth()->user()->hasPermission('create-dieuwrine') ||
+              auth()->user()->hasPermission('edit-dieuwrine') ||
+              auth()->user()->hasPermission('delete-dieuwrine') ||
+              auth()->user()->is_admin
+              )
                 <li class="nav-item ">
-                  <a class="nav-link" href="{{ route('dieuw.create') }}">
-                    <span class="sidebar-mini"> A </span>
-                    <span class="sidebar-normal"> NOUVEAU </span>
-                  </a>
+                    <a class="nav-link" data-toggle="collapse" href="#dieuwrigne">
+                      <i class="fas fa-user-graduate"></i>
+                      <p> Dieuwrignes</p>
+                    </a>
+                    <div class="collapse" id="dieuwrigne">
+                      <ul class="nav">
+
+                          <!--Lister Dieuwrine-->
+                          @if(auth()->user()->hasPermission('view-dieuwrine') ||
+                              auth()->user()->is_admin
+                           )
+                            <li class="nav-item ">
+                              <a class="nav-link" href="{{ route('dieuw.index') }}">
+                                <span class="sidebar-mini"> L </span>
+                                <span class="sidebar-normal"> LISTER</span>
+                              </a>
+                            </li>
+                          @endif
+
+                      <!--Creer Dieuwrine-->
+                          @if(auth()->user()->hasPermission('create-dieuwrine') ||
+                              auth()->user()->is_admin
+                         )
+                            <li class="nav-item ">
+                              <a class="nav-link" href="{{ route('dieuw.create') }}">
+                                <span class="sidebar-mini"> A </span>
+                                <span class="sidebar-normal"> NOUVEAU </span>
+                              </a>
+                            </li>
+                          @endif
+
+                      </ul>
+                    </div>
                 </li>
-              </ul>
-            </div>
-          </li>
-            <li class="nav-item ">
+            @endif
+
+            <!--Ndongo Tarbiya-->
+            @if(auth()->user()->hasPermission('view-tarbiya') ||
+              auth()->user()->hasPermission('create-tarbiya') ||
+              auth()->user()->hasPermission('edit-tarbiya') ||
+              auth()->user()->hasPermission('delete-tarbiya') ||
+              auth()->user()->is_admin
+              )
+                <li class="nav-item ">
                 <a class="nav-link" data-toggle="collapse" href="#tarbiya">
                     <i class="fas fa-male"></i>
                     <p> Ndongo Tarbiya</p>
                 </a>
                 <div class="collapse" id="tarbiya">
                     <ul class="nav">
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{{ route('tarbiya.index') }}">
-                                <span class="sidebar-mini"> L </span>
-                                <span class="sidebar-normal"> LISTER</span>
-                            </a>
+
+                        <!--Lister Tarbiya-->
+                        @if(auth()->user()->hasPermission('view-tarbiya') ||
+                            auth()->user()->is_admin
+                          )
+                            <li class="nav-item ">
+                                <a class="nav-link" href="{{ route('tarbiya.index') }}">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> LISTER</span>
+                                </a>
                         </li>
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{{ route('tarbiya.create') }}">
-                                <span class="sidebar-mini"> A </span>
-                                <span class="sidebar-normal"> NOUVEAU </span>
-                            </a>
-                        </li>
+                        @endif
+
+                        <!--Creer Tarbiya-->
+                        @if(
+                          auth()->user()->hasPermission('create-tarbiya') ||
+                          auth()->user()->is_admin
+                          )
+                            <li class="nav-item ">
+                                <a class="nav-link" href="{{ route('tarbiya.create') }}">
+                                    <span class="sidebar-mini"> A </span>
+                                    <span class="sidebar-normal"> NOUVEAU </span>
+                                </a>
+                            </li>
+                        @endif
+
                     </ul>
                 </div>
             </li>
-          <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#daara">
-              <i class="fas fa-home"></i>
-              <p> Daaras
+            @endif
 
-              </p>
-            </a>
-            <div class="collapse" id="daara">
-              <ul class="nav">
-                <li class="nav-item ">
-                  <a class="nav-link" href="{{ route('daara.index') }}">
-                    <span class="sidebar-mini"> L </span>
-                    <span class="sidebar-normal"> LISTER </span>
-                  </a>
-                </li>
-                <li class="nav-item ">
-                  <a class="nav-link" href="{{ route('daara.create') }}">
-                    <span class="sidebar-mini"> N </span>
-                    <span class="sidebar-normal">NOUVEAU</span>
-                  </a>
-                </li>
 
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item ">
+            <!--Daara-->
+            @if(auth()->user()->hasPermission('view-daara') ||
+              auth()->user()->hasPermission('create-daara') ||
+              auth()->user()->hasPermission('edit-daara') ||
+              auth()->user()->hasPermission('delete-daara') ||
+              auth()->user()->is_admin
+              )
+                <li class="nav-item ">
+                <a class="nav-link" data-toggle="collapse" href="#daara">
+                  <i class="fas fa-home"></i>
+                  <p> Daaras
+
+                  </p>
+                </a>
+                <div class="collapse" id="daara">
+                  <ul class="nav">
+                    <li class="nav-item ">
+                      <a class="nav-link" href="{{ route('daara.index') }}">
+                        <span class="sidebar-mini"> L </span>
+                        <span class="sidebar-normal"> LISTER </span>
+                      </a>
+                    </li>
+                    <li class="nav-item ">
+                      <a class="nav-link" href="{{ route('daara.create') }}">
+                        <span class="sidebar-mini"> N </span>
+                        <span class="sidebar-normal">NOUVEAU</span>
+                      </a>
+                    </li>
+
+                  </ul>
+                </div>
+              </li>
+            @endif
+
+            <!--consultations-->
+            @if(auth()->user()->hasPermission('view-campagne-consultation') ||
+              auth()->user()->is_admin
+              )
+                <li class="nav-item ">
             <a class="nav-link collapse"  href="{{ route('consultation.index') }}">
               <i class="material-icons">grid_on</i>
               <p> Consultations </p>
             </a>
           </li>
-          <li class="nav-item">
+            @endif
+
+
+            <!--Medecin-->
+            @if(auth()->user()->hasPermission('view-medecin') ||
+              auth()->user()->hasPermission('create-medecin') ||
+              auth()->user()->hasPermission('edit-medecin') ||
+              auth()->user()->hasPermission('delete-medecin') ||
+              auth()->user()->is_admin
+              )
+                <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#medecin">
               <i class="fas fa-user-md"></i>
               <p>Médecins</p>
             </a>
             <div class="collapse" id="medecin">
               <ul class="nav">
-                <li class="nav-item ">
+                  <!--Lister Medecin-->
+                  @if(auth()->user()->hasPermission('view-medecin') ||
+                     auth()->user()->is_admin
+                 )
+                    <li class="nav-item ">
                   <a class="nav-link" href="{{ route('medecin.index') }}">
                     <span class="sidebar-mini"> L </span>
                     <span class="sidebar-normal"> LISTER </span>
                   </a>
                 </li>
-                <li class="nav-item ">
+                  @endif
+
+                  <!--Creer Medecin-->
+                  @if(auth()->user()->hasPermission('create-medecin') ||
+                     auth()->user()->is_admin
+                   )
+                     <li class="nav-item ">
                   <a class="nav-link" href="{{ route('medecin.create') }}">
                     <span class="sidebar-mini"> N </span>
                     <span class="sidebar-normal"> NOUVEAU </span>
                   </a>
                 </li>
+                  @endif
               </ul>
-            </div>
-          </li>
+                </div>
+            </li>
+            @endif
 
-          <li class="nav-item">
-            <a class="nav-link"  href="{{ url('galerie') }}">
-              <i class="fas fa-images"></i>
-              <p> Galerie</p>
-            </a>
-          </li>
+            <!--Galerie-->
+            @if(auth()->user()->hasPermission('view-galerie') ||
+              auth()->user()->is_admin
+              )
+                <!--Lister Galerie-->
+                <li class="nav-item">
+                    <a class="nav-link"  href="{{ url('galerie') }}">
+                      <i class="fas fa-images"></i>
+                      <p> Galerie</p>
+                    </a>
+                </li>
+            @endif
 
         </ul>
       </div>

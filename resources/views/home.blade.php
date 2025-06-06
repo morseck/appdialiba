@@ -2,7 +2,8 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
+        @if(auth()->user()->hasPermission('view-reports') || auth()->user()->is_admin)
+            <div class="row">
         <div class="col-lg-11 card" style="margin:auto;">
           <div class="row">
               <div class="col-lg-4 col-md-6 col-sm-6">
@@ -10,7 +11,7 @@
               <div class="card-header card-header-warning card-header-icon">
                   <a href="{{ route('dieuw.index') }}" class="text-white">
                      <div class="card-icon">
-                        <i class="fas fa-user-graduate"></i>
+                         <i class="fas fa-user-tie"></i>
                     </div>
                   </a>
                   <a href="{{ route('dieuw.index') }}">
@@ -113,118 +114,123 @@
           </div>
         </div>
       </div>
+        @endif
+
         <br><br>
-        <div class="row">
-    <div class="col-lg-10 card" style="margin: auto;">
-      <div class="row">
-          <div class="col-lg-6 col-md-6">
-            <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
-              <div class="card-header card-header-icon card-header-info">
-                <div class="card-icon">
-                  <i class="material-icons">pie_chart</i>
+
+        @if(auth()->user()->hasPermission('view-diagramme') || auth()->user()->is_admin)
+            <div class="row">
+                <div class="col-lg-10 card" style="margin: auto;">
+          <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
+                  <div class="card-header card-header-icon card-header-info">
+                    <div class="card-icon">
+                      <i class="material-icons">pie_chart</i>
+                    </div>
+                    <h5 class="card-title">Répartitions des talibés en <b>fonctions des Daaras</b>
+                      <!-- <small> - Rounded</small> -->
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="myChart1"></canvas>
+                  </div>
                 </div>
-                <h5 class="card-title">Répartitions des talibés en <b>fonctions des Daaras</b>
-                  <!-- <small> - Rounded</small> -->
-                </h5>
               </div>
-              <div class="card-body">
-                <canvas id="myChart1"></canvas>
+              <div class="col-lg-6 col-md-6">
+                  <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
+                      <div class="card-header card-header-icon card-header-success">
+                          <div class="card-icon">
+                              <i class="material-icons">insert_chart</i>
+                          </div>
+                          <h4 class="card-title">Répartition des talibés en <b> fonctions des régions</b>
+                              <!-- <small> - Rounded</small> -->
+                          </h4>
+                      </div>
+                      <div class="card-body">
+                          <canvas id="myChart2"></canvas>
+                      </div>
+                  </div>
               </div>
+              <div class="col-lg-12 col-md-12">
+                  <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
+                      <div class="card-header card-header-icon card-header-warning">
+                          <div class="card-icon">
+                              <i class="material-icons">insert_chart</i>
+                          </div>
+                          <h4 class="card-title">Répartition des talibés en <b>fonctions des hizibs</b>
+                              <!-- <small> - Rounded</small> -->
+                          </h4>
+                      </div>
+                      <div class="card-body">
+                          <canvas id="myChart3"></canvas>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-12 col-md-12">
+                  <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
+                      <div class="card-header card-header-icon card-header-danger">
+                          <div class="card-icon">
+                              <i class="material-icons">insert_chart</i>
+                          </div>
+                          <h4 class="card-title">Répartition des talibés en <b>fonction des serignes daara</b>
+                              <!-- <small> - Rounded</small> -->
+                          </h4>
+                      </div>
+                      <div class="card-body">
+                          <canvas id="myChart4"></canvas>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                  <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
+                      <div class="card-header card-header-icon card-header-default">
+                          <div class="card-icon">
+                              <i class="material-icons">pie_chart</i>
+                          </div>
+                          <h4 class="card-title">Répartition des <b>Ndongos Tarbiya</b> en fonction des daaras
+                              <!-- <small> - Rounded</small> -->
+                          </h4>
+                      </div>
+                      <div class="card-body">
+                          <canvas id="myChart5"></canvas>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                  <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
+                      <div class="card-header card-header-icon card-header-success">
+                          <div class="card-icon">
+                              <i class="material-icons">insert_chart</i>
+                          </div>
+                          <h4 class="card-title">Répartition des <b>Médecins</b> en fonction de leurs spécialités
+                              <!-- <small> - Rounded</small> -->
+                          </h4>
+                      </div>
+                      <div class="card-body">
+                          <canvas id="myChart6"></canvas>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-12 col-md-12">
+                  <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
+                      <div class="card-header card-header-icon card-header-danger">
+                          <div class="card-icon">
+                              <i class="material-icons">insert_chart</i>
+                          </div>
+                          <h4 class="card-title">Répartition des <b>Maladies</b> en fonction de leur apparution
+                              <!-- <small> - Rounded</small> -->
+                          </h4>
+                      </div>
+                      <div class="card-body">
+                          <canvas id="myChart7"></canvas>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
             </div>
-          </div>
-          <div class="col-lg-6 col-md-6">
-              <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
-                  <div class="card-header card-header-icon card-header-success">
-                      <div class="card-icon">
-                          <i class="material-icons">insert_chart</i>
-                      </div>
-                      <h4 class="card-title">Répartition des talibés en <b> fonctions des régions</b>
-                          <!-- <small> - Rounded</small> -->
-                      </h4>
-                  </div>
-                  <div class="card-body">
-                      <canvas id="myChart2"></canvas>
-                  </div>
-              </div>
-          </div>
-          <div class="col-lg-12 col-md-12">
-              <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
-                  <div class="card-header card-header-icon card-header-warning">
-                      <div class="card-icon">
-                          <i class="material-icons">insert_chart</i>
-                      </div>
-                      <h4 class="card-title">Répartition des talibés en <b>fonctions des hizibs</b>
-                          <!-- <small> - Rounded</small> -->
-                      </h4>
-                  </div>
-                  <div class="card-body">
-                      <canvas id="myChart3"></canvas>
-                  </div>
-              </div>
-          </div>
-          <div class="col-lg-12 col-md-12">
-              <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
-                  <div class="card-header card-header-icon card-header-danger">
-                      <div class="card-icon">
-                          <i class="material-icons">insert_chart</i>
-                      </div>
-                      <h4 class="card-title">Répartition des talibés en <b>fonction des serignes daara</b>
-                          <!-- <small> - Rounded</small> -->
-                      </h4>
-                  </div>
-                  <div class="card-body">
-                      <canvas id="myChart4"></canvas>
-                  </div>
-              </div>
-          </div>
-          <div class="col-lg-6 col-md-6">
-              <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
-                  <div class="card-header card-header-icon card-header-default">
-                      <div class="card-icon">
-                          <i class="material-icons">pie_chart</i>
-                      </div>
-                      <h4 class="card-title">Répartition des <b>Ndongos Tarbiya</b> en fonction des daaras
-                          <!-- <small> - Rounded</small> -->
-                      </h4>
-                  </div>
-                  <div class="card-body">
-                      <canvas id="myChart5"></canvas>
-                  </div>
-              </div>
-          </div>
-          <div class="col-lg-6 col-md-6">
-              <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
-                  <div class="card-header card-header-icon card-header-success">
-                      <div class="card-icon">
-                          <i class="material-icons">insert_chart</i>
-                      </div>
-                      <h4 class="card-title">Répartition des <b>Médecins</b> en fonction de leurs spécialités
-                          <!-- <small> - Rounded</small> -->
-                      </h4>
-                  </div>
-                  <div class="card-body">
-                      <canvas id="myChart6"></canvas>
-                  </div>
-              </div>
-          </div>
-          <div class="col-lg-12 col-md-12">
-              <div class="card" style="background-color: #eeeeee; border: 0.3px solid rgba(0,0,0,0.1)">
-                  <div class="card-header card-header-icon card-header-danger">
-                      <div class="card-icon">
-                          <i class="material-icons">insert_chart</i>
-                      </div>
-                      <h4 class="card-title">Répartition des <b>Maladies</b> en fonction de leur apparution
-                          <!-- <small> - Rounded</small> -->
-                      </h4>
-                  </div>
-                  <div class="card-body">
-                      <canvas id="myChart7"></canvas>
-                  </div>
-              </div>
-          </div>
-      </div>
-    </div>
-  </div>
+        @endif
     </div>
 @endsection
 
