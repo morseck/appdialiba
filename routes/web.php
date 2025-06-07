@@ -129,3 +129,23 @@ Route::resource('tarbiya','TarbiyaController');
 Route::resource('ordonnance','OrdonnanceController');
 
 //**********************************END OLD ROUTE**********************************
+
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+
+    // Routes pour les rôles
+    Route::resource('roles', 'RoleController');
+    Route::post('roles/{role}/permissions', 'RoleController@assignPermissions')->name('roles.assign-permissions');
+    Route::delete('roles/{role}/permissions/{permission}', 'RoleController@removePermission')->name('roles.remove-permission');
+
+    // Routes pour les permissions
+    Route::resource('permissions', 'PermissionController');
+
+    // Routes pour la gestion des utilisateurs
+    Route::resource('users', 'UserController');
+    Route::post('users/{user}/roles', 'UserController@assignRoles')->name('users.assign-roles');
+    Route::delete('users/{user}/roles/{role}', 'UserController@removeRole')->name('users.remove-role');
+
+    // Route pour le tableau de bord
+    Route::get('dashboard', 'AdminController@dashboard')->name('admin.dashboard');
+});
