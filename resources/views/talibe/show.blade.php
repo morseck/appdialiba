@@ -68,11 +68,189 @@
             cursor: pointer;
         }
 
-        /* Style pour la miniature */
-        .thumbnail {
-            width: 100px;
-            height: 100px;
-            cursor: pointer;
+        /* Timeline principale */
+        .timeline {
+            position: relative;
+            padding: 0;
+            list-style: none;
+        }
+
+        /* Ligne verticale centrale */
+        .timeline:before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 40px; /* Position de la ligne */
+            width: 2px;
+            margin-left: -1px; /* Centrer la ligne */
+            content: '';
+            background-color: #e9ecef;
+        }
+
+        .timeline > li {
+            position: relative;
+            margin-bottom: 50px;
+            min-height: 50px;
+        }
+
+        .timeline > li:before,
+        .timeline > li:after {
+            content: '';
+            display: table;
+        }
+
+        .timeline > li:after {
+            clear: both;
+        }
+
+        .timeline > li .timeline-panel {
+            position: relative;
+            float: right;
+            width: calc(100% - 90px);
+            padding: 0 20px 0 30px;
+            text-align: left;
+        }
+
+        /* Badge (icône) centré sur la ligne */
+        .timeline > li .timeline-badge {
+            position: absolute;
+            top: 16px;
+            left: 15px; /* Position pour centrer sur la ligne à 40px */
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            line-height: 48px;
+            font-size: 1.4em;
+            text-align: center;
+            border-radius: 50%;
+            color: #fff;
+            /* Centrer parfaitement sur la ligne */
+            margin-left: 0; /* Ajuster si nécessaire */
+        }
+
+        /* Alternative si vous voulez centrer mathématiquement */
+        .timeline > li .timeline-badge-centered {
+            position: absolute;
+            top: 16px;
+            left: calc(40px - 25px); /* 40px (position ligne) - 25px (moitié de la largeur badge) */
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            line-height: 48px;
+            font-size: 1.4em;
+            text-align: center;
+            border-radius: 50%;
+            color: #fff;
+        }
+
+        /* Couleurs des badges */
+        .timeline-badge.talibe {
+            background-color: #28a745;
+        }
+
+        .timeline-badge.hizib {
+            background-color: #00b2ff;
+        }
+
+        .timeline-badge.daara {
+            background-color: #e3306e;
+            color: #333;
+        }
+
+        .timeline-badge.dieuw {
+            background-color: #ffab00;
+        }
+
+        /* Panel styling */
+        .timeline-panel {
+            border: 1px solid #d4d4d4;
+            border-radius: 10px;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-panel:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .timeline-heading h4 {
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .timeline-body {
+            margin-top: 10px;
+        }
+
+        /* Badges de type */
+        .badge-type {
+            font-size: 0.8em;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-talibe {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+        }
+
+        .badge-hizib {
+            background: linear-gradient(135deg, #00b2ff, #087eb2);
+            color: white;
+        }
+
+        .badge-daara {
+            background: linear-gradient(135deg, #e3306e, #ad1e4e);
+            color: white;
+        }
+
+        .badge-dieuw {
+            background: linear-gradient(135deg, #ffab00, #a97513);
+            color: white;
+        }
+
+        .user-info {
+            font-size: 0.85em;
+            color: #6c757d;
+            margin-top: 8px;
+        }
+
+        .date-info {
+            font-size: 0.8em;
+            color: #adb5bd;
+        }
+
+        .comment-section {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 3px solid #007bff;
+        }
+
+        .no-history {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .card-header-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .history-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
 
@@ -583,6 +761,82 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+            </div>
+
+
+            <div class="offset-md-2 col-md-8">
+                <div class="card history-card">
+                    <div class="card-header">
+                        <h3 class="mb-0">
+                            Historique de {{ $talibe->fullname() }}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        @if(count($talibe->historyTalibe()) > 0)
+                            <ul class="timeline">
+                                @foreach($talibe->historyTalibe() as $history)
+                                    <li>
+                                        <div class="timeline-badge {{ $history['type'] }}">
+                                            @if($history['type'] == 'talibe')
+                                                <i class="fas fa-user"></i>
+                                            @elseif($history['type'] == 'hizib')
+                                                <i class="fas fa-book-open"></i>
+                                            @elseif($history['type'] == 'daara')
+                                                <i class="fas fa-home"></i>
+                                            @elseif($history['type'] == 'dieuw')
+                                                <i class="fas fa-user-tie"></i>
+                                            @endif
+                                        </div>
+                                        <div class="timeline-panel">
+                                            <div class="timeline-heading">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <span class="mt-2 badge badge-type badge-{{ $history['type'] }}">
+                                                        @if($history['type'] == 'talibe')
+                                                            Informations
+                                                        @elseif($history['type'] == 'hizib')
+                                                            Hizib
+                                                        @elseif($history['type'] == 'daara')
+                                                            Daara
+                                                        @elseif($history['type'] == 'dieuw')
+                                                            Dieuwrine
+                                                        @endif
+                                                    </span>
+                                                    <small class="date-info">
+                                                        <i class="fas fa-calendar-alt mr-1"></i>
+                                                        {{ $history['date'] }}
+                                                    </small>
+                                                </div>
+                                                <p class="timeline-title">{{ $history['message'] }}</p>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <div class="user-info">
+                                                    <i class="fas fa-user-edit mr-1"></i>
+                                                    <strong>{{ $history['user'] }}</strong>
+                                                    @if(isset($history['user_email']) && !empty($history['user_email']))
+                                                        <span class="text-muted">({{ $history['user_email'] }})</span>
+                                                    @endif
+                                                </div>
+
+                                                @if(isset($history['commentaire']) && !empty($history['commentaire']))
+                                                    <div class="comment-section">
+                                                        <small><i class="fas fa-comment mr-1"></i><strong>Commentaire:</strong></small>
+                                                        <p class="mb-0 mt-1">{{ $history['commentaire'] }}</p>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <div class="no-history">
+                                <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Aucun historique disponible</h5>
+                                <p class="text-muted">Ce Talibe n'a pas encore d'historique de modifications.</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

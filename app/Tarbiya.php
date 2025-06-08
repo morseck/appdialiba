@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tarbiya extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Loggable;
 
     protected $fillable=['prenom','nom','genre','pere','mere','datenaissance','lieunaissance','adresse','region',
         'tuteur','phone1','phone2','arrivee','depart','deces','commentaire','avatar','daara_id'

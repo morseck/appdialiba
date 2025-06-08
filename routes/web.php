@@ -1,5 +1,55 @@
 <?php
 
+
+
+
+//**********************************START NEW ROUTE**********************************
+
+
+//use Illuminate\Support\Facades\Route;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', 'HomeController@index')->name('home');
+    //Route::resource('/admin/users', 'AdminController');
+});
+
+/*
+// Routes protégées par plusieurs rôles
+Route::middleware(['auth', 'role:admin,manager'])->group(function () {
+    //Route::get('/management', 'ManagementController@index');
+});
+
+// Routes protégées par permission
+Route::middleware(['auth', 'permission:edit-tablibes'])->group(function () {
+   // Route::get('/posts/{post}/edit', 'PostController@edit');
+    //Route::put('/posts/{post}', 'PostController@update');
+});
+
+// Routes protégées par permission
+Route::middleware(['auth', 'permission:delete-tablibes'])->group(function () {
+    //Route::delete('/posts/{post}', 'PostController@destroy');
+});
+
+// Exemple d'utilisation dans un contrôleur individuel
+//Route::get('/profile', 'UserController@profile')->middleware(['auth', 'role:user']);
+
+// Combinaison de middleware
+Route::middleware(['auth', 'role:admin', 'permission:manage-users'])->group(function () {
+  //  Route::resource('/admin/roles', 'RoleController');
+   // Route::resource('/admin/permissions', 'PermissionController');
+});
+ * /
+
+//**********************************END NEW ROUTE**********************************
+
+
+
+
+
+
+
+//**********************************START OLD ROUTE**********************************
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,9 +65,11 @@ Route::get('/', function () {
     return view('welcome');
 });*/
 
+
+
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+//Route::get('/', 'HomeController@index')->name('home');
 
 //Importer fichier excel dieuwrine
 //Route::post('/importation', 'TalibeController@importation_dieuwrine')->name('importation');
@@ -75,3 +127,54 @@ Route::resource('medecin','MedecinController');
 Route::resource('tarbiya','TarbiyaController');
 
 Route::resource('ordonnance','OrdonnanceController');
+
+//**********************************END OLD ROUTE**********************************
+
+
+
+//**********************************Administration**********************************
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+
+    // Routes pour les rôles
+    Route::resource('roles', 'RoleController');
+    Route::post('roles/{role}/permissions', 'RoleController@assignPermissions')->name('roles.assign-permissions');
+    Route::delete('roles/{role}/permissions/{permission}', 'RoleController@removePermission')->name('roles.remove-permission');
+
+    // Routes pour les permissions
+    Route::resource('permissions', 'PermissionController');
+
+    // Routes pour la gestion des utilisateurs
+    Route::resource('users', 'UserController');
+    Route::post('users/{user}/roles', 'UserController@assignRoles')->name('users.assign-roles');
+    Route::delete('users/{user}/roles/{role}', 'UserController@removeRole')->name('users.remove-role');
+
+    // Route pour le tableau de bord
+    Route::get('dashboard', 'AdminController@dashboard')->name('admin.dashboard');
+});
+
+
+
+//********************************** Logs Transaction **********************************
+// Solution 1: Routes manuelles (recommandée)
+Route::group(['prefix' => 'transaction-logs', 'middleware' => 'auth'], function () {
+
+    // Routes spécifiques AVANT la route avec paramètre
+    Route::get('export', 'TransactionLogsController@export')->name('transaction-logs.export');
+    Route::delete('clean', 'TransactionLogsController@clean')->name('transaction-logs.clean');
+    Route::get('statistics', 'TransactionLogsController@statistics')->name('transaction-logs.statistics');
+
+    // Routes principales
+    Route::get('/', 'TransactionLogsController@index')->name('transaction-logs.index');
+    Route::get('{id}', 'TransactionLogsController@show')->name('transaction-logs.show')->where('id', '[0-9]+');
+});
+
+
+//********************************** Logs Laravel **********************************
+Route::group(['prefix' => 'logs', 'middleware' => ['auth']], function () {
+    Route::get('/', 'LogController@index')->name('logs.index');
+    Route::get('/show/{filename}', 'LogController@show')->name('logs.show');
+    Route::get('/download/{filename}', 'LogController@download')->name('logs.download');
+    Route::delete('/delete/{filename}', 'LogController@delete')->name('logs.delete');
+    Route::post('/clear', 'LogController@clear')->name('logs.clear');
+});

@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Daara extends Model
 {
+    use  Loggable;
     protected $fillable = ['nom','lat','lon','creation','dieuw','image','phone'] ;
 
     public function talibes()
