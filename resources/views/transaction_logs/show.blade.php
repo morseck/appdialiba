@@ -266,7 +266,7 @@
                                             <i class="fa fa-eye"></i> Voir le Talibe
                                         </a>
                                     @elseif($log->model_type == 'App\Dieuw')
-                                        <a href="{{ route('dieuws.show', $relatedModel->id) }}" class="btn btn-primary btn-sm">
+                                        <a href="{{ route('dieuw.show', $relatedModel->id) }}" class="btn btn-primary btn-sm">
                                             <i class="fa fa-eye"></i> Voir le Dieuw
                                         </a>
                                     @elseif($log->model_type == 'App\User')

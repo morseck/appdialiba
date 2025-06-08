@@ -155,7 +155,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
 
 
-//********************************** Logs **********************************
+//********************************** Logs Transaction **********************************
 // Solution 1: Routes manuelles (recommandée)
 Route::group(['prefix' => 'transaction-logs', 'middleware' => 'auth'], function () {
 
@@ -167,4 +167,14 @@ Route::group(['prefix' => 'transaction-logs', 'middleware' => 'auth'], function 
     // Routes principales
     Route::get('/', 'TransactionLogsController@index')->name('transaction-logs.index');
     Route::get('{id}', 'TransactionLogsController@show')->name('transaction-logs.show')->where('id', '[0-9]+');
+});
+
+
+//********************************** Logs Laravel **********************************
+Route::group(['prefix' => 'logs', 'middleware' => ['auth']], function () {
+    Route::get('/', 'LogController@index')->name('logs.index');
+    Route::get('/show/{filename}', 'LogController@show')->name('logs.show');
+    Route::get('/download/{filename}', 'LogController@download')->name('logs.download');
+    Route::delete('/delete/{filename}', 'LogController@delete')->name('logs.delete');
+    Route::post('/clear', 'LogController@clear')->name('logs.clear');
 });

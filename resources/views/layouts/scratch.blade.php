@@ -401,16 +401,46 @@
             </li>
             @endif
 
-            <!--Galerie-->
-            @if(auth()->user()->hasPermission('view-logs') ||
-              auth()->user()->is_admin
-              )
-                <!--Lister Logs-->
-                <li class="nav-item {{ Request::is('transaction-logs*') ? 'active' : '' }}">
-                    <a class="nav-link"  href="{{ url('transaction-logs?') }}">
-                        <i class="fas fa-list"></i>
-                        <p> Logs</p>
+            <!--LOGS-->
+            @if(
+                auth()->user()->hasPermission('view-logs-transaction') ||
+                auth()->user()->hasPermission('view-logs-framework') ||
+                auth()->user()->is_admin
+             )
+                <li class="nav-item ">
+                    <a class="nav-link" data-toggle="collapse" href="#logs">
+                        <i class="fas fa-clipboard-list"></i>
+                        <p>Logs</p>
                     </a>
+                    <div class="collapse" id="logs">
+                        <ul class="nav">
+                            <!--Lister Logs transaction-->
+                            @if(auth()->user()->hasPermission('view-logs-transaction') ||
+                               auth()->user()->is_admin
+                           )
+                                <li class="nav-item ">
+
+                                    <a class="nav-link"  href="{{ url('transaction-logs?') }}">
+                                        <span class="sidebar-mini"> L T </span>
+                                        <span class="sidebar-normal"> Logs Transaction </span>
+                                    </a>
+                                </li>
+                            @endif
+                            <!--Lister Logs framework-->
+                            @if(auth()->user()->hasPermission('view-logs-transaction') ||
+                               auth()->user()->is_admin
+                           )
+                                <li class="nav-item ">
+
+                                    <a class="nav-link"  href="{{ route('logs.index') }}">
+                                        <span class="sidebar-mini"> L F </span>
+                                        <span class="sidebar-normal"> Logs Framework </span>
+                                    </a>
+                                </li>
+                            @endif
+
+                        </ul>
+                    </div>
                 </li>
             @endif
 
