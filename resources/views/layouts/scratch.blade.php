@@ -401,6 +401,19 @@
             </li>
             @endif
 
+            <!--Galerie-->
+            @if(auth()->user()->hasPermission('view-logs') ||
+              auth()->user()->is_admin
+              )
+                <!--Lister Logs-->
+                <li class="nav-item {{ Request::is('transaction-logs*') ? 'active' : '' }}">
+                    <a class="nav-link"  href="{{ url('transaction-logs?') }}">
+                        <i class="fas fa-list"></i>
+                        <p> Logs</p>
+                    </a>
+                </li>
+            @endif
+
         </ul>
       </div>
 

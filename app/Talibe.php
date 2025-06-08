@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Talibe extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Loggable;
 
     protected $fillable=['prenom','nom','genre','pere','mere','datenaissance','lieunaissance','adresse','region','dieuw_id',
         'tuteur','phone1','phone2','arrivee','depart','deces','commentaire','avatar','niveau','daara_id'

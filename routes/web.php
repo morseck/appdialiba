@@ -131,6 +131,9 @@ Route::resource('ordonnance','OrdonnanceController');
 //**********************************END OLD ROUTE**********************************
 
 
+
+//**********************************Administration**********************************
+
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     // Routes pour les rôles
@@ -148,4 +151,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     // Route pour le tableau de bord
     Route::get('dashboard', 'AdminController@dashboard')->name('admin.dashboard');
+});
+
+
+
+//********************************** Logs **********************************
+// Solution 1: Routes manuelles (recommandée)
+Route::group(['prefix' => 'transaction-logs', 'middleware' => 'auth'], function () {
+
+    // Routes spécifiques AVANT la route avec paramètre
+    Route::get('export', 'TransactionLogsController@export')->name('transaction-logs.export');
+    Route::delete('clean', 'TransactionLogsController@clean')->name('transaction-logs.clean');
+    Route::get('statistics', 'TransactionLogsController@statistics')->name('transaction-logs.statistics');
+
+    // Routes principales
+    Route::get('/', 'TransactionLogsController@index')->name('transaction-logs.index');
+    Route::get('{id}', 'TransactionLogsController@show')->name('transaction-logs.show')->where('id', '[0-9]+');
 });

@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Ordonnance extends Model
 {
+    use Loggable;
     /**
      * The table associated with the model.
      *

@@ -70,8 +70,18 @@ class RoleController extends Controller
 
         if ($request->has('permissions')) {
             $role->permissions()->sync($request->permissions);
+
+                log_transaction($role, 'assign_or_remove_permissions', json_encode($role->permissions()->select('permissions.id')->get()
+                ), json_encode($request->permissions), 'Assignation ou revocation de permissions à role', json_encode([
+                'role' => $role->name,
+            ]));
         } else {
             $role->permissions()->detach();
+            $role->permissions()->sync($request->permissions);
+            log_transaction($role, 'assign_permissions', json_encode($role->permissions()->select('permissions.id')->get()
+            ), json_encode($request->permissions), 'Assignation de permissions à role', json_encode([
+                'role' => $role->name,
+            ]));
         }
 
         return redirect()->route('roles.index')->with('success', 'Rôle mis à jour avec succès!');
@@ -100,6 +110,14 @@ class RoleController extends Controller
         ]);
 
         $role->permissions()->sync($request->permissions);
+        $role->logCustomAction('Assignation role', 'Assignation de permissions à role', [
+            'ancien' =>  $role->permissions(),
+            'nouveau' =>  $role->permissions(),
+            //'motif' => 'Rapprochement familial'
+        ]);
+        log_transaction($role, 'assign_permissions', $role->permissions(), $request->permissions, 'Assignation de permissions à role', [
+            'role' => $role->name,
+        ]);
 
         return redirect()->back()->with('success', 'Permissions assignées avec succès!');
     }

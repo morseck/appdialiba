@@ -2,11 +2,13 @@
 
 namespace App;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HistoryTalibe extends Model
 {
+    use Loggable;
 
     protected $fillable=[
         'talibe_id','hizib_id','daara_id','dieuw_id',

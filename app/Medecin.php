@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Medecin extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Loggable;
 
     protected $fillable=['prenom','nom','phone','email','hopital','spec', 'image'] ;
 

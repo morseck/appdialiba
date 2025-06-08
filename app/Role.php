@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
+    use Loggable;
+
     protected $fillable = ['name', 'display_name', 'description'];
 
     public function users()

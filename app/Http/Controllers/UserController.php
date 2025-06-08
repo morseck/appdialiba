@@ -88,8 +88,18 @@ class UserController extends Controller
 
         if ($request->has('roles')) {
             $user->roles()->sync($request->roles);
+
+            log_transaction($user, 'assign_or_remove_role', json_encode($user->roles()->select('roles.id')->get()
+            ), json_encode($request->roles), 'Assignation ou revocation de role à utilisation', json_encode([
+                'user' => $user->name,
+            ]));
+
         } else {
             $user->roles()->detach();
+            log_transaction($user, 'assign_or_remove_role', json_encode($user->roles()->select('roles.id')->get()
+            ), json_encode($request->roles), 'Assignation ou revocation de role à utilisation', json_encode([
+                'user' => $user->name,
+            ]));
         }
 
         return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès!');

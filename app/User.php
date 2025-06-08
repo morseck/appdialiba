@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Traits\Loggable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Loggable;
 
     protected $fillable = [
         'name', 'email', 'password','is_admin'
