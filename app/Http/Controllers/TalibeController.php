@@ -203,7 +203,7 @@ class TalibeController extends Controller
     public function edit($id)
     {
         $talibe = Talibe::findOrFail($id);
-        $dieuws = $talibe->daara_id ? Dieuw::where('daara_id', $talibe->daara_id)->get() : Dieuw::all();
+        $dieuws = Dieuw::all();
         return view('talibe.edit', [
             'talibe' => $talibe,
             'dieuws' => $dieuws,
