@@ -1,0 +1,10 @@
+.nav-item.active .nav-link{
+    background-color: #0a6ebd !important; /* Couleur de fond que tu veux */
+    #background-color: #4caf4f !important; /* Couleur de fond que tu veux */
+}
+.sidebar {
+    background-color: #0a6ebd;
+    color: white;
+}
+
+

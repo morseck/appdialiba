@@ -10,14 +10,10 @@
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link href="/assets/css/material-dashboard.css?v=2.0.2" rel="stylesheet" />
+  <link href="/assets/css/new.css?v=2.0.2" rel="stylesheet" />
 
   @stack('styles')
 
-    <style>
-        .nav-item.active .nav-link{
-            background-color: #4caf4f !important; /* Couleur de fond que tu veux */
-        }
-    </style>
 </head>
 
 <body class="sidebar-mini">
@@ -33,7 +29,7 @@
       </div>
       <div class="sidebar-wrapper">
           <a href="{{ route('home') }}" class="logo-normal">
-              <img class="w-100" src="/assets/img/Ndongo_yi-name.png" alt="">
+              <img class="w-100" src="/assets/img/attazkira-removebg.png" alt="">
           </a>
 
         <ul class="nav">
