@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         			 //MedecinsTableSeeder::class,
         			 //TalibesTableSeeder::class,
                      //ConsultationsTableSeeder::class,
-                    RolesAndPermissionsSeeder::class
+                    //RolesAndPermissionsSeeder::class,
+                    NotificationTypesSeeder::class
 
         	]);
 
