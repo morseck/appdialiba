@@ -20,7 +20,7 @@
                             <th>ID</th>
                             <th>Nom</th>
                             <th>Email</th>
-                            <th>Admin</th>
+                            <th>Type</th>
                             <th>Rôles</th>
                             <th>Créé le</th>
                             <th>Actions</th>
@@ -36,7 +36,14 @@
                                     @if($user->is_admin)
                                         <span class="badge badge-danger">Admin</span>
                                     @else
-                                        <span class="badge badge-secondary">Utilisateur</span>
+                                        @if($user->isMedecin())
+                                            <span class="badge badge-secondary">Médecin</span>
+                                        @elseif($user->isDieuw())
+                                            <span class="badge badge-secondary">Serigne Daara</span>
+                                        @else
+                                            <span class="badge badge-secondary">Utilisateur</span>
+                                        @endif
+
                                     @endif
                                 </td>
                                 <td>

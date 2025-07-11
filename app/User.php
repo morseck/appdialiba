@@ -11,26 +11,114 @@ class User extends Authenticatable
     use Notifiable, Loggable;
 
     protected $fillable = [
-        'name', 'email', 'password','is_admin'
+        'name', 'email', 'password', 'is_admin'
     ];
 
     protected $hidden = [
         'password', 'remember_token',
     ];
 
+    /**
+     * Relations avec les profils spécialisés
+     */
+    public function medecin()
+    {
+        return $this->hasOne(Medecin::class);
+    }
+
+    public function dieuw()
+    {
+        return $this->hasOne(Dieuw::class);
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'user_roles');
     }
 
+    /**
+     * Déterminer le type d'utilisateur
+     */
+    public function getUserType()
+    {
+        if ($this->medecin) {
+            return 'medecin';
+        } elseif ($this->dieuw) {
+            return 'dieuw';
+        } elseif ($this->is_admin) {
+            return 'admin';
+        } else {
+            return 'user';
+        }
+    }
+
+    /**
+     * Obtenir le profil associé (médecin ou dieuw)
+     */
+    public function getProfile()
+    {
+        if ($this->medecin) {
+            return $this->medecin;
+        } elseif ($this->dieuw) {
+            return $this->dieuw;
+        }
+        return null;
+    }
+
+    /**
+     * Vérifier si l'utilisateur est un médecin
+     */
+    public function isMedecin()
+    {
+        return $this->medecin !== null;
+    }
+
+    /**
+     * Vérifier si l'utilisateur est un dieuw
+     */
+    public function isDieuw()
+    {
+        return $this->dieuw !== null;
+    }
+
+    /**
+     * Obtenir l'avatar approprié
+     */
+    public function getAvatarAttribute()
+    {
+        $profile = $this->getProfile();
+        if ($profile && isset($profile->avatar)) {
+            return $profile->avatar;
+        } elseif ($profile && isset($profile->image)) {
+            return $profile->image;
+        }
+        return 'default-avatar.png';
+    }
+
+    /**
+     * Redirection après connexion selon le type d'utilisateur
+     */
+    public function getRedirectRoute()
+    {
+        switch ($this->getUserType()) {
+            case 'medecin':
+                return route('medecin.dashboard');
+            case 'dieuw':
+                return route('dieuw.dashboard');
+            case 'admin':
+                return route('admin.dashboard');
+            default:
+                return route('home');
+        }
+    }
+
+    // Toutes les autres méthodes existantes restent identiques...
     public function hasRole($role)
     {
-        // Charger les rôles si ils ne sont pas déjà chargés
         if (!$this->relationLoaded('roles')) {
             $this->load('roles');
         }
 
-        // Vérifier que la collection existe
         if ($this->roles === null || $this->roles->isEmpty()) {
             return false;
         }
@@ -59,12 +147,10 @@ class User extends Authenticatable
 
     public function hasPermission($permission)
     {
-        // Charger les rôles avec leurs permissions si pas déjà chargés
         if (!$this->relationLoaded('roles')) {
             $this->load('roles.permissions');
         }
 
-        // Vérifier que la collection existe
         if ($this->roles === null || $this->roles->isEmpty()) {
             return false;
         }
@@ -78,11 +164,6 @@ class User extends Authenticatable
         return false;
     }
 
-
-
-    /**
-     * Méthode pour vérifier si l'utilisateur a des rôles
-     */
     public function hasRoles()
     {
         if (!$this->relationLoaded('roles')) {
@@ -92,9 +173,6 @@ class User extends Authenticatable
         return $this->roles !== null && $this->roles->isNotEmpty();
     }
 
-    /**
-     * Obtenir tous les noms des rôles de l'utilisateur
-     */
     public function getRoleNames()
     {
         if (!$this->relationLoaded('roles')) {
@@ -108,9 +186,6 @@ class User extends Authenticatable
         return $this->roles->pluck('name');
     }
 
-    /**
-     * Obtenir toutes les permissions de l'utilisateur via ses rôles
-     */
     public function getAllPermissions()
     {
         if (!$this->relationLoaded('roles')) {
@@ -132,9 +207,6 @@ class User extends Authenticatable
         return $permissions->unique('id');
     }
 
-    /**
-     * Vérifier si l'utilisateur a toutes les permissions données
-     */
     public function hasAllPermissions($permissions)
     {
         if (is_string($permissions)) {
@@ -150,9 +222,6 @@ class User extends Authenticatable
         return true;
     }
 
-    /**
-     * Assigner un rôle de manière sécurisée
-     */
     public function assignRole($role)
     {
         if (is_string($role)) {
@@ -165,38 +234,30 @@ class User extends Authenticatable
 
         if ($role && !$this->hasRole($role)) {
             $this->roles()->attach($role->id);
-            // Recharger les relations pour éviter les problèmes de cache
             $this->load('roles');
         }
 
         return $this;
     }
 
-    /**
-     * Retirer un rôle de manière sécurisée
-     */
     public function removeRole($role)
     {
         if (is_string($role)) {
             $roleModel = Role::where('name', $role)->first();
             if (!$roleModel) {
-                return $this; // Pas d'erreur si le rôle n'existe pas
+                return $this;
             }
             $role = $roleModel;
         }
 
         if ($role && $this->hasRole($role)) {
             $this->roles()->detach($role->id);
-            // Recharger les relations pour éviter les problèmes de cache
             $this->load('roles');
         }
 
         return $this;
     }
 
-    /**
-     * Synchroniser les rôles de l'utilisateur
-     */
     public function syncRoles($roles)
     {
         $roleIds = collect();
@@ -220,26 +281,16 @@ class User extends Authenticatable
         return $this;
     }
 
-
-    /**
-     * Scope pour charger automatiquement les rôles
-     */
     public function scopeWithRoles($query)
     {
         return $query->with('roles');
     }
 
-    /**
-     * Scope pour charger les rôles avec leurs permissions
-     */
     public function scopeWithRolesAndPermissions($query)
     {
         return $query->with('roles.permissions');
     }
 
-    /**
-     * Scope pour les utilisateurs ayant un rôle spécifique
-     */
     public function scopeWithRole($query, $role)
     {
         return $query->whereHas('roles', function ($q) use ($role) {
@@ -251,9 +302,6 @@ class User extends Authenticatable
         });
     }
 
-    /**
-     * Scope pour les utilisateurs ayant une permission spécifique
-     */
     public function scopeWithPermission($query, $permission)
     {
         return $query->whereHas('roles.permissions', function ($q) use ($permission) {

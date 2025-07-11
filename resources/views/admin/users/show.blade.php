@@ -2,7 +2,19 @@
 
 @section('title', 'Détails de l\'Utilisateur')
 
-@section('page-title', 'Utilisateur : ' . $user->name)
+@php
+    if ($user->is_admin) {
+        $roleLabel = 'Admin';
+    } elseif ($user->isMedecin()) {
+        $roleLabel = 'Médecin';
+    } elseif ($user->isDieuw()) {
+        $roleLabel = 'Serigne Daara';
+    } else {
+        $roleLabel = 'Utilisateur';
+    }
+@endphp
+
+@section('page-title', $roleLabel . ' : ' . $user->name)
 
 @push('styles')
     <style>
