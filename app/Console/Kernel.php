@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\CreateUserAccountsCommand::class,
+        \App\Console\Commands\PopulateMatricules::class,
     ];
 
     /**

@@ -621,6 +621,10 @@
                             </div>
                             <div class="card-body">
                                 <div class="row mbt-15">
+                                    <div class="col-lg-4 col-xs-6"><b>Matricule</b></div>
+                                    <div class="col-lg-6 col-xs-6">{{ $talibe->matricule}}</div>
+                                </div>
+                                <div class="row mbt-15">
                                     <div class="col-lg-4 col-xs-6"><b>Genre</b></div>
                                     <div class="col-lg-6 col-xs-6">{{ intval($talibe->genre) === 1 ? 'Masculin': 'Féminin' }}</div>
                                 </div>
