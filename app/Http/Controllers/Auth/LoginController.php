@@ -32,12 +32,12 @@ class LoginController extends Controller
 
         switch ($user->getUserType()) {
             case 'medecin':
-                dd("medecin");
+                //dd("medecin");
                 redirect()->route('talibe.index');
                 //return route('talibe.index'); // ou route personnalisée
             break;
             case 'dieuw':
-                dd("dieuw");
+                //dd("dieuw");
                 return route('dieuw.index');
 
                 break;
@@ -45,7 +45,7 @@ class LoginController extends Controller
             //    return route('admin.dashboard'); // adapte selon ton app
             default:
                 dd("default");
-                return route('home');
+                //return route('home');
         }
         }
 
