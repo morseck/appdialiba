@@ -44,8 +44,8 @@ class LoginController extends Controller
           //  case 'admin':
             //    return route('admin.dashboard'); // adapte selon ton app
             default:
-                dd("default");
-                //return route('home');
+                //dd("default");
+                return route('home');
         }
         }
 
