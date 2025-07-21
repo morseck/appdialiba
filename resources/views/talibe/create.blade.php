@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endpush
 
+<!--Creer talibe-->
+@if(auth()->user()->hasPermission('create-talibes')|| auth()->user()->is_admin)
+
 @section('content')
 		<div class="container-fluid">
           <div class="col-md-8 col-12 mr-auto ml-auto">
@@ -401,6 +404,24 @@
           </div>
         </div>
 @endsection
+@else
+    @section('content')
+        <div class="container-fluid">
+            <div class="col-md-8 col-12 mr-auto ml-auto">
+                <div class="wizard-container">
+                    <div class="card card-wizard" data-color="green" id="wizardProfile">
+                        <div class="card-header text-center">
+                            <h2>Vous n'êtes pas autorisé br à faire cet action</h2>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    @endsection
+
+@endif
 
 @push('scripts-scroll')
     <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>

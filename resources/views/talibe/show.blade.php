@@ -258,8 +258,11 @@
 @endpush
 
 @section('content')
+    @if(auth()->user()->hasPermission('view-talibes')
+    || auth()->user()->is_admin
+   )
 
-    <div class="container-fluid">
+        <div class="container-fluid">
         {{--Debut bulletin de santé --}}
         <div class="row" id="bulletin_medical" style="display: none;">
             <div class="col-md-12">
@@ -598,9 +601,15 @@
                                             <h3><strong>{{ $talibe->age() }} </strong> ans</h3>
                                         @endif
                                         @if($talibe->daara != '' )
-                                            <a href="{{ route('by_daara',['id' => $talibe->daara->id]) }}" title="Cliquer pour voire les détails sur le Daara" >
+                                            @if(auth()->user()->hasPermission('view-daara')
+                                           || auth()->user()->is_admin
+                                         )
+                                                <a href="{{ route('by_daara',['id' => $talibe->daara->id]) }}" title="Cliquer pour voire les détails sur le Daara" >
+                                                    <h4 class="category badge badge-success">{{ $talibe->daara->nom  }}</h4>
+                                                </a>
+                                            @else
                                                 <h4 class="category badge badge-success">{{ $talibe->daara->nom  }}</h4>
-                                            </a>
+                                            @endif
                                         @else
                                             <span class="category badge badge-warning">non orienté</span>
                                         @endif
@@ -609,10 +618,24 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <p class="text-center">
-                                                    <button type="button" class="btn btn-round btn-outline-success" data-toggle="modal" data-target="#modalConsultation" href="#"><i class="fas fa-medkit"></i> Nouvelle consultation</button>
-                                                    <button type="button" class="btn btn-round btn-outline-info button_rapport"><i class="fas fa-stethoscope"></i> <span id="libelle">Voir bulletin médical</span></button>
+                                                    @if(auth()->user()->hasPermission('add-consultation')
+                                                        || auth()->user()->is_admin
+                                                      )
 
+                                                    <button type="button" class="btn btn-round btn-outline-success" data-toggle="modal" data-target="#modalConsultation" href="#"><i class="fas fa-medkit"></i> Nouvelle consultation</button>
+                                                    @endif
+
+                                                        @if(auth()->user()->hasPermission('view-consultation')
+                                                            || auth()->user()->is_admin
+                                                          )
+                                                    <button type="button" class="btn btn-round btn-outline-info button_rapport"><i class="fas fa-stethoscope"></i> <span id="libelle">Voir bulletin médical</span></button>
+                                                        @endif
+
+                                                        @if(auth()->user()->hasPermission('add-ordonnance')
+                                                        || auth()->user()->is_admin
+                                                      )
                                                     <button type="button" class="btn btn-round btn-outline-warning" data-toggle="modal" data-target="#modalOrdonnance" href="#"><i class="fas fa-tablets"></i> <span>Ajouter une ordonnance</span></button>
+                                                        @endif
                                                 </p>
                                             </div>
                                         </div>
@@ -636,7 +659,13 @@
                                     <div class="col-lg-4 col-xs-6"><b>Dieuwrigne</b></div>
                                     <div class="col-lg-6 col-xs-6">
                                         @if($talibe->dieuw != '')
+                                            @if(auth()->user()->hasPermission('view-dieuwrine')
+                                           || auth()->user()->is_admin
+                                         )
                                             <a href="{{ route('dieuw.show',['id' =>  $talibe->dieuw->id]) }}" title="Cliquer pour voire les détails sur le Dieuwrine" class="category badge badge-default text-white">{{ $talibe->dieuw->fullname() }}</a>
+                                            @else
+                                                <span  class="category badge badge-default text-white">{{ $talibe->dieuw->fullname() }}</span>
+                                            @endif
                                         @else
                                             <span class="category badge badge-danger">non affecté</span>
                                         @endif
@@ -702,15 +731,28 @@
                             </div>
                             <div class="card-footer">
                                 <div class="row">
-                                    <div class="col-lg-4">
-                                        <a class="btn btn-info" href="{{ route('talibe.edit',['id' => $talibe->id]) }}"><i class="fas fa-user-edit"></i> Editer</a>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletmodal"><i class="fas fa-trash-alt"></i> Supprimer</button>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <a class="btn btn-default" href="{{ route('talibe.index') }}"><i class="fas fa-list"></i> Liste Talibés</a>
-                                    </div>
+                                    @if(auth()->user()->hasPermission('edit-talibes')
+                                           || auth()->user()->is_admin
+                                         )
+                                        <div class="col-lg-4">
+                                            <a class="btn btn-info" href="{{ route('talibe.edit',['id' => $talibe->id]) }}"><i class="fas fa-user-edit"></i> Editer</a>
+                                        </div>
+                                    @endif
+
+                                    @if(auth()->user()->hasPermission('delete-talibes')
+                                           || auth()->user()->is_admin
+                                         )
+                                        <div class="col-lg-4">
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletmodal"><i class="fas fa-trash-alt"></i> Supprimer</button>
+                                        </div>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('delete-talibes')
+                                       || auth()->user()->is_admin
+                                     )
+                                        <div class="col-lg-4">
+                                            <a class="btn btn-default" href="{{ route('talibe.index') }}"><i class="fas fa-list"></i> Liste Talibés</a>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -731,6 +773,9 @@
                 </div>
             </div>
 
+            @if(auth()->user()->hasPermission('view-ordonnance')
+                || auth()->user()->is_admin
+              )
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
@@ -754,12 +799,23 @@
                                 </div>
                                 <div class="card-footer ">
                                     <div class="row">
+
+                                        @if(auth()->user()->hasPermission('edit-ordonnance')
+                                           || auth()->user()->is_admin
+                                         )
                                         <div class="offset-md-1 col-md-4 col-sm-12">
                                             <a class="btn btn-outline-info" href="{{ route('ordonnance.edit',['id' => $ordonnance['id']]) }}"><i class="fas fa-file-prescription"></i> Editer</a>
                                         </div>
+                                        @endif
+
+
+                                            @if(auth()->user()->hasPermission('delete-ordonnance')
+                                               || auth()->user()->is_admin
+                                             )
                                         <div class="offset-md-2 col-md-4 col-sm-12">
                                             <button onclick="deleteOrdonnance({{$ordonnance['id']}})" type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deletmodalOrdonnance"><i class="fas fa-trash-alt"></i> Supprimer</button>
                                         </div>
+                                            @endif
                                     </div>
                                 </div>
                             </div>
@@ -767,8 +823,12 @@
                     @endforeach
                 </div>
             </div>
+            @endif
 
 
+            @if(auth()->user()->hasPermission('view-history-talibe')
+               || auth()->user()->is_admin
+             )
             <div class="offset-md-2 col-md-8">
                 <div class="card history-card">
                     <div class="card-header">
@@ -843,6 +903,8 @@
                     </div>
                 </div>
             </div>
+
+            @endif
         </div>
         {{--Fin show talibe--}}
 
@@ -917,6 +979,17 @@
         </div>
     </div>
     <!-- fin deletion ordonnance confirmation modal -->
+
+    @else
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Vous n'êtes pas autorisé <br> à faire cet action</h3>
+                </div>
+            </div>
+        </div>
+
+    @endif
 @endsection
 
 @push('scripts-scroll')

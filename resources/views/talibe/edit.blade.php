@@ -13,6 +13,10 @@
 @endpush
 
 @section('content')
+    @section('content')
+        @if(auth()->user()->hasPermission('edit-talibes')
+        || auth()->user()->is_admin
+       )
 		<div class="container-fluid">
           <div class="col-md-8 col-12 mr-auto ml-auto">
             <!--      Wizard container        -->
@@ -398,6 +402,15 @@
             <!-- wizard container -->
           </div>
         </div>
+        @else
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h3>Vous n'êtes pas autorisé <br> à faire cet action</h3>
+                    </div>
+                </div>
+            </div>
+        @endif
 @endsection
 
 @push('scripts-scroll')
