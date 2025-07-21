@@ -29,7 +29,6 @@ class RedirectBasedOnUserType
             switch ($userType) {
                 case 'medecin':
                          redirect()->route('talibe.index');
-
                     break;
 
                 case 'dieuw':
