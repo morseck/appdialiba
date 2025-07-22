@@ -296,7 +296,7 @@ class TalibeController extends Controller
             'prenom' => $request->prenom,
             'nom' => $request->nom,
             'genre' => $request->genre,
-            'datenaissance' => app_date_reverse($request->datenaissance, '/', '-'),
+            'datenaissance' => $request->datenaissance ? app_date_reverse($request->datenaissance, '/', '-') : null,
             'lieunaissance' => $request->lieunaissance,
             'region' => $request->region,
             'phone1' => $request->phone1,
@@ -309,7 +309,7 @@ class TalibeController extends Controller
             'dieuw_id' => $request->dieuw_id,
             'niveau' => $request->niveau,
             'commentaire' => $request->commentaire,
-            'arrivee' => app_date_reverse($request->arrivee, '/', '-')
+            'arrivee' => $request->arrivee ? app_date_reverse($request->arrivee, '/', '-') : null
         ]);
 
         if ($request->hasFile('avatar')) {
