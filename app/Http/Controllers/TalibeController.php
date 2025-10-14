@@ -140,7 +140,8 @@ class TalibeController extends Controller
             return back()->withErrors($validator);
 
         $talibe->save();
-        $talibe = Talibe::latest()->first();
+        $talibe->refresh();
+        //$talibe = Talibe::latest()->first();
         $id = $talibe->id;
 
         //var_dump($talibe);die();
