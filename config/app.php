@@ -78,7 +78,11 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'fr', // Langue par défaut
+    'fallback_locale' => 'fr',
+
+    // Ajouter cette nouvelle configuration
+    'available_locales' => ['fr', 'ar'],
 
     /*
     |--------------------------------------------------------------------------

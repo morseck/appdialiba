@@ -210,6 +210,32 @@ if (!function_exists('clean_old_logs')) {
     {
         return TransactionLog::where('created_at', '<', now()->subDays($days))->delete();
     }
-
 }
-?>
+
+if (!function_exists('localized_route')) {
+    function localized_route($name, $parameters = [], $locale = null)
+    {
+        $locale = $locale ?: app()->getLocale();
+
+        if ($locale === config('app.locale')) {
+            return route($name, $parameters);
+        }
+
+        return route($name, array_merge(['locale' => $locale], $parameters));
+    }
+}
+
+if (!function_exists('current_locale')) {
+    function current_locale()
+    {
+        return app()->getLocale();
+    }
+}
+
+if (!function_exists('is_rtl')) {
+    function is_rtl()
+    {
+        return in_array(app()->getLocale(), ['ar', 'he', 'ur', 'fa']);
+    }
+}
+

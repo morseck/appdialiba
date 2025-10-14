@@ -7,4 +7,24 @@
     color: white;
 }
 
+/* Ajouter dans votre CSS */
+[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] .sidebar {
+    right: 0;
+    left: auto;
+}
+
+[dir="rtl"] .main-panel {
+    margin-right: 260px;
+    margin-left: 0;
+}
+
+[dir="rtl"] .navbar-nav {
+    padding-left: 35px;
+    padding-right: 50px;
+}
 
