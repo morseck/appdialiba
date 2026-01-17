@@ -36,12 +36,12 @@ class TalibeController extends Controller
         //$data_import = DB::table('import_taiba')->orderBy('id')->get();
         $data_import = null;
 
-        // Si l'utilisateur est un dieuw, filtrer les talibés par son daara_id
+        // Si l'utilisateur est un dieuw/serigne, filtrer les talibés qui lui sont affectés
         $user = auth()->user();
-        if ($user->isDieuw() && $user->dieuw && $user->dieuw->daara_id) {
-            $daaraId = $user->dieuw->daara_id;
-            $talibeList = Talibe::where('daara_id', $daaraId)->paginate(25);
-            $nbr = Talibe::where('daara_id', $daaraId)->count();
+        if ($user->isDieuw() && $user->dieuw) {
+            $dieuwId = $user->dieuw->id;
+            $talibeList = Talibe::where('dieuw_id', $dieuwId)->paginate(25);
+            $nbr = Talibe::where('dieuw_id', $dieuwId)->count();
         } else {
             $talibeList = Talibe::paginate(25);
             $nbr = Talibe::all()->count();
@@ -64,10 +64,10 @@ class TalibeController extends Controller
         if ($recherche) {
             $query = Talibe::query()->where(DB::raw("lower(CONCAT(prenom,' ', nom))"), 'ilike', strtolower('%' . $recherche . '%'));
 
-            // Si l'utilisateur est un dieuw, filtrer les talibés par son daara_id
+            // Si l'utilisateur est un dieuw/serigne, filtrer les talibés qui lui sont affectés
             $user = auth()->user();
-            if ($user->isDieuw() && $user->dieuw && $user->dieuw->daara_id) {
-                $query->where('daara_id', $user->dieuw->daara_id);
+            if ($user->isDieuw() && $user->dieuw) {
+                $query->where('dieuw_id', $user->dieuw->id);
             }
 
             $talibeList = $query->get();
@@ -398,10 +398,10 @@ class TalibeController extends Controller
 
     public function viewTrash()
     {
-        // Si l'utilisateur est un dieuw, filtrer les talibés supprimés par son daara_id
+        // Si l'utilisateur est un dieuw/serigne, filtrer les talibés supprimés qui lui sont affectés
         $user = auth()->user();
-        if ($user->isDieuw() && $user->dieuw && $user->dieuw->daara_id) {
-            $trashedTalibes = Talibe::onlyTrashed()->where('daara_id', $user->dieuw->daara_id)->get();
+        if ($user->isDieuw() && $user->dieuw) {
+            $trashedTalibes = Talibe::onlyTrashed()->where('dieuw_id', $user->dieuw->id)->get();
         } else {
             $trashedTalibes = Talibe::onlyTrashed()->get();
         }
