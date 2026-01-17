@@ -36,12 +36,28 @@ class TalibeController extends Controller
         //$data_import = DB::table('import_taiba')->orderBy('id')->get();
         $data_import = null;
 
-        // Si l'utilisateur est un dieuw/serigne, filtrer les talibés qui lui sont affectés
+        // Filtrage selon le rôle de l'utilisateur
         $user = auth()->user();
         if ($user->isDieuw() && $user->dieuw) {
             $dieuwId = $user->dieuw->id;
-            $talibeList = Talibe::where('dieuw_id', $dieuwId)->paginate(25);
-            $nbr = Talibe::where('dieuw_id', $dieuwId)->count();
+            $daaraId = $user->dieuw->daara_id;
+
+            // Rôle "dieuw" : voir les talibés affectés + ceux du même daara
+            // Rôle "serigne" : voir uniquement les talibés affectés
+            if ($user->hasRole('dieuw')) {
+                $query = Talibe::where(function($q) use ($dieuwId, $daaraId) {
+                    $q->where('dieuw_id', $dieuwId);
+                    if ($daaraId) {
+                        $q->orWhere('daara_id', $daaraId);
+                    }
+                });
+            } else {
+                // Rôle serigne ou autre profil dieuw
+                $query = Talibe::where('dieuw_id', $dieuwId);
+            }
+
+            $talibeList = $query->paginate(25);
+            $nbr = $query->count();
         } else {
             $talibeList = Talibe::paginate(25);
             $nbr = Talibe::all()->count();
@@ -64,10 +80,25 @@ class TalibeController extends Controller
         if ($recherche) {
             $query = Talibe::query()->where(DB::raw("lower(CONCAT(prenom,' ', nom))"), 'ilike', strtolower('%' . $recherche . '%'));
 
-            // Si l'utilisateur est un dieuw/serigne, filtrer les talibés qui lui sont affectés
+            // Filtrage selon le rôle de l'utilisateur
             $user = auth()->user();
             if ($user->isDieuw() && $user->dieuw) {
-                $query->where('dieuw_id', $user->dieuw->id);
+                $dieuwId = $user->dieuw->id;
+                $daaraId = $user->dieuw->daara_id;
+
+                // Rôle "dieuw" : voir les talibés affectés + ceux du même daara
+                // Rôle "serigne" : voir uniquement les talibés affectés
+                if ($user->hasRole('dieuw')) {
+                    $query->where(function($q) use ($dieuwId, $daaraId) {
+                        $q->where('dieuw_id', $dieuwId);
+                        if ($daaraId) {
+                            $q->orWhere('daara_id', $daaraId);
+                        }
+                    });
+                } else {
+                    // Rôle serigne ou autre profil dieuw
+                    $query->where('dieuw_id', $dieuwId);
+                }
             }
 
             $talibeList = $query->get();
@@ -398,10 +429,25 @@ class TalibeController extends Controller
 
     public function viewTrash()
     {
-        // Si l'utilisateur est un dieuw/serigne, filtrer les talibés supprimés qui lui sont affectés
+        // Filtrage selon le rôle de l'utilisateur
         $user = auth()->user();
         if ($user->isDieuw() && $user->dieuw) {
-            $trashedTalibes = Talibe::onlyTrashed()->where('dieuw_id', $user->dieuw->id)->get();
+            $dieuwId = $user->dieuw->id;
+            $daaraId = $user->dieuw->daara_id;
+
+            // Rôle "dieuw" : voir les talibés affectés + ceux du même daara
+            // Rôle "serigne" : voir uniquement les talibés affectés
+            if ($user->hasRole('dieuw')) {
+                $trashedTalibes = Talibe::onlyTrashed()->where(function($q) use ($dieuwId, $daaraId) {
+                    $q->where('dieuw_id', $dieuwId);
+                    if ($daaraId) {
+                        $q->orWhere('daara_id', $daaraId);
+                    }
+                })->get();
+            } else {
+                // Rôle serigne ou autre profil dieuw
+                $trashedTalibes = Talibe::onlyTrashed()->where('dieuw_id', $dieuwId)->get();
+            }
         } else {
             $trashedTalibes = Talibe::onlyTrashed()->get();
         }
