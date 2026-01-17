@@ -35,9 +35,20 @@ class TalibeController extends Controller
         $view = $request->query('view') === 'card' ? 'talibe.index-card' : 'talibe.index-table';
         //$data_import = DB::table('import_taiba')->orderBy('id')->get();
         $data_import = null;
-        $talibeList = Talibe::paginate(25);
+
+        // Si l'utilisateur est un dieuw, filtrer les talibés par son daara_id
+        $user = auth()->user();
+        if ($user->isDieuw() && $user->dieuw && $user->dieuw->daara_id) {
+            $daaraId = $user->dieuw->daara_id;
+            $talibeList = Talibe::where('daara_id', $daaraId)->paginate(25);
+            $nbr = Talibe::where('daara_id', $daaraId)->count();
+        } else {
+            $talibeList = Talibe::paginate(25);
+            $nbr = Talibe::all()->count();
+        }
+
         $numero = $talibeList->currentPage() * $talibeList->perPage() - $talibeList->perPage() + 1;
-        return view($view, ['talibeList' => $talibeList, 'nbr' => Talibe::all()->count(), 'data_import' => $data_import, 'numero' => $numero]);
+        return view($view, ['talibeList' => $talibeList, 'nbr' => $nbr, 'data_import' => $data_import, 'numero' => $numero]);
     }
 
     /**
@@ -51,16 +62,16 @@ class TalibeController extends Controller
         $nombre = 0;
 
         if ($recherche) {
-            // var_dump($recherche); die();
-            //$talibeList = Talibe::query();
-            $talibeList = Talibe::query()->where(DB::raw("lower(CONCAT(prenom,' ', nom))"), 'ilike', strtolower('%' . $recherche . '%'))
-                ->get();
-            //var_dump($talibes);die();
-            /* $talibeList = DB::table('talibes')
-                 ->where(DB::raw('CONCAT(prenom, " ", nom)'), 'ilike' , '%'.$recherche.'%')
-                 ->get();*/
+            $query = Talibe::query()->where(DB::raw("lower(CONCAT(prenom,' ', nom))"), 'ilike', strtolower('%' . $recherche . '%'));
+
+            // Si l'utilisateur est un dieuw, filtrer les talibés par son daara_id
+            $user = auth()->user();
+            if ($user->isDieuw() && $user->dieuw && $user->dieuw->daara_id) {
+                $query->where('daara_id', $user->dieuw->daara_id);
+            }
+
+            $talibeList = $query->get();
             $nombre = count($talibeList);
-            // var_dump($resultats);die();
         }
 
 
@@ -387,10 +398,13 @@ class TalibeController extends Controller
 
     public function viewTrash()
     {
-
-        // $trashedTalibes = Talibe::where('deleted_at','!=', null);
-        $trashedTalibes = Talibe::onlyTrashed()->get();
-        //var_dump($trashedTalibes);die();
+        // Si l'utilisateur est un dieuw, filtrer les talibés supprimés par son daara_id
+        $user = auth()->user();
+        if ($user->isDieuw() && $user->dieuw && $user->dieuw->daara_id) {
+            $trashedTalibes = Talibe::onlyTrashed()->where('daara_id', $user->dieuw->daara_id)->get();
+        } else {
+            $trashedTalibes = Talibe::onlyTrashed()->get();
+        }
 
         return view('talibe.trash', ['talibeList' => $trashedTalibes, 'nbr'=>count($trashedTalibes)]);
     }
