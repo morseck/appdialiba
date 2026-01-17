@@ -108,7 +108,7 @@
                 <li class="nav-item  {{ Request::is('dieuw*') ? 'active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#dieuwrigne">
                       <i class="fas fa-user-graduate"></i>
-                      <p> Dieuwrignes</p>
+                      <p> Serigne Daara</p>
                     </a>
                     <div class="collapse" id="dieuwrigne">
                       <ul class="nav">

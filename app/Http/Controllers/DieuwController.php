@@ -94,6 +94,7 @@ class DieuwController extends Controller
            return back()->withErrors($validator);
 
         $dieuw->save();
+        $dieuw->createUserAccount();
 
         session()->flash('dieuwEvent', 'Le dieuwrigne '.$dieuw->fullname().' a été bien ajouté');
 

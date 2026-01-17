@@ -81,7 +81,7 @@ class Dieuw extends Model
         ]);
 
         // Assigner le rôle de dieuw si il existe
-        if ($role = Role::where('name', 'dieuw')->first()) {
+        if ($role = Role::where('name', 'serigne')->first()) {
             $user->assignRole($role);
         }
 
@@ -96,11 +96,11 @@ class Dieuw extends Model
     private function generateEmail()
     {
         $base = strtolower(str_slug($this->prenom . '.' . $this->nom, '.'));
-        $email = $base . '@dieuw.local';
+        $email = $base . '@serigne.local';
 
         $counter = 1;
         while (User::where('email', $email)->exists()) {
-            $email = $base . $counter . '@dieuw.local';
+            $email = $base . $counter . '@serigne.local';
             $counter++;
         }
 
